@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/const/AppColors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../product_details_screen.dart';
-import '../search_screen.dart';
+import '../../product_details_screen.dart';
+import '../../search_screen.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -169,3 +169,6 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
+//initial commit
