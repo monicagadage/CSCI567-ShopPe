@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">1090945564897-r62rle88ek9e8gj98kpm5rhm897cpj2o.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">1090945564897</string>
+    <string name="google_api_key" translatable="false">AIzaSyCCYv83-NOKuhi_Gi1ms0Jr0W8-fKsUlWc</string>
+    <string name="google_app_id" translatable="false">1:1090945564897:android:c6c9a88ebce810143cf7a0</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCCYv83-NOKuhi_Gi1ms0Jr0W8-fKsUlWc</string>
+    <string name="google_storage_bucket" translatable="false">shoppe-535ea.appspot.com</string>
+    <string name="project_id" translatable="false">shoppe-535ea</string>
+</resources>
