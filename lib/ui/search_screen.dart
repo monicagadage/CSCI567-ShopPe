@@ -10,10 +10,22 @@ class _SearchScreenState extends State<SearchScreen> {
   var inputText = "test";
   @override
   Widget build(BuildContext context) {
+    // return MaterialApp(
+    //   title: 'Welcome to Flutter',
+    //   home: Scaffold(
+    //     appBar: AppBar(
+    //       title: const Text('Welcome to Flutter'),
+    //     ),
+    //     body: const Center(
+    //       child: Text('Profile'),
+    //     ),
+    //   ),
+    // );
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               TextFormField(
@@ -56,7 +68,9 @@ class _SearchScreenState extends State<SearchScreen> {
                               elevation: 5,
                               child: ListTile(
                                 title: Text(data['product-name']),
-                                leading: Image.network(data['product-img'][0]),
+                                // leading: Image.network(
+                                //     // 'https://picsum.photos/250?image=9')
+                                leading: Image.network(data['product-img']),
                               ),
                             );
                           }).toList(),

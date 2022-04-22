@@ -20,7 +20,30 @@ class _HomeState extends State<Home> {
   CarouselController buttonCarouselController = CarouselController();
 
   @override
-  Widget build(BuildContext context) => Column(children: <Widget>[
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: SafeArea(
+            child: Container(
+      child: Column(children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child: TextFormField(
+            readOnly: true,
+            decoration: InputDecoration(
+              fillColor: Colors.white,
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                  borderSide: BorderSide(color: Colors.blue)),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                  borderSide: BorderSide(color: Colors.grey)),
+              hintText: 'Enter a search term',
+              hintStyle: TextStyle(fontSize: 15),
+            ),
+            onTap: () => Navigator.push(
+                context, CupertinoPageRoute(builder: (_) => SearchScreen())),
+          ),
+        ),
         CarouselSlider(
             items: _carouselImages
                 .map((item) => Padding(
@@ -75,7 +98,8 @@ class _HomeState extends State<Home> {
                             child: Container(
                                 color: Colors.yellow,
                                 child: Image.network(
-                                  _products[index]["product-img"][0],
+                                  // 'https://picsum.photos/250?image=9'
+                                  _products[index]["product-img"],
                                 ))),
                         Text("${_products[index]["product-name"]}"),
                         Text("${_products[index]["product-price"].toString()}"),
@@ -85,7 +109,9 @@ class _HomeState extends State<Home> {
                 );
               }),
         ),
-      ]);
+      ]),
+    )));
+  }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
   List<String> _carouselImages = [];
@@ -130,7 +156,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     fetchCarouselImages();
-    // fetchProducts();
+    fetchProducts();
   }
 
   // @override
