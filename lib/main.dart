@@ -1,11 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:signup/firebase_options.dart';
 import 'package:signup/screens/signin_screen.dart';
 import 'package:signup/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -33,3 +34,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+// flutter run -d chrome --web-renderer html
