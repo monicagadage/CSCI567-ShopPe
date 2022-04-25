@@ -9,6 +9,8 @@ import 'package:signup/const/AppColors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'product_details_screen.dart';
 import 'search_screen.dart';
+import 'product_card.dart';
+
 import 'dart:math';
 
 class Home extends StatefulWidget {
@@ -18,6 +20,37 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   CarouselController buttonCarouselController = CarouselController();
+
+  Widget _productWidget() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      width: 300,
+      height: 140,
+      child: GridView(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1,
+            childAspectRatio: 4 / 3,
+            mainAxisSpacing: 30,
+            crossAxisSpacing: 20),
+        padding: EdgeInsets.only(left: 20),
+        scrollDirection: Axis.horizontal,
+        children: _products
+            .map(
+              (product) => ProductCard(
+            product: product,
+            // onSelected: (model) {
+              // setState(() {
+              //   AppData.productList.forEach((item) {
+              //     item.isSelected = false;
+              //   });
+              //   model.isSelected = true;
+              // });
+            // },
+          ),
+        ).toList(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,38 +110,41 @@ class _HomeState extends State<Home> {
             size: Size(6, 6),
           ),
         ),
-        Expanded(
-          child: GridView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _products.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 1),
-              itemBuilder: (_, index) {
-                return GestureDetector(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => ProductDetails(_products[index]))),
-                  child: Card(
-                    elevation: 3,
-                    child: Column(
-                      children: [
-                        AspectRatio(
-                            aspectRatio: 2,
-                            child: Container(
-                                color: Colors.yellow,
-                                child: Image.network(
-                                  // 'https://picsum.photos/250?image=9'
-                                  _products[index]["product-img"],
-                                ))),
-                        Text("${_products[index]["product-name"]}"),
-                        Text("${_products[index]["product-price"].toString()}"),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-        ),
+        // Expanded(
+        //   child: GridView.builder(
+        //       scrollDirection: Axis.horizontal,
+        //       itemCount: _products.length,
+        //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        //           crossAxisCount: 2, childAspectRatio: 1),
+        //       itemBuilder: (_, index) {
+        //         return GestureDetector(
+        //           onTap: () => Navigator.push(
+        //               context,
+        //               MaterialPageRoute(
+        //                   builder: (_) => ProductDetails(_products[index]))),
+        //           child: Card(
+        //             elevation: 3,
+        //             child: Column(
+        //               children: [
+        //                 AspectRatio(
+        //                     aspectRatio: 2,
+        //                     child: Container(
+        //                         color: Colors.yellow,
+        //                         child: Image.network(
+        //                           // 'https://picsum.photos/250?image=9'
+        //                           _products[index]["product-img"],
+        //                         ))),
+        //                 Text("${_products[index]["product-name"]}"),
+        //                 Text("${_products[index]["product-price"].toString()}"),
+        //               ],
+        //             ),
+        //           ),
+        //         );
+        //       }),
+        // ),
+
+        _productWidget(),
+
       ]),
     )));
   }
