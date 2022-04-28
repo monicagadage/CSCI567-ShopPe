@@ -21,10 +21,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   CarouselController buttonCarouselController = CarouselController();
 
-  Widget _productWidget() {
+  Widget _productWidget(List item_list) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
-      width: 300,
+      width: 500,
       height: 140,
       child: GridView(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
             crossAxisSpacing: 20),
         padding: EdgeInsets.only(left: 20),
         scrollDirection: Axis.horizontal,
-        children: _products
+        children: item_list
             .map(
               (product) => ProductCard(
             product: product,
@@ -52,48 +52,78 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget _categoryRow(
+      String title,
+      // Color primary,
+      // Color textColor,
+      ) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      height: 30,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(
+                color: const Color(0xff5a5d85), fontWeight: FontWeight.bold),
+          ),
+          // _chip("See all", primary)
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
             child: Container(
       child: Column(children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(left: 20, right: 20),
-          child: TextFormField(
-            readOnly: true,
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(0)),
-                  borderSide: BorderSide(color: Colors.blue)),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(0)),
-                  borderSide: BorderSide(color: Colors.grey)),
-              hintText: 'Enter a search term',
-              hintStyle: TextStyle(fontSize: 15),
-            ),
-            onTap: () => Navigator.push(
-                context, CupertinoPageRoute(builder: (_) => SearchScreen())),
-          ),
-        ),
+        // Padding(
+        //   padding: EdgeInsets.only(left: 20, right: 20),
+        //   child: TextFormField(
+        //     readOnly: true,
+        //     decoration: InputDecoration(
+        //       fillColor: Colors.white,
+        //       focusedBorder: OutlineInputBorder(
+        //           borderRadius: BorderRadius.all(Radius.circular(0)),
+        //           borderSide: BorderSide(color: Colors.blue)),
+        //       enabledBorder: OutlineInputBorder(
+        //           borderRadius: BorderRadius.all(Radius.circular(0)),
+        //           borderSide: BorderSide(color: Colors.grey)),
+        //       hintText: 'Enter a search term',
+        //       hintStyle: TextStyle(fontSize: 15),
+        //     ),
+        //     onTap: () => Navigator.push(
+        //         context, CupertinoPageRoute(builder: (_) => SearchScreen())),
+        //   ),
+        // ),
         CarouselSlider(
             items: _carouselImages
-                .map((item) => Padding(
-                      padding: const EdgeInsets.only(left: 3, right: 3),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(item),
-                                fit: BoxFit.fitWidth)),
-                      ),
-                    ))
+                // .map((item) => Padding(
+                //       padding: const EdgeInsets.only(left: 3, right: 3),
+                //       child: Container(
+                //         decoration: BoxDecoration(
+                //             image: DecorationImage(
+                //                 image: NetworkImage(item),
+                //                 fit: BoxFit.fitWidth)),
+                //       ),
+                //     ))
+                .map((item) => Container(
+              child: Container(
+                  child:
+                  Image.network(item, fit: BoxFit.fitWidth, width: 1200)),
+            ))
                 .toList(),
             options: CarouselOptions(
-                autoPlay: false,
-                enlargeCenterPage: true,
-                viewportFraction: 0.8,
-                enlargeStrategy: CenterPageEnlargeStrategy.height,
+                viewportFraction: 1.0,
+                enlargeCenterPage: false,
+                // autoPlay: false,
+                // enlargeCenterPage: true,
+                // viewportFraction: 0.8,
+                // enlargeStrategy: CenterPageEnlargeStrategy.height,
+                disableCenter: true,
                 onPageChanged: (val, carouselPageChangedReason) {
                   setState(() {
                     _dotPosition = val;
@@ -143,7 +173,11 @@ class _HomeState extends State<Home> {
         //       }),
         // ),
 
-        _productWidget(),
+        _categoryRow("Electronics"),
+
+        _productWidget(_products),
+
+        _categoryRow("Clothes"),
 
       ]),
     )));
@@ -182,6 +216,7 @@ class _HomeState extends State<Home> {
           "product-price": qn.docs[i]["product-price"],
           "product-img": qn.docs[i]["product-img"],
         });
+        // print("jjjjjjjjjkllll ${qn.docs[i].reference.path}");
       }
     });
 

@@ -4,6 +4,8 @@ import 'package:signup/ui/cart.dart';
 import 'package:signup/ui/favourite.dart';
 import 'package:signup/ui/home.dart';
 import 'package:signup/ui/profile.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:signup/ui/search_screen.dart';
 
 class BottomNavController extends StatefulWidget {
   @override
@@ -23,12 +25,18 @@ class _BottomNavControllerState extends State<BottomNavController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.red,
         elevation: 0,
         title: Text(
           "ShoPee",
           style: TextStyle(color: Colors.black),
         ),
+        actions: <Widget>[
+          new IconButton(onPressed: (){
+            Navigator.push(
+                context, CupertinoPageRoute(builder: (_) => SearchScreen()));
+          }, icon: Icon(Icons.search, color: Colors.white))
+        ],
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
