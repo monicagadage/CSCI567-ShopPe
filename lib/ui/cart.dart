@@ -11,7 +11,6 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
-<<<<<<< HEAD
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,35 +31,10 @@ class _CartState extends State<Cart> {
   //   return Scaffold(
   //     body: SafeArea(
   //       child: fetchData("users-cart-items"),
-=======
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //     title: 'Welcome to Flutter',
-  //     home: Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text('Welcome to Flutter'),
-  //       ),
-  //       body: const Center(
-  //         child: Text('Profile'),
-  //       ),
->>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
   //     ),
   //   );
   // }
 
-<<<<<<< HEAD
-=======
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: fetchData("users-cart-items"),
-      ),
-    );
-  }
-
->>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
   Widget fetchData(String collectionName) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance

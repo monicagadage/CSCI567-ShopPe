@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
-<<<<<<< HEAD
 class SizeConfig {
   static late MediaQueryData _mediaQueryData;
   static late double screenWidth;
@@ -32,8 +31,6 @@ double getProportionateScreenWidth(double inputWidth) {
   return (inputWidth / 375.0) * screenWidth;
 }
 
-=======
->>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
 class TitleText extends StatelessWidget {
   final String text;
   final double fontSize;

@@ -8,11 +8,8 @@ import 'package:signup/screens/signup_screen.dart';
 import 'package:signup/utils/color_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-<<<<<<< HEAD
 import '../ui/home.dart';
 
-=======
->>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
 
@@ -61,11 +58,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-<<<<<<< HEAD
                         builder: (context) => Home()));
-=======
-                        builder: (context) => BottomNavController()));
->>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
               }).onError((error, stackTrace) {
                 print("Error ${error.toString()}");
               });
