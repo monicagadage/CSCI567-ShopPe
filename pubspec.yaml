@@ -42,11 +42,8 @@ dependencies:
   carousel_slider: ^4.0.0
   cloud_firestore: ^3.1.12
   google_fonts: ^2.1.0
-<<<<<<< HEAD
   uuid: ^3.0.6
   flutter_svg: ^1.0.3
-=======
->>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
 
 dev_dependencies:
   flutter_test:

@@ -264,6 +264,8 @@ class _HomeState extends State<Home> {
           "product-liked": qn.docs[i]["isliked"],
           "product-quantity": qn.docs[i]["quantity"],
           "product-cart": qn.docs[i]["cart"],
+          "cart-reference": qn.docs[i]["cart-reference"],
+          "favorite-reference": qn.docs[i]["favorite-reference"],
           "product-location": qn.docs[i]["reference"],
           "product-thumbnail": <String>[qn.docs[i]["thumbnail1"].toString(), qn.docs[i]["thumbnail2"].toString(),
             qn.docs[i]["thumbnail3"].toString(), qn.docs[i]["thumbnail4"].toString()],

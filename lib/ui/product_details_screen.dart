@@ -52,21 +52,36 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
   }
 
 
-  // Future addToCart() async {
-  //   final FirebaseAuth _auth = FirebaseAuth.instance;
-  //   var currentUser = _auth.currentUser;
-  //   CollectionReference _collectionRef =
-  //       FirebaseFirestore.instance.collection("users-cart-items");
-  //   return _collectionRef
-  //       .doc(currentUser!.email)
-  //       .collection("items")
-  //       .doc()
-  //       .set({
-  //     "name": widget._product["product-name"],
-  //     "price": widget._product["product-price"],
-  //     "images": widget._product["product-img"],
-  //   }).then((value) => print("Added to cart"));
-  // }
+  Future addToCart() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+    var uuid = Uuid();
+    var v1 = uuid.v1();
+
+    DocumentReference docRef = FirebaseFirestore.instance.doc(widget._product["product-location"]);
+    docRef.update({
+      "cart-reference": v1,
+      "cart": true,
+      "quantity": 1
+    });
+    widget._product["cart-reference"] = v1;
+    widget._product["product-cart"] = true;
+    widget._product["product-quantity"] = 1;
+
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection("users-cart-items");
+    return _collectionRef
+        .doc(currentUser!.email)
+        .collection("items")
+        .doc(v1)
+        .set({
+      "name": widget._product["product-name"],
+      "price": widget._product["product-price"],
+      "images": widget._product["product-img"],
+      "quantity": widget._product["product-quantity"],
+      "reference": widget._product["product-location"],
+    }).then((value) => print("Added to cart"));
+  }
 
   Future addToFavourite() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -457,7 +472,9 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
 
   FloatingActionButton _flotingButton() {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        widget._product["product-cart"] ? print("Already added to cart!!") : addToCart();
+      },
       backgroundColor: AppColors.orange,
       child: Icon(Icons.shopping_basket,
           color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
