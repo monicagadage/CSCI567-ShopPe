@@ -3,12 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:signup/const/AppColors.dart';
+<<<<<<< HEAD
+=======
+import 'package:signup/screens/bottom_nav_controller.dart';
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
 import 'package:signup/reusable_widgets/customButton.dart';
 import 'package:signup/reusable_widgets/myTextField.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../reusable_widgets/reusable_widgets.dart';
+<<<<<<< HEAD
 import '../ui/home.dart';
+=======
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
 import '../utils/color_utils.dart';
 
 class UserForm extends StatefulWidget {
@@ -53,7 +60,11 @@ class _UserFormState extends State<UserForm> {
           "age": _ageController.text,
         })
         .then((value) => Navigator.push(
+<<<<<<< HEAD
             context, MaterialPageRoute(builder: (_) => Home())))
+=======
+            context, MaterialPageRoute(builder: (_) => BottomNavController())))
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
         .catchError((error) => print("something is wrong. $error"));
   }
 
@@ -152,7 +163,11 @@ class _UserFormState extends State<UserForm> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
+<<<<<<< HEAD
                         builder: (context) => Home()),
+=======
+                        builder: (context) => BottomNavController()),
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
                   );
                 }),
               ],

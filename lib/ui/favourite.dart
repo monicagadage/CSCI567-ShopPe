@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,12 @@ import 'package:signup/reusable_widgets/reusable_widgets.dart';
 
 import '../screens/bottom_nav_controller.dart';
 
+=======
+// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+// import 'package:flutter_ecommerce/widgets/fetchProducts.dart';
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
 
 class Favourite extends StatefulWidget {
   @override
@@ -14,6 +21,7 @@ class Favourite extends StatefulWidget {
 }
 
 class _FavouriteState extends State<Favourite> {
+<<<<<<< HEAD
 
   @override
   void initState() {
@@ -49,6 +57,19 @@ class _FavouriteState extends State<Favourite> {
                 .caption,
           ),
         ],
+=======
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Welcome to Flutter',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Welcome to Flutter'),
+        ),
+        body: const Center(
+          child: Text('Favourite'),
+        ),
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
       ),
     );
   }
@@ -61,6 +82,7 @@ class _FavouriteState extends State<Favourite> {
   //     ),
   //   );
   // }
+<<<<<<< HEAD
 
   List favorite_items = [];
 // var _firestoreInstance = FirebaseFirestore.instance;
@@ -325,4 +347,6 @@ Widget slideLeftBackground() {
       alignment: Alignment.centerRight,
     ),
   );
+=======
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
 }

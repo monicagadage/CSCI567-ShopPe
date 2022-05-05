@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:signup/const/AppColors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signup/reusable_widgets/reusable_widgets.dart';
+<<<<<<< HEAD
 import 'package:uuid/uuid.dart';
+=======
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
 
 // ignore: must_be_immutable
 class ProductDetails extends StatefulWidget {
@@ -33,7 +36,10 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
 
   late AnimationController controller;
   late Animation<double> animation;
+<<<<<<< HEAD
   late bool isLiked;
+=======
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
   @override
   void initState() {
     super.initState();
@@ -42,7 +48,10 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     animation = Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(parent: controller, curve: Curves.easeInToLinear));
     controller.forward();
+<<<<<<< HEAD
     isLiked = widget._product["product-liked"];
+=======
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
   }
 
   @override
@@ -51,7 +60,10 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     super.dispose();
   }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
   // Future addToCart() async {
   //   final FirebaseAuth _auth = FirebaseAuth.instance;
   //   var currentUser = _auth.currentUser;
@@ -68,6 +80,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
   //   }).then((value) => print("Added to cart"));
   // }
 
+<<<<<<< HEAD
   Future addToFavourite() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var uuid = Uuid();
@@ -115,6 +128,25 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
   }
 
 
+=======
+  // Future addToFavourite() async {
+  //   final FirebaseAuth _auth = FirebaseAuth.instance;
+  //   var currentUser = _auth.currentUser;
+  //   CollectionReference _collectionRef =
+  //       FirebaseFirestore.instance.collection("users-favourite-items");
+  //   return _collectionRef
+  //       .doc(currentUser!.email)
+  //       .collection("items")
+  //       .doc()
+  //       .set({
+  //     "name": widget._product["product-name"],
+  //     "price": widget._product["product-price"],
+  //     "images": widget._product["product-img"],
+  //   }).then((value) => print("Added to favourite"));
+  // }
+
+  bool isLiked = true;
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
   Widget _appBar() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -139,9 +171,12 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
               onPressed: () {
                 setState(() {
                   isLiked = !isLiked;
+<<<<<<< HEAD
                   // isLiked = widget._product["product-liked"];
                   isLiked ? addToFavourite() : removefromFavourite(widget._product["favorite-reference"]);
                   // addToFavourite();
+=======
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
                 });
               }),
         ],
@@ -203,17 +238,26 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: <Widget>[
+<<<<<<< HEAD
           // TitleText(
           //   text: "AIP",
           //   fontSize: 160,
           //   color: Color(0xffE1E2E4),
           // ),
+=======
+          TitleText(
+            text: "AIP",
+            fontSize: 160,
+            color: Color(0xffE1E2E4),
+          ),
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
           Image.network(widget._product["product-img"])
         ],
       ),
     );
   }
 
+<<<<<<< HEAD
   Widget _categoryWidget() {
     print("gggggggg ${widget._product["product-thumbnail"]}");
 
@@ -228,6 +272,20 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
           (widget._product["product-thumbnail"]).map((x) => _thumbnail(x)).toList()),
     );
   }
+=======
+  // Widget _categoryWidget() {
+  //   return Container(
+  //     margin: EdgeInsets.symmetric(vertical: 0),
+  //     width: 100,
+  //     height: 80,
+  //     child: Row(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children:
+  //         AppData.showThumbnailList.map((x) => _thumbnail(x)).toList()),
+  //   );
+  // }
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
 
   Widget _thumbnail(String image) {
     return AnimatedBuilder(
@@ -250,7 +308,11 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
             borderRadius: BorderRadius.all(Radius.circular(13)),
             // color: Theme.of(context).backgroundColor,
           ),
+<<<<<<< HEAD
           child: Image.network(image),
+=======
+          child: Image.asset(image),
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
         )
             // .ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13))),
       ),
@@ -450,7 +512,11 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
           fontSize: 14,
         ),
         SizedBox(height: 20),
+<<<<<<< HEAD
         Text((widget._product["product-description"]).replaceAll("\\n", "\n")),
+=======
+        Text("AppData.description description description description description description"),
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
       ],
     );
   }

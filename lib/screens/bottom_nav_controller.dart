@@ -7,6 +7,7 @@ import 'package:signup/ui/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:signup/ui/search_screen.dart';
 
+<<<<<<< HEAD
 class BottomNavController extends StatelessWidget {
   String selectedMenu;
 
@@ -168,3 +169,73 @@ class BottomNavController extends StatelessWidget {
   }
 
 }
+=======
+class BottomNavController extends StatefulWidget {
+  @override
+  _BottomNavControllerState createState() => _BottomNavControllerState();
+}
+
+class _BottomNavControllerState extends State<BottomNavController> {
+  final _pages = [
+    Home(),
+    Favourite(),
+    Cart(),
+    Profile(),
+  ];
+  var _currentIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        elevation: 0,
+        title: Text(
+          "ShoPee",
+          style: TextStyle(color: Colors.black),
+        ),
+        actions: <Widget>[
+          new IconButton(onPressed: (){
+            Navigator.push(
+                context, CupertinoPageRoute(builder: (_) => SearchScreen()));
+          }, icon: Icon(Icons.search, color: Colors.white))
+        ],
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 5,
+        selectedItemColor: AppColors.deep_orange,
+        backgroundColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        currentIndex: _currentIndex,
+        selectedLabelStyle:
+            TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite_outline), label: "Favourite"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_shopping_cart),
+            label: "Cart",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: "Person",
+          ),
+        ],
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+            print(_currentIndex);
+          });
+        },
+      ),
+      body: _pages[_currentIndex],
+    );
+  }
+}
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba

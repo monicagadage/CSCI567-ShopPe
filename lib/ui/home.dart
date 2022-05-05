@@ -7,7 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:signup/const/AppColors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+<<<<<<< HEAD
 import '../screens/bottom_nav_controller.dart';
+=======
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
 import 'product_details_screen.dart';
 import 'search_screen.dart';
 import 'product_card.dart';
@@ -78,6 +81,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< HEAD
         appBar: AppBar(
           backgroundColor: Colors.red,
           elevation: 0,
@@ -96,6 +100,9 @@ class _HomeState extends State<Home> {
         ),
         body: SingleChildScrollView (
         child: SafeArea(
+=======
+        body: SafeArea(
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
             child: Container(
       child: Column(children: <Widget>[
         // Padding(
@@ -195,6 +202,7 @@ class _HomeState extends State<Home> {
 
         _productWidget(_products),
 
+<<<<<<< HEAD
         _categoryRow("Watches"),
 
         _productWidget(_watches),
@@ -207,14 +215,23 @@ class _HomeState extends State<Home> {
     ))),
         bottomNavigationBar: BottomNavController("home"),
     );
+=======
+        _categoryRow("Clothes"),
+
+      ]),
+    )));
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
   }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
   List<String> _carouselImages = [];
   var _dotPosition = 0;
   List _products = [];
+<<<<<<< HEAD
   List _watches = [];
   List _shirts = [];
+=======
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
   var _firestoreInstance = FirebaseFirestore.instance;
 
   fetchCarouselImages() async {
@@ -244,6 +261,7 @@ class _HomeState extends State<Home> {
           "product-price": qn.docs[i]["product-price"],
           "product-img": qn.docs[i]["product-img"],
         });
+<<<<<<< HEAD
         print("jjjjjjjjjkllll ${qn.docs[i].reference.path}");
       }
     });
@@ -293,6 +311,8 @@ class _HomeState extends State<Home> {
           "favorite-reference": qn.docs[i]["favorite-reference"],
           "product-thumbnail": <String>[qn.docs[i]["thumbnail1"].toString(), qn.docs[i]["thumbnail2"].toString(),
             qn.docs[i]["thumbnail3"].toString(), qn.docs[i]["thumbnail4"].toString()] });
+=======
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
         // print("jjjjjjjjjkllll ${qn.docs[i].reference.path}");
       }
     });
@@ -305,8 +325,11 @@ class _HomeState extends State<Home> {
     super.initState();
     fetchCarouselImages();
     fetchProducts();
+<<<<<<< HEAD
     fetch_watch();
     fetch_shirt();
+=======
+>>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
   }
 
   // @override
