@@ -37,14 +37,3 @@ class MyApp extends StatelessWidget {
 
 
 // flutter run -d chrome --web-renderer html
-
-
-// add path reference field
-// add quantity field
-// add isliked field
-// add add_to_cart field
-
-// Category:
-  // Shoes - size, color, add more images, description
-  // T shirts - size(l, xl, xxl), color, add more images, description
-  // Watch - description

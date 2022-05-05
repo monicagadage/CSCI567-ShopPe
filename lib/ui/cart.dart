@@ -11,29 +11,29 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //     title: 'Welcome to Flutter',
-  //     home: Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text('Welcome to Flutter'),
-  //       ),
-  //       body: const Center(
-  //         child: Text('Profile'),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: fetchData("users-cart-items"),
+    return MaterialApp(
+      title: 'Welcome to Flutter',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Welcome to Flutter'),
+        ),
+        body: const Center(
+          child: Text('Profile'),
+        ),
       ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     body: SafeArea(
+  //       child: fetchData("users-cart-items"),
+  //     ),
+  //   );
+  // }
 
   Widget fetchData(String collectionName) {
     return StreamBuilder(

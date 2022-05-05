@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:signup/const/AppColors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../screens/bottom_nav_controller.dart';
 import 'product_details_screen.dart';
 import 'search_screen.dart';
 import 'product_card.dart';
@@ -77,7 +78,24 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
+        appBar: AppBar(
+          backgroundColor: Colors.red,
+          elevation: 0,
+          title: Text(
+            "ShoPee",
+            style: TextStyle(color: Colors.black),
+          ),
+          actions: <Widget>[
+            new IconButton(onPressed: (){
+              Navigator.push(
+                  context, CupertinoPageRoute(builder: (_) => SearchScreen()));
+            }, icon: Icon(Icons.search, color: Colors.white))
+          ],
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+        ),
+        body: SingleChildScrollView (
+        child: SafeArea(
             child: Container(
       child: Column(children: <Widget>[
         // Padding(
@@ -177,16 +195,26 @@ class _HomeState extends State<Home> {
 
         _productWidget(_products),
 
+        _categoryRow("Watches"),
+
+        _productWidget(_watches),
+
         _categoryRow("Clothes"),
 
-      ]),
-    )));
+        _productWidget(_shirts),
+
+      ]      ),
+    ))),
+        bottomNavigationBar: BottomNavController("home"),
+    );
   }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
   List<String> _carouselImages = [];
   var _dotPosition = 0;
   List _products = [];
+  List _watches = [];
+  List _shirts = [];
   var _firestoreInstance = FirebaseFirestore.instance;
 
   fetchCarouselImages() async {
@@ -216,6 +244,55 @@ class _HomeState extends State<Home> {
           "product-price": qn.docs[i]["product-price"],
           "product-img": qn.docs[i]["product-img"],
         });
+        print("jjjjjjjjjkllll ${qn.docs[i].reference.path}");
+      }
+    });
+
+    return qn.docs;
+  }
+
+  fetch_watch() async {
+    _firestoreInstance = FirebaseFirestore.instance;
+    QuerySnapshot qn = await _firestoreInstance.collection("watch").get();
+    setState(() {
+      for (int i = 0; i < qn.docs.length; i++) {
+        _watches.add({
+          "product-name": qn.docs[i]["name"],
+          "product-description": qn.docs[i]["description"],
+          "product-price": qn.docs[i]["price"],
+          "product-img": qn.docs[i]["img"],
+          "product-liked": qn.docs[i]["isliked"],
+          "product-quantity": qn.docs[i]["quantity"],
+          "product-cart": qn.docs[i]["cart"],
+          "product-location": qn.docs[i]["reference"],
+          "product-thumbnail": <String>[qn.docs[i]["thumbnail1"].toString(), qn.docs[i]["thumbnail2"].toString(),
+            qn.docs[i]["thumbnail3"].toString(), qn.docs[i]["thumbnail4"].toString()],
+        });
+        // print("jjjjjjjjjkllll ${qn.docs[i].reference.path}");
+      }
+    });
+
+    return qn.docs;
+  }
+
+  fetch_shirt() async {
+    _firestoreInstance = FirebaseFirestore.instance;
+    QuerySnapshot qn = await _firestoreInstance.collection("Shirts").get();
+    setState(() {
+      for (int i = 0; i < qn.docs.length; i++) {
+        _shirts.add({
+          "product-name": qn.docs[i]["name"],
+          "product-description": qn.docs[i]["description"],
+          "product-price": qn.docs[i]["price"],
+          "product-img": qn.docs[i]["img"],
+          "product-liked": qn.docs[i]["isliked"],
+          "product-quantity": qn.docs[i]["quantity"],
+          "product-cart": qn.docs[i]["cart"],
+          "product-location": qn.docs[i]["reference"],
+          "cart-reference": qn.docs[i]["cart-reference"],
+          "favorite-reference": qn.docs[i]["favorite-reference"],
+          "product-thumbnail": <String>[qn.docs[i]["thumbnail1"].toString(), qn.docs[i]["thumbnail2"].toString(),
+            qn.docs[i]["thumbnail3"].toString(), qn.docs[i]["thumbnail4"].toString()] });
         // print("jjjjjjjjjkllll ${qn.docs[i].reference.path}");
       }
     });
@@ -228,6 +305,8 @@ class _HomeState extends State<Home> {
     super.initState();
     fetchCarouselImages();
     fetchProducts();
+    fetch_watch();
+    fetch_shirt();
   }
 
   // @override

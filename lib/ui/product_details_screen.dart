@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:signup/const/AppColors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signup/reusable_widgets/reusable_widgets.dart';
+import 'package:uuid/uuid.dart';
 
 // ignore: must_be_immutable
 class ProductDetails extends StatefulWidget {
@@ -32,6 +33,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
 
   late AnimationController controller;
   late Animation<double> animation;
+  late bool isLiked;
   @override
   void initState() {
     super.initState();
@@ -40,6 +42,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     animation = Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(parent: controller, curve: Curves.easeInToLinear));
     controller.forward();
+    isLiked = widget._product["product-liked"];
   }
 
   @override
@@ -47,6 +50,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     controller.dispose();
     super.dispose();
   }
+
 
   // Future addToCart() async {
   //   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -64,23 +68,53 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
   //   }).then((value) => print("Added to cart"));
   // }
 
-  // Future addToFavourite() async {
-  //   final FirebaseAuth _auth = FirebaseAuth.instance;
-  //   var currentUser = _auth.currentUser;
-  //   CollectionReference _collectionRef =
-  //       FirebaseFirestore.instance.collection("users-favourite-items");
-  //   return _collectionRef
-  //       .doc(currentUser!.email)
-  //       .collection("items")
-  //       .doc()
-  //       .set({
-  //     "name": widget._product["product-name"],
-  //     "price": widget._product["product-price"],
-  //     "images": widget._product["product-img"],
-  //   }).then((value) => print("Added to favourite"));
-  // }
+  Future addToFavourite() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var uuid = Uuid();
+    var v1 = uuid.v1();
+    DocumentReference docRef = FirebaseFirestore.instance.doc(widget._product["product-location"]);
+    docRef.update({
+      "favorite-reference": v1,
+      "isliked": true,
+    });
+    widget._product["favorite-reference"] = v1;
+    widget._product["product-liked"] = true;
+    var currentUser = _auth.currentUser;
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection("users-favourite-items");
+    return _collectionRef
+        .doc(currentUser!.email)
+        .collection("items")
+        .doc(v1)
+        .set({
+      "name": widget._product["product-name"],
+      "price": widget._product["product-price"],
+      "images": widget._product["product-img"],
+      "reference": widget._product["product-location"],
 
-  bool isLiked = true;
+    }).then((value) => print("Added to favourite"));
+  }
+
+  Future removefromFavourite(String docId) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    DocumentReference docRef = FirebaseFirestore.instance.doc(widget._product["product-location"]);
+    docRef.update({
+      "favorite-reference": "",
+      "isliked": false,
+    });
+    var currentUser = _auth.currentUser;
+    widget._product["favorite-reference"] = "";
+    widget._product["product-liked"] = false;
+    CollectionReference _collectionRef =
+    FirebaseFirestore.instance.collection("users-favourite-items");
+    return _collectionRef
+        .doc(currentUser!.email)
+        .collection("items")
+        .doc(docId)
+        .delete().then((value) => print("Removed from favourite"));
+  }
+
+
   Widget _appBar() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -105,6 +139,9 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
               onPressed: () {
                 setState(() {
                   isLiked = !isLiked;
+                  // isLiked = widget._product["product-liked"];
+                  isLiked ? addToFavourite() : removefromFavourite(widget._product["favorite-reference"]);
+                  // addToFavourite();
                 });
               }),
         ],
@@ -166,29 +203,31 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: <Widget>[
-          TitleText(
-            text: "AIP",
-            fontSize: 160,
-            color: Color(0xffE1E2E4),
-          ),
+          // TitleText(
+          //   text: "AIP",
+          //   fontSize: 160,
+          //   color: Color(0xffE1E2E4),
+          // ),
           Image.network(widget._product["product-img"])
         ],
       ),
     );
   }
 
-  // Widget _categoryWidget() {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(vertical: 0),
-  //     width: 100,
-  //     height: 80,
-  //     child: Row(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children:
-  //         AppData.showThumbnailList.map((x) => _thumbnail(x)).toList()),
-  //   );
-  // }
+  Widget _categoryWidget() {
+    print("gggggggg ${widget._product["product-thumbnail"]}");
+
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 0),
+      width: 100,
+      height: 80,
+      child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:
+          (widget._product["product-thumbnail"]).map((x) => _thumbnail(x)).toList()),
+    );
+  }
 
   Widget _thumbnail(String image) {
     return AnimatedBuilder(
@@ -211,7 +250,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
             borderRadius: BorderRadius.all(Radius.circular(13)),
             // color: Theme.of(context).backgroundColor,
           ),
-          child: Image.asset(image),
+          child: Image.network(image),
         )
             // .ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13))),
       ),
@@ -411,7 +450,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
           fontSize: 14,
         ),
         SizedBox(height: 20),
-        Text("AppData.description description description description description description"),
+        Text((widget._product["product-description"]).replaceAll("\\n", "\n")),
       ],
     );
   }

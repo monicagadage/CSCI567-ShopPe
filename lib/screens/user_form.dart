@@ -3,12 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:signup/const/AppColors.dart';
-import 'package:signup/screens/bottom_nav_controller.dart';
 import 'package:signup/reusable_widgets/customButton.dart';
 import 'package:signup/reusable_widgets/myTextField.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../reusable_widgets/reusable_widgets.dart';
+import '../ui/home.dart';
 import '../utils/color_utils.dart';
 
 class UserForm extends StatefulWidget {
@@ -53,7 +53,7 @@ class _UserFormState extends State<UserForm> {
           "age": _ageController.text,
         })
         .then((value) => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => BottomNavController())))
+            context, MaterialPageRoute(builder: (_) => Home())))
         .catchError((error) => print("something is wrong. $error"));
   }
 
@@ -152,7 +152,7 @@ class _UserFormState extends State<UserForm> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BottomNavController()),
+                        builder: (context) => Home()),
                   );
                 }),
               ],
