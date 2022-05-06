@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:signup/const/AppColors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signup/reusable_widgets/reusable_widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:uuid/uuid.dart';
+// import 'package:uuid/uuid.dart';
 
 // ignore: must_be_immutable
 class ProductDetails extends StatefulWidget {
@@ -15,7 +17,8 @@ class ProductDetails extends StatefulWidget {
   _ProductDetailsState createState() => _ProductDetailsState();
 }
 
-class _ProductDetailsState extends State<ProductDetails> with TickerProviderStateMixin {
+class _ProductDetailsState extends State<ProductDetails>
+    with TickerProviderStateMixin {
   // @override
   // Widget build(BuildContext context) {
   //   return MaterialApp(
@@ -51,19 +54,15 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     super.dispose();
   }
 
-
   Future addToCart() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
     var uuid = Uuid();
     var v1 = uuid.v1();
 
-    DocumentReference docRef = FirebaseFirestore.instance.doc(widget._product["product-location"]);
-    docRef.update({
-      "cart-reference": v1,
-      "cart": true,
-      "quantity": 1
-    });
+    DocumentReference docRef =
+        FirebaseFirestore.instance.doc(widget._product["product-location"]);
+    docRef.update({"cart-reference": v1, "cart": true, "quantity": 1});
     widget._product["cart-reference"] = v1;
     widget._product["product-cart"] = true;
     widget._product["product-quantity"] = 1;
@@ -87,7 +86,8 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var uuid = Uuid();
     var v1 = uuid.v1();
-    DocumentReference docRef = FirebaseFirestore.instance.doc(widget._product["product-location"]);
+    DocumentReference docRef =
+        FirebaseFirestore.instance.doc(widget._product["product-location"]);
     docRef.update({
       "favorite-reference": v1,
       "isliked": true,
@@ -106,13 +106,13 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
       "price": widget._product["product-price"],
       "images": widget._product["product-img"],
       "reference": widget._product["product-location"],
-
     }).then((value) => print("Added to favourite"));
   }
 
   Future removefromFavourite(String docId) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
-    DocumentReference docRef = FirebaseFirestore.instance.doc(widget._product["product-location"]);
+    DocumentReference docRef =
+        FirebaseFirestore.instance.doc(widget._product["product-location"]);
     docRef.update({
       "favorite-reference": "",
       "isliked": false,
@@ -121,14 +121,14 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     widget._product["favorite-reference"] = "";
     widget._product["product-liked"] = false;
     CollectionReference _collectionRef =
-    FirebaseFirestore.instance.collection("users-favourite-items");
+        FirebaseFirestore.instance.collection("users-favourite-items");
     return _collectionRef
         .doc(currentUser!.email)
         .collection("items")
         .doc(docId)
-        .delete().then((value) => print("Removed from favourite"));
+        .delete()
+        .then((value) => print("Removed from favourite"));
   }
-
 
   Widget _appBar() {
     return Container(
@@ -150,53 +150,54 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
               color: isLiked ? Color(0xffF72804) : Color(0xffE1E2E4),
               size: 15,
               padding: 12,
-              isOutLine: false,
-              onPressed: () {
-                setState(() {
-                  isLiked = !isLiked;
-                  // isLiked = widget._product["product-liked"];
-                  isLiked ? addToFavourite() : removefromFavourite(widget._product["favorite-reference"]);
-                  // addToFavourite();
-                });
-              }),
+              isOutLine: false, onPressed: () {
+            setState(() {
+              isLiked = !isLiked;
+              // isLiked = widget._product["product-liked"];
+              isLiked
+                  ? addToFavourite()
+                  : removefromFavourite(widget._product["favorite-reference"]);
+              // addToFavourite();
+            });
+          }),
         ],
       ),
     );
   }
 
   Widget _icon(
-      IconData icon, {
-        Color color = const Color(0xffa8a09b),
-        double size = 20,
-        double padding = 10,
-        bool isOutLine = false,
-        required Function onPressed,
-      }) {
+    IconData icon, {
+    Color color = const Color(0xffa8a09b),
+    double size = 20,
+    double padding = 10,
+    bool isOutLine = false,
+    required Function onPressed,
+  }) {
     return GestureDetector(
-        onTap: () => onPressed(),
-
-    child: Container(
-      height: 40,
-      width: 40,
-      padding: EdgeInsets.all(padding),
-      // margin: EdgeInsets.all(padding),
-      decoration: BoxDecoration(
-        border: Border.all(
-            color: Color(0xffa8a09b),
-            style: isOutLine ? BorderStyle.solid : BorderStyle.none),
-        borderRadius: BorderRadius.all(Radius.circular(13)),
-        color:
-        isOutLine ? Colors.transparent : Theme.of(context).backgroundColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Color(0xfff8f8f8),
-              blurRadius: 5,
-              spreadRadius: 10,
-              offset: Offset(5, 5)),
-        ],
+      onTap: () => onPressed(),
+      child: Container(
+        height: 40,
+        width: 40,
+        padding: EdgeInsets.all(padding),
+        // margin: EdgeInsets.all(padding),
+        decoration: BoxDecoration(
+          border: Border.all(
+              color: Color(0xffa8a09b),
+              style: isOutLine ? BorderStyle.solid : BorderStyle.none),
+          borderRadius: BorderRadius.all(Radius.circular(13)),
+          color: isOutLine
+              ? Colors.transparent
+              : Theme.of(context).backgroundColor,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Color(0xfff8f8f8),
+                blurRadius: 5,
+                spreadRadius: 10,
+                offset: Offset(5, 5)),
+          ],
+        ),
+        child: Icon(icon, color: color, size: size),
       ),
-      child: Icon(icon, color: color, size: size),
-    ),
     );
     //     .ripple(() {
     //   if (onPressed != null) {
@@ -239,8 +240,9 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
       child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
-          children:
-          (widget._product["product-thumbnail"]).map((x) => _thumbnail(x)).toList()),
+          children: (widget._product["product-thumbnail"])
+              .map((x) => _thumbnail(x))
+              .toList()),
     );
   }
 
@@ -254,21 +256,21 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
         child: child,
       ),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        child: Container(
-          height: 40,
-          width: 50,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Color(0xffA1A3A6),
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          child: Container(
+            height: 40,
+            width: 50,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Color(0xffA1A3A6),
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(13)),
+              // color: Theme.of(context).backgroundColor,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(13)),
-            // color: Theme.of(context).backgroundColor,
+            child: Image.network(image),
+          )
+          // .ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13))),
           ),
-          child: Image.network(image),
-        )
-            // .ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13))),
-      ),
     );
   }
 
@@ -279,7 +281,8 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
       minChildSize: .53,
       builder: (context, scrollController) {
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10).copyWith(bottom: 0),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10)
+              .copyWith(bottom: 0),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(40),
@@ -309,7 +312,8 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      TitleText(text: widget._product["product-name"], fontSize: 25),
+                      TitleText(
+                          text: widget._product["product-name"], fontSize: 25),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
@@ -322,7 +326,8 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                                 color: AppColors.red,
                               ),
                               TitleText(
-                                text: widget._product["product-price"].toString(),
+                                text:
+                                    widget._product["product-price"].toString(),
                                 fontSize: 25,
                               ),
                             ],
@@ -396,7 +401,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
             style: !isSelected ? BorderStyle.solid : BorderStyle.none),
         borderRadius: BorderRadius.all(Radius.circular(13)),
         color:
-        isSelected ? AppColors.orange : Theme.of(context).backgroundColor,
+            isSelected ? AppColors.orange : Theme.of(context).backgroundColor,
       ),
       child: TitleText(
         text: text,
@@ -404,7 +409,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
         color: isSelected ? AppColors.background : AppColors.titleTextColor,
       ),
     );
-        // .ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)));
+    // .ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)));
   }
 
   Widget _availableColor() {
@@ -448,10 +453,10 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
       backgroundColor: color.withAlpha(150),
       child: isSelected
           ? Icon(
-        Icons.check_circle,
-        color: color,
-        size: 18,
-      )
+              Icons.check_circle,
+              color: color,
+              size: 18,
+            )
           : CircleAvatar(radius: 7, backgroundColor: color),
     );
   }
@@ -473,7 +478,9 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
   FloatingActionButton _flotingButton() {
     return FloatingActionButton(
       onPressed: () {
-        widget._product["product-cart"] ? print("Already added to cart!!") : addToCart();
+        widget._product["product-cart"]
+            ? print("Already added to cart!!")
+            : addToCart();
       },
       backgroundColor: AppColors.orange,
       child: Icon(Icons.shopping_basket,
@@ -489,13 +496,13 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
         child: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Color(0xfffbfbfb),
-                  Color(0xfff7f7f7),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              )),
+            colors: [
+              Color(0xfffbfbfb),
+              Color(0xfff7f7f7),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          )),
           child: Stack(
             children: <Widget>[
               Column(
@@ -513,3 +520,341 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     );
   }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// import 'package:carousel_slider/carousel_slider.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:signup/const/AppColors.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+// // ignore: must_be_immutable
+// class ProductDetails extends StatefulWidget {
+//   var _product;
+//   ProductDetails(this._product);
+//   @override
+//   _ProductDetailsState createState() => _ProductDetailsState();
+// }
+
+// class _ProductDetailsState extends State<ProductDetails> {
+//   Future addToCart() async {
+//     final FirebaseAuth _auth = FirebaseAuth.instance;
+//     var currentUser = _auth.currentUser;
+//     CollectionReference _collectionRef =
+//         FirebaseFirestore.instance.collection("users-cart-items");
+//     return _collectionRef
+//         .doc(currentUser!.email)
+//         .collection("items")
+//         .doc()
+//         .set({
+//       "name": widget._product["product-name"],
+//       "price": widget._product["product-price"],
+//       "images": widget._product["product-img"],
+//     }).then((value) => print("Added to cart"));
+//   }
+
+//   Future addToFavourite() async {
+//     final FirebaseAuth _auth = FirebaseAuth.instance;
+//     var currentUser = _auth.currentUser;
+//     CollectionReference _collectionRef =
+//         FirebaseFirestore.instance.collection("users-favourite-items");
+//     return _collectionRef
+//         .doc(currentUser!.email)
+//         .collection("items")
+//         .doc()
+//         .set({
+//       "name": widget._product["product-name"],
+//       "price": widget._product["product-price"],
+//       "images": widget._product["product-img"],
+//     }).then((value) => print("Added to favourite"));
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: Colors.transparent,
+//         elevation: 0,
+//         leading: Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: CircleAvatar(
+//             backgroundColor: AppColors.deep_orange,
+//             child: IconButton(
+//                 onPressed: () => Navigator.pop(context),
+//                 icon: Icon(
+//                   Icons.arrow_back,
+//                   color: Colors.white,
+//                 )),
+//           ),
+//         ),
+//         actions: [
+//           StreamBuilder(
+//             stream: FirebaseFirestore.instance
+//                 .collection("users-favourite-items")
+//                 .doc(FirebaseAuth.instance.currentUser!.email)
+//                 .collection("items")
+//                 .where("name", isEqualTo: widget._product['product-name'])
+//                 .snapshots(),
+//             builder: (BuildContext context, AsyncSnapshot snapshot) {
+//               if (snapshot.data == null) {
+//                 return Text("");
+//               }
+//               return Padding(
+//                 padding: const EdgeInsets.only(right: 8),
+//                 child: CircleAvatar(
+//                   backgroundColor: Colors.red,
+//                   child: IconButton(
+//                     onPressed: () => snapshot.data.docs.length == 0
+//                         ? addToFavourite()
+//                         : print("Already Added"),
+//                     icon: snapshot.data.docs.length == 0
+//                         ? Icon(
+//                             Icons.favorite_outline,
+//                             color: Colors.white,
+//                           )
+//                         : Icon(
+//                             Icons.favorite,
+//                             color: Colors.white,
+//                           ),
+//                   ),
+//                 ),
+//               );
+//             },
+//           ),
+//         ],
+//       ),
+//       body: SafeArea(
+//           child: Padding(
+//         padding: const EdgeInsets.only(left: 12, right: 12, top: 10),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             AspectRatio(
+//               aspectRatio: 3.5,
+//               child: CarouselSlider(
+//                   items: widget._product['product-img']
+//                       .map<Widget>((item) => Padding(
+//                             padding: const EdgeInsets.only(left: 3, right: 3),
+//                             child: Container(
+//                               decoration: BoxDecoration(
+//                                   image: DecorationImage(
+//                                       image: NetworkImage(item),
+//                                       fit: BoxFit.fitWidth)),
+//                             ),
+//                           ))
+//                       .toList(),
+//                   options: CarouselOptions(
+//                       autoPlay: false,
+//                       enlargeCenterPage: true,
+//                       viewportFraction: 0.8,
+//                       enlargeStrategy: CenterPageEnlargeStrategy.height,
+//                       onPageChanged: (val, carouselPageChangedReason) {
+//                         setState(() {});
+//                       })),
+//             ),
+//             Text(
+//               widget._product['product-name'],
+//               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+//             ),
+//             Text(widget._product['product-description']),
+//             SizedBox(
+//               height: 10,
+//             ),
+//             Text(
+//               "\$ ${widget._product['product-price'].toString()}",
+//               style: TextStyle(
+//                   fontWeight: FontWeight.bold, fontSize: 30, color: Colors.red),
+//             ),
+//             Divider(),
+//             SizedBox(
+//               width: 1.sw,
+//               height: 56.h,
+//               child: ElevatedButton(
+//                 onPressed: () => addToCart(),
+//                 child: Text(
+//                   "Add to cart",
+//                   style: TextStyle(color: Colors.white, fontSize: 18.sp),
+//                 ),
+//                 style: ElevatedButton.styleFrom(
+//                   primary: AppColors.deep_orange,
+//                   elevation: 3,
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       )),
+//     );
+//   }
+// }
+
+/////////////////////////////////////////////////////////////////////////////////////
+///
+// import 'package:carousel_slider/carousel_slider.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:signup/const/AppColors.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+// // ignore: must_be_immutable
+// class ProductDetails extends StatefulWidget {
+//   var _product;
+//   ProductDetails(this._product);
+//   @override
+//   _ProductDetailsState createState() => _ProductDetailsState();
+// }
+
+// class _ProductDetailsState extends State<ProductDetails> {
+//   Future addToCart() async {
+//     final FirebaseAuth _auth = FirebaseAuth.instance;
+//     var currentUser = _auth.currentUser;
+//     CollectionReference _collectionRef =
+//         FirebaseFirestore.instance.collection("users-cart-items");
+//     return _collectionRef
+//         .doc(currentUser!.email)
+//         .collection("items")
+//         .doc()
+//         .set({
+//       "name": widget._product["product-name"],
+//       "price": widget._product["product-price"],
+//       "images": widget._product["product-img"],
+//     }).then((value) => print("Added to cart"));
+//   }
+
+//   Future addToFavourite() async {
+//     final FirebaseAuth _auth = FirebaseAuth.instance;
+//     var currentUser = _auth.currentUser;
+//     CollectionReference _collectionRef =
+//         FirebaseFirestore.instance.collection("users-favourite-items");
+//     return _collectionRef
+//         .doc(currentUser!.email)
+//         .collection("items")
+//         .doc()
+//         .set({
+//       "name": widget._product["product-name"],
+//       "price": widget._product["product-price"],
+//       "images": widget._product["product-img"],
+//     }).then((value) => print("Added to favourite"));
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: Colors.transparent,
+//         elevation: 0,
+//         leading: Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: CircleAvatar(
+//             backgroundColor: AppColors.deep_orange,
+//             child: IconButton(
+//                 onPressed: () => Navigator.pop(context),
+//                 icon: Icon(
+//                   Icons.arrow_back,
+//                   color: Color.fromARGB(255, 255, 255, 255),
+//                 )),
+//           ),
+//         ),
+//         actions: [
+//           StreamBuilder(
+//             stream: FirebaseFirestore.instance
+//                 .collection("users-favourite-items")
+//                 .doc(FirebaseAuth.instance.currentUser!.email)
+//                 .collection("items")
+//                 .where("name", isEqualTo: widget._product['product-name'])
+//                 .snapshots(),
+//             builder: (BuildContext context, AsyncSnapshot snapshot) {
+//               if (snapshot.data == null) {
+//                 return Text("");
+//               }
+//               return Padding(
+//                 padding: const EdgeInsets.only(right: 8),
+//                 child: CircleAvatar(
+//                   backgroundColor: Colors.red,
+//                   child: IconButton(
+//                     onPressed: () => snapshot.data.docs.length == 0
+//                         ? addToFavourite()
+//                         : print("Already Added"),
+//                     icon: snapshot.data.docs.length == 0
+//                         ? Icon(
+//                             Icons.favorite_outline,
+//                             color: Colors.white,
+//                           )
+//                         : Icon(
+//                             Icons.favorite,
+//                             color: Colors.white,
+//                           ),
+//                   ),
+//                 ),
+//               );
+//             },
+//           ),
+//         ],
+//       ),
+//       body: SafeArea(
+//           child: Padding(
+//         padding: const EdgeInsets.only(left: 12, right: 12, top: 10),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             // AspectRatio(
+//             //   aspectRatio: 3.5,
+//             //   child: CarouselSlider(
+//             //       items: widget._product['product-img']
+//             //           .map<Widget>((item) => Padding(
+//             //                 padding: const EdgeInsets.only(left: 3, right: 3),
+//             //                 child: Container(
+//             //                   decoration: BoxDecoration(
+//             //                       image: DecorationImage(
+//             //                           image: NetworkImage(item),
+//             //                           fit: BoxFit.fitWidth)),
+//             //                 ),
+//             //               ))
+//             //           .toList(),
+//             //       options: CarouselOptions(
+//             //           autoPlay: false,
+//             //           enlargeCenterPage: true,
+//             //           viewportFraction: 0.8,
+//             //           enlargeStrategy: CenterPageEnlargeStrategy.height,
+//             //           onPageChanged: (val, carouselPageChangedReason) {
+//             //             setState(() {});
+//             //           })),
+//             // ),
+//             Text(
+//               widget._product['product-name'],
+//               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+//             ),
+//             Text(widget._product['product-description']),
+//             SizedBox(
+//               height: 10,
+//             ),
+//             Text(
+//               "\$ ${widget._product['product-price'].toString()}",
+//               style: TextStyle(
+//                   fontWeight: FontWeight.bold, fontSize: 30, color: Colors.red),
+//             ),
+//             Divider(),
+//             SizedBox(
+//               width: 1,
+//               height: 56,
+//               child: ElevatedButton(
+//                 onPressed: () => addToCart(),
+//                 child: Text(
+//                   "Add to cart",
+//                   style: TextStyle(
+//                       color: Color.fromARGB(255, 236, 0, 0), fontSize: 18),
+//                 ),
+//                 style: ElevatedButton.styleFrom(
+//                   primary: Color.fromARGB(255, 0, 43, 236),
+//                   elevation: 3,
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       )),
+//     );
+//   }
+// }

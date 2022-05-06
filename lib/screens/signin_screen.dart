@@ -37,7 +37,7 @@ class _SignInScreenState extends State<SignInScreen> {
           padding: EdgeInsets.fromLTRB(
               20, MediaQuery.of(context).size.height * 0.2, 20, 0),
           child: Column(children: <Widget>[
-            logoWidget("assest/image/Shopee_logo.png"),
+            logoWidget("assest/images/Shopee_logo.png"),
             reusableTextField("Enter UserName", Icons.person_outline, false,
                 _emailTextController),
             const SizedBox(
@@ -58,7 +58,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home()));
+                        builder: (context) => BottomNavController()));
               }).onError((error, stackTrace) {
                 print("Error ${error.toString()}");
               });

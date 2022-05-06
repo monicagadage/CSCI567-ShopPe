@@ -61,7 +61,6 @@ class _CartState extends State<Cart> {
       ),
     );
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +73,6 @@ class _CartState extends State<Cart> {
   }
 
 }
-
-
-
 
 class Body extends StatefulWidget {
   List cart_item;
@@ -198,8 +194,6 @@ class _BodyState extends State<Body> {
   }
 }
 
-
-
 class CartCard extends StatelessWidget {
   var item;
 
@@ -253,8 +247,6 @@ class CartCard extends StatelessWidget {
     );
   }
 }
-
-
 
 Widget slideRightBackground() {
   return Container(
@@ -313,3 +305,26 @@ Widget slideLeftBackground() {
     ),
   );
 }
+
+// //////////////////////////////////////////////////////////////////////////////////////////////
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import '../reusable_widgets/fetchProducts.dart';
+//
+// class Cart extends StatefulWidget {
+//   @override
+//   _CartState createState() => _CartState();
+// }
+//
+// class _CartState extends State<Cart> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SafeArea(
+//         child: fetchData("users-cart-items"),
+//       ),
+//     );
+//   }
+// }
