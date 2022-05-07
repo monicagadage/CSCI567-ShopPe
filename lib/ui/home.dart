@@ -92,7 +92,7 @@ class _HomeState extends State<Home> {
                 Navigator.push(context,
                     CupertinoPageRoute(builder: (_) => SearchScreen()));
               },
-              icon: Icon(Icons.search, color: Colors.white))
+              icon: Icon(Icons.search, color: Color.fromARGB(255, 2, 2, 2)))
         ],
         centerTitle: true,
         automaticallyImplyLeading: false,
