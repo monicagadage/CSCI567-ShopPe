@@ -33,22 +33,30 @@ import 'package:signup/reusable_widgets/reusable_widgets.dart';
 //   Product({this.id,this.name, this.category, this.price, this.isliked,this.isSelected = false,this.image});
 // }
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends StatefulWidget {
   final Map<String, dynamic> product;
   // final ValueChanged<Product> onSelected;
-  ProductCard({Key? key, required this.product}) : super(key: key);
+  ProductCard(this.product);
 
-//   @override
-//   _ProductCardState createState() => _ProductCardState();
-// }
+  @override
+  _ProductCardState createState() => _ProductCardState();
+}
 
-// class _ProductCardState extends State<ProductCard> {
-//   Product product;
-//   @override
-//   void initState() {
-//     product = widget.product;
-//     super.initState();
-//   }
+class _ProductCardState extends State<ProductCard> {
+  late Map<String, dynamic> product;
+  @override
+  void initState() {
+    product = widget.product;
+    super.initState();
+  }
+
+  callback(new_map)
+  {
+    print("inside callback inside callback inside callback inside callback");
+    setState(() {
+      product["product-liked"] = new_map;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +71,7 @@ class ProductCard extends StatelessWidget {
       // margin: EdgeInsets.symmetric(vertical: !product.isSelected ? 20 : 0),
       child: GestureDetector(
           onTap: () => Navigator.push(context,
-              MaterialPageRoute(builder: (_) => ProductDetails(product))),
+              MaterialPageRoute(builder: (_) => ProductDetails(product, callback))),
           child: Container(
 
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),

@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_ecommerce/widgets/fetchProducts.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:signup/reusable_widgets/reusable_widgets.dart';
+import 'package:uuid/uuid.dart';
 
 import '../screens/bottom_nav_controller.dart';
 
@@ -35,11 +37,17 @@ class _FavouriteState extends State<Favourite> {
 //   }
 // }
 
+  callback()
+  {
+    favorite_items = [];
+    fetch_favorite();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-      body: Body(favorite_items),
+      body: Body(favorite_items, callback),
       // bottomNavigationBar: BottomNavController("favorite"),
     );
     // ),
@@ -47,6 +55,9 @@ class _FavouriteState extends State<Favourite> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+      backgroundColor: Colors.deepOrangeAccent[200],
+      centerTitle: true,
+      automaticallyImplyLeading: false,
       title: Column(
         children: [
           Text(
@@ -93,7 +104,7 @@ class _FavouriteState extends State<Favourite> {
           "price": qn.docs[i]["price"],
           "img": qn.docs[i]["images"],
           "location": qn.docs[i]["reference"]});
-        print("jjjjjjjjjkllll ${qn.docs[i].reference.path}");
+        print("favourite favourite favourite favourite ${qn.docs[i].reference.path}");
       }
     });
 
@@ -105,31 +116,88 @@ class _FavouriteState extends State<Favourite> {
 
 class Body extends StatefulWidget {
   List fav_item;
-  Body(this.fav_item);
+  Function callback;
+  Body(this.fav_item, this.callback);
   @override
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
 
+  Future addToCart(String docId) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+    var uuid = Uuid();
+    var v1 = uuid.v1();
+
+    final s = docId.split('/');
+
+    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+
+    print("${allData} string string ${s[1]}");
+
+    var isliked = allData[currentUser!.email.toString()]["isliked"];
+    var favorite_reference = allData[currentUser!.email.toString()]["favorite-reference"];
+    var name = allData["name"];
+    var price = allData["price"];
+    var image = allData["img"];
+
+
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
+        .set({
+      currentUser.email.toString() : {
+        'isliked': isliked,
+        'favorite-reference': favorite_reference,
+        'cart': true,
+        'cart-reference': v1,
+        "quantity": 1 }
+    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+
+
+    CollectionReference _collectionRef =
+    FirebaseFirestore.instance.collection("users-cart-items");
+    return _collectionRef
+        .doc(currentUser!.email)
+        .collection("items")
+        .doc(v1)
+        .set({
+      "name": name,
+      "price": price,
+      "images": image,
+      "quantity": 1,
+      "reference": docId,
+    }).then((value) => Fluttertoast.showToast(msg: 'Added to cart'));
+  }
+
   Future removefromFavourite(String docId) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
-
-    DocumentReference docRef = await FirebaseFirestore.instance.doc(
-        docId); //.get() as DocumentReference<Object?>;
-    Map<String, dynamic> pro = await docRef.get() as Map<String, dynamic>;
-    print(docRef);
-
-    var reference = pro['favorite-reference'];
-
-    print("${reference} 111111111111111");
-
-    docRef.update({
-      "favorite-reference": "",
-      "isliked": false,
-    });
-
     var currentUser = _auth.currentUser;
+
+    final s = docId.split('/');
+
+    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+
+    print("${allData} string string ${s[1]}");
+
+    var cart = allData[currentUser!.email.toString()]["cart"];
+    var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser!.email.toString()]["quantity"];
+    var reference = allData[currentUser!.email.toString()]['favorite-reference'];
+
+
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
+        .set({
+      currentUser.email.toString() : {
+        'isliked': false,
+        'favorite-reference': "",
+        'cart': cart,
+        'cart-reference': cart_reference,
+        "quantity": quantity }
+    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+
+    widget.callback();
 
     CollectionReference _collectionRef =
     FirebaseFirestore.instance.collection("users-favourite-items");
@@ -214,6 +282,7 @@ class _BodyState extends State<Body> {
                     return res;
                   } else {
                     // TODO: Navigate to edit page;
+                    addToCart(widget.fav_item[index]["location"]);
                     print("swipe right right right right");
                   }
                 },

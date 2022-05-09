@@ -38,6 +38,8 @@ void main() async {
   runApp(const MyApp());
 }
 
+// const Colors.lightBlue[800] = Color(0xff486579);
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -46,7 +48,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ShoPe',
+      // themeMode: ThemeMode.dark,
       theme: ThemeData(
+        // brightness: Brightness.dark,
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -56,7 +60,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primaryColor: Colors.lightBlue[800],
+        primaryColor: Colors.lightBlue,
       ),
       home: SplashScreen(),
     );

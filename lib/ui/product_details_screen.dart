@@ -12,27 +12,14 @@ import 'package:uuid/uuid.dart';
 // ignore: must_be_immutable
 class ProductDetails extends StatefulWidget {
   Map<String, dynamic> _product;
-  ProductDetails(this._product);
+  Function callback;
+  ProductDetails(this._product, this.callback);
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails>
     with TickerProviderStateMixin {
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //     title: 'Welcome to Flutter',
-  //     home: Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text('Welcome to Flutter'),
-  //       ),
-  //       body: const Center(
-  //         child: Text('Profile'),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   late AnimationController controller;
   late Animation<double> animation;
@@ -60,9 +47,27 @@ class _ProductDetailsState extends State<ProductDetails>
     var uuid = Uuid();
     var v1 = uuid.v1();
 
-    DocumentReference docRef =
-        FirebaseFirestore.instance.doc(widget._product["product-location"]);
-    docRef.update({"cart-reference": v1, "cart": true, "quantity": 1});
+    final s = widget._product["product-location"].split('/');
+
+    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+
+    print("${allData} string string ${s[1]}");
+
+    var isliked = allData[currentUser!.email.toString()]["isliked"];
+    var favorite_reference = allData[currentUser!.email.toString()]["favorite-reference"];
+
+
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
+        .set({
+      currentUser.email.toString() : {
+        'isliked': isliked,
+        'favorite-reference': favorite_reference,
+        'cart': true,
+        'cart-reference': v1,
+        "quantity": 1 }
+    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+
     widget._product["cart-reference"] = v1;
     widget._product["product-cart"] = true;
     widget._product["product-quantity"] = 1;
@@ -86,15 +91,37 @@ class _ProductDetailsState extends State<ProductDetails>
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var uuid = Uuid();
     var v1 = uuid.v1();
-    DocumentReference docRef =
-        FirebaseFirestore.instance.doc(widget._product["product-location"]);
-    docRef.update({
-      "favorite-reference": v1,
-      "isliked": true,
-    });
-    widget._product["favorite-reference"] = v1;
-    widget._product["product-liked"] = true;
     var currentUser = _auth.currentUser;
+
+    final s = widget._product["product-location"].split('/');
+
+    // QuerySnapshot qn = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+
+    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+
+    print("${allData} string string ${s[1]}");
+
+    var cart = allData[currentUser!.email.toString()]["cart"];
+    var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser!.email.toString()]["quantity"];
+
+
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
+        .set({
+      currentUser.email.toString() : {
+        'isliked': true,
+        'favorite-reference': v1,
+        'cart': cart,
+        'cart-reference': cart_reference,
+        "quantity": quantity }
+    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+
+    widget._product["favorite-reference"] = v1;
+    widget._product["isliked"] = true;
+
+    widget.callback(true);
+
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection("users-favourite-items");
     return _collectionRef
@@ -111,15 +138,35 @@ class _ProductDetailsState extends State<ProductDetails>
 
   Future removefromFavourite(String docId) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
-    DocumentReference docRef =
-        FirebaseFirestore.instance.doc(widget._product["product-location"]);
-    docRef.update({
-      "favorite-reference": "",
-      "isliked": false,
-    });
     var currentUser = _auth.currentUser;
+    final s = widget._product["product-location"].split('/');
+
+    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+
+    print("${allData} string string ${s[1]}");
+
+    var cart = allData[currentUser!.email.toString()]["cart"];
+    var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser!.email.toString()]["quantity"];
+
+
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
+        .set({
+      currentUser.email.toString() : {
+        'isliked': false,
+        'favorite-reference': "",
+        'cart': cart,
+        'cart-reference': cart_reference,
+        "quantity": quantity }
+    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+
+
     widget._product["favorite-reference"] = "";
     widget._product["product-liked"] = false;
+
+    widget.callback(false);
+
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection("users-favourite-items");
     return _collectionRef
@@ -241,12 +288,13 @@ class _ProductDetailsState extends State<ProductDetails>
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: (widget._product["product-thumbnail"])
-              .map((x) => _thumbnail(x))
-              .toList()),
+              .map<Widget>((x) => _thumbnail(x.toString()) ).toList()
+      ),
     );
   }
 
   Widget _thumbnail(String image) {
+    print("${image} imageimageimageimageimageimage");
     return AnimatedBuilder(
       animation: animation,
       //  builder: null,
@@ -509,7 +557,7 @@ class _ProductDetailsState extends State<ProductDetails>
                 children: <Widget>[
                   _appBar(),
                   _productImage(),
-                  // _categoryWidget(),
+                  _categoryWidget(),
                 ],
               ),
               _detailWidget()

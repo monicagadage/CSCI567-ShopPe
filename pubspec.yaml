@@ -49,6 +49,7 @@ dependencies:
   overlay_support: ^1.2.1
   flutter_local_notifications: ^9.4.1
   uuid: ^3.0.6
+  flutter_slidable: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -79,7 +80,6 @@ flutter:
   assets:
     - assest/fonts/
     - assest/icons/
-    - assest/image/
     - assest/images/
 
 

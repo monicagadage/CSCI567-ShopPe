@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 
 class CheckoutCard extends StatefulWidget {
-  List cart_item;
+  double total;
 
-  CheckoutCard(this.cart_item);
+  CheckoutCard(this.total);
   @override
   _CheckoutCardState createState() => _CheckoutCardState();
 }
@@ -69,7 +69,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                     text: "Total:\n",
                     children: [
                       TextSpan(
-                        text: "\$337.15",
+                        text: "\$${widget.total.toStringAsFixed(2)}",
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                     ],
