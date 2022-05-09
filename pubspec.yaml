@@ -49,6 +49,7 @@ dependencies:
   overlay_support: ^1.2.1
   flutter_local_notifications: ^9.4.1
   uuid: ^3.0.6
+  awesome_card: ^1.1.7
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:signup/screens/splash_screen.dart';
 import 'package:signup/ui/notifications.dart';
+import 'package:signup/ui/payment/add_card.dart';
+import 'package:signup/ui/payment/paymentDetails.dart';
 import 'package:signup/ui/profile.dart';
 
 import 'profile_menu.dart';
@@ -23,6 +25,22 @@ class ProfileBody extends StatelessWidget {
             press: () => {
               Navigator.push(
                   context, CupertinoPageRoute(builder: (_) => Profile()))
+            },
+          ),
+          ProfileMenu(
+            text: "Payments",
+            icon: "assest/icons/Bell.svg",
+            press: () {
+              Navigator.push(context,
+                  CupertinoPageRoute(builder: (_) => PaymentDetails()));
+            },
+          ),
+          ProfileMenu(
+            text: "Add Card",
+            icon: "assest/icons/Bell.svg",
+            press: () {
+              Navigator.push(
+                  context, CupertinoPageRoute(builder: (_) => AddCard()));
             },
           ),
           ProfileMenu(

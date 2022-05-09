@@ -12,7 +12,6 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
-
   @override
   void initState() {
     super.initState();
@@ -25,8 +24,11 @@ class _CartState extends State<Cart> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
 
-    QuerySnapshot qn = await _firestoreInstance.collection("users-cart-items").doc(currentUser!.email)
-        .collection("items").get();
+    QuerySnapshot qn = await _firestoreInstance
+        .collection("users-cart-items")
+        .doc(currentUser!.email)
+        .collection("items")
+        .get();
     setState(() {
       for (int i = 0; i < qn.docs.length; i++) {
         cart_items.add({
@@ -34,7 +36,8 @@ class _CartState extends State<Cart> {
           "price": qn.docs[i]["price"],
           "img": qn.docs[i]["images"],
           "quantity": qn.docs[i]["quantity"],
-          "location": qn.docs[i]["reference"]});
+          "location": qn.docs[i]["reference"]
+        });
         print("cart cart cart cart ${qn.docs[i].reference.path}");
       }
     });
@@ -52,10 +55,7 @@ class _CartState extends State<Cart> {
           ),
           Text(
             "${cart_items.length} items",
-            style: Theme
-                .of(context)
-                .textTheme
-                .caption,
+            style: Theme.of(context).textTheme.caption,
           ),
         ],
       ),
@@ -71,7 +71,6 @@ class _CartState extends State<Cart> {
     );
     // ),
   }
-
 }
 
 class Body extends StatefulWidget {
@@ -82,7 +81,6 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-
   // Future removefromFavourite(String docId) async {
   //   final FirebaseAuth _auth = FirebaseAuth.instance;
   //
@@ -114,8 +112,8 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-      EdgeInsets.symmetric(horizontal: 50 ),    // getProportionateScreenWidth(20)
+      padding: EdgeInsets.symmetric(
+          horizontal: 50), // getProportionateScreenWidth(20)
       child: ListView.builder(
         itemCount: widget.cart_item.length,
         itemBuilder: (context, index) => Padding(
@@ -210,7 +208,7 @@ class CartCard extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: 0.88,
             child: Container(
-              padding: EdgeInsets.all(20),     // getProportionateScreenWidth(10)
+              padding: EdgeInsets.all(20), // getProportionateScreenWidth(10)
               decoration: BoxDecoration(
                 color: Color(0xFFF5F6F9),
                 borderRadius: BorderRadius.circular(15),
