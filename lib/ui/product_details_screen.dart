@@ -3,33 +3,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:signup/const/AppColors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signup/reusable_widgets/reusable_widgets.dart';
 import 'package:uuid/uuid.dart';
 
-// ignore: must_be_immutable
+
 class ProductDetails extends StatefulWidget {
   Map<String, dynamic> _product;
-  ProductDetails(this._product);
+  Function callback;
+  ProductDetails(this._product, this.callback);
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
 
-class _ProductDetailsState extends State<ProductDetails> with TickerProviderStateMixin {
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //     title: 'Welcome to Flutter',
-  //     home: Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text('Welcome to Flutter'),
-  //       ),
-  //       body: const Center(
-  //         child: Text('Profile'),
-  //       ),
-  //     ),
-  //   );
-  // }
+class _ProductDetailsState extends State<ProductDetails>
+    with TickerProviderStateMixin {
 
   late AnimationController controller;
   late Animation<double> animation;
@@ -51,35 +38,87 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     super.dispose();
   }
 
+  Future addToCart() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+    var uuid = Uuid();
+    var v1 = uuid.v1();
 
-  // Future addToCart() async {
-  //   final FirebaseAuth _auth = FirebaseAuth.instance;
-  //   var currentUser = _auth.currentUser;
-  //   CollectionReference _collectionRef =
-  //       FirebaseFirestore.instance.collection("users-cart-items");
-  //   return _collectionRef
-  //       .doc(currentUser!.email)
-  //       .collection("items")
-  //       .doc()
-  //       .set({
-  //     "name": widget._product["product-name"],
-  //     "price": widget._product["product-price"],
-  //     "images": widget._product["product-img"],
-  //   }).then((value) => print("Added to cart"));
-  // }
+    final s = widget._product["product-location"].split('/');
+
+    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+
+    print("${allData} string string ${s[1]}");
+
+    var isliked = allData[currentUser!.email.toString()]["isliked"];
+    var favorite_reference = allData[currentUser!.email.toString()]["favorite-reference"];
+
+
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
+        .set({
+      currentUser.email.toString() : {
+        'isliked': isliked,
+        'favorite-reference': favorite_reference,
+        'cart': true,
+        'cart-reference': v1,
+        "quantity": 1 }
+    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+
+    widget._product["cart-reference"] = v1;
+    widget._product["product-cart"] = true;
+    widget._product["product-quantity"] = 1;
+
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection("users-cart-items");
+    return _collectionRef
+        .doc(currentUser!.email)
+        .collection("items")
+        .doc(v1)
+        .set({
+      "name": widget._product["product-name"],
+      "price": widget._product["product-price"],
+      "images": widget._product["product-img"],
+      "quantity": widget._product["product-quantity"],
+      "reference": widget._product["product-location"],
+    }).then((value) => print("Added to cart"));
+  }
 
   Future addToFavourite() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var uuid = Uuid();
     var v1 = uuid.v1();
-    DocumentReference docRef = FirebaseFirestore.instance.doc(widget._product["product-location"]);
-    docRef.update({
-      "favorite-reference": v1,
-      "isliked": true,
-    });
-    widget._product["favorite-reference"] = v1;
-    widget._product["product-liked"] = true;
     var currentUser = _auth.currentUser;
+
+    final s = widget._product["product-location"].split('/');
+
+    // QuerySnapshot qn = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+
+    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+
+    print("${allData} string string ${s[1]}");
+
+    var cart = allData[currentUser!.email.toString()]["cart"];
+    var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser!.email.toString()]["quantity"];
+
+
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
+        .set({
+      currentUser.email.toString() : {
+        'isliked': true,
+        'favorite-reference': v1,
+        'cart': cart,
+        'cart-reference': cart_reference,
+        "quantity": quantity }
+    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+
+    widget._product["favorite-reference"] = v1;
+    widget._product["isliked"] = true;
+
+    widget.callback(true);
+
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection("users-favourite-items");
     return _collectionRef
@@ -91,29 +130,49 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
       "price": widget._product["product-price"],
       "images": widget._product["product-img"],
       "reference": widget._product["product-location"],
-
     }).then((value) => print("Added to favourite"));
   }
 
   Future removefromFavourite(String docId) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
-    DocumentReference docRef = FirebaseFirestore.instance.doc(widget._product["product-location"]);
-    docRef.update({
-      "favorite-reference": "",
-      "isliked": false,
-    });
     var currentUser = _auth.currentUser;
+    final s = widget._product["product-location"].split('/');
+
+    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+
+    print("${allData} string string ${s[1]}");
+
+    var cart = allData[currentUser!.email.toString()]["cart"];
+    var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser!.email.toString()]["quantity"];
+
+
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
+        .set({
+      currentUser.email.toString() : {
+        'isliked': false,
+        'favorite-reference': "",
+        'cart': cart,
+        'cart-reference': cart_reference,
+        "quantity": quantity }
+    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+
+
     widget._product["favorite-reference"] = "";
     widget._product["product-liked"] = false;
+
+    widget.callback(false);
+
     CollectionReference _collectionRef =
-    FirebaseFirestore.instance.collection("users-favourite-items");
+        FirebaseFirestore.instance.collection("users-favourite-items");
     return _collectionRef
         .doc(currentUser!.email)
         .collection("items")
         .doc(docId)
-        .delete().then((value) => print("Removed from favourite"));
+        .delete()
+        .then((value) => print("Removed from favourite"));
   }
-
 
   Widget _appBar() {
     return Container(
@@ -135,53 +194,54 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
               color: isLiked ? Color(0xffF72804) : Color(0xffE1E2E4),
               size: 15,
               padding: 12,
-              isOutLine: false,
-              onPressed: () {
-                setState(() {
-                  isLiked = !isLiked;
-                  // isLiked = widget._product["product-liked"];
-                  isLiked ? addToFavourite() : removefromFavourite(widget._product["favorite-reference"]);
-                  // addToFavourite();
-                });
-              }),
+              isOutLine: false, onPressed: () {
+            setState(() {
+              isLiked = !isLiked;
+              // isLiked = widget._product["product-liked"];
+              isLiked
+                  ? addToFavourite()
+                  : removefromFavourite(widget._product["favorite-reference"]);
+              // addToFavourite();
+            });
+          }),
         ],
       ),
     );
   }
 
   Widget _icon(
-      IconData icon, {
-        Color color = const Color(0xffa8a09b),
-        double size = 20,
-        double padding = 10,
-        bool isOutLine = false,
-        required Function onPressed,
-      }) {
+    IconData icon, {
+    Color color = const Color(0xffa8a09b),
+    double size = 20,
+    double padding = 10,
+    bool isOutLine = false,
+    required Function onPressed,
+  }) {
     return GestureDetector(
-        onTap: () => onPressed(),
-
-    child: Container(
-      height: 40,
-      width: 40,
-      padding: EdgeInsets.all(padding),
-      // margin: EdgeInsets.all(padding),
-      decoration: BoxDecoration(
-        border: Border.all(
-            color: Color(0xffa8a09b),
-            style: isOutLine ? BorderStyle.solid : BorderStyle.none),
-        borderRadius: BorderRadius.all(Radius.circular(13)),
-        color:
-        isOutLine ? Colors.transparent : Theme.of(context).backgroundColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Color(0xfff8f8f8),
-              blurRadius: 5,
-              spreadRadius: 10,
-              offset: Offset(5, 5)),
-        ],
+      onTap: () => onPressed(),
+      child: Container(
+        height: 40,
+        width: 40,
+        padding: EdgeInsets.all(padding),
+        // margin: EdgeInsets.all(padding),
+        decoration: BoxDecoration(
+          border: Border.all(
+              color: Color(0xffa8a09b),
+              style: isOutLine ? BorderStyle.solid : BorderStyle.none),
+          borderRadius: BorderRadius.all(Radius.circular(13)),
+          color: isOutLine
+              ? Colors.transparent
+              : Theme.of(context).backgroundColor,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Color(0xfff8f8f8),
+                blurRadius: 5,
+                spreadRadius: 10,
+                offset: Offset(5, 5)),
+          ],
+        ),
+        child: Icon(icon, color: color, size: size),
       ),
-      child: Icon(icon, color: color, size: size),
-    ),
     );
     //     .ripple(() {
     //   if (onPressed != null) {
@@ -224,12 +284,14 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
       child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
-          children:
-          (widget._product["product-thumbnail"]).map((x) => _thumbnail(x)).toList()),
+          children: (widget._product["product-thumbnail"])
+              .map<Widget>((x) => _thumbnail(x.toString()) ).toList()
+      ),
     );
   }
 
   Widget _thumbnail(String image) {
+    print("${image} imageimageimageimageimageimage");
     return AnimatedBuilder(
       animation: animation,
       //  builder: null,
@@ -239,21 +301,21 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
         child: child,
       ),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        child: Container(
-          height: 40,
-          width: 50,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Color(0xffA1A3A6),
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          child: Container(
+            height: 40,
+            width: 50,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Color(0xffA1A3A6),
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(13)),
+              // color: Theme.of(context).backgroundColor,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(13)),
-            // color: Theme.of(context).backgroundColor,
+            child: Image.network(image),
+          )
+          // .ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13))),
           ),
-          child: Image.network(image),
-        )
-            // .ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13))),
-      ),
     );
   }
 
@@ -264,7 +326,8 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
       minChildSize: .53,
       builder: (context, scrollController) {
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10).copyWith(bottom: 0),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10)
+              .copyWith(bottom: 0),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(40),
@@ -294,7 +357,8 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      TitleText(text: widget._product["product-name"], fontSize: 25),
+                      TitleText(
+                          text: widget._product["product-name"], fontSize: 25),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
@@ -307,7 +371,8 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                                 color: AppColors.red,
                               ),
                               TitleText(
-                                text: widget._product["product-price"].toString(),
+                                text:
+                                    widget._product["product-price"].toString(),
                                 fontSize: 25,
                               ),
                             ],
@@ -381,7 +446,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
             style: !isSelected ? BorderStyle.solid : BorderStyle.none),
         borderRadius: BorderRadius.all(Radius.circular(13)),
         color:
-        isSelected ? AppColors.orange : Theme.of(context).backgroundColor,
+            isSelected ? AppColors.orange : Theme.of(context).backgroundColor,
       ),
       child: TitleText(
         text: text,
@@ -389,7 +454,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
         color: isSelected ? AppColors.background : AppColors.titleTextColor,
       ),
     );
-        // .ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)));
+    // .ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)));
   }
 
   Widget _availableColor() {
@@ -433,10 +498,10 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
       backgroundColor: color.withAlpha(150),
       child: isSelected
           ? Icon(
-        Icons.check_circle,
-        color: color,
-        size: 18,
-      )
+              Icons.check_circle,
+              color: color,
+              size: 18,
+            )
           : CircleAvatar(radius: 7, backgroundColor: color),
     );
   }
@@ -457,7 +522,11 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
 
   FloatingActionButton _flotingButton() {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        widget._product["product-cart"]
+            ? print("Already added to cart!!")
+            : addToCart();
+      },
       backgroundColor: AppColors.orange,
       child: Icon(Icons.shopping_basket,
           color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
@@ -472,20 +541,20 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
         child: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Color(0xfffbfbfb),
-                  Color(0xfff7f7f7),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              )),
+            colors: [
+              Color(0xfffbfbfb),
+              Color(0xfff7f7f7),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          )),
           child: Stack(
             children: <Widget>[
               Column(
                 children: <Widget>[
                   _appBar(),
                   _productImage(),
-                  // _categoryWidget(),
+                  _categoryWidget(),
                 ],
               ),
               _detailWidget()

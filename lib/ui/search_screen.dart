@@ -1,14 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:signup/ui/product_details_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
-}
 
+}
 class _SearchScreenState extends State<SearchScreen> {
+  
   var inputText = "test";
+  callback()
+  {
+    
+
+  }
+  
   @override
   Widget build(BuildContext context) {
     // return MaterialApp(
@@ -67,15 +75,16 @@ class _SearchScreenState extends State<SearchScreen> {
                             return Card(
                               elevation: 5,
                               child: ListTile(
-                                title: Text(data['name']),
+                                title: Text(data['name'].toString()),
                                 // leading: Image.network(
                                 //     // 'https://picsum.photos/250?image=9')
-                                leading: Image.network(data['img']),
+                                leading: Image.network(data['img'][0].toString()),
+                                onTap: getDetails(data['reference'].toString()),
 
-                                onTap: ()=> Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                builder : (context) => ProductDetails(data))),
+                                // onTap: ()=> Navigator.push(
+                                // context,
+                                // MaterialPageRoute(
+                                // builder : (context) => ProductDetails(data,callback))),
 
                               ),
                             );
@@ -89,5 +98,49 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
     );
+  }
+
+  getDetails(String data) async {
+
+    var _firestoreInstance = FirebaseFirestore.instance;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+    final pathID = data.split("/");
+    
+    DocumentSnapshot<Map<String, dynamic>> value = await FirebaseFirestore.instance.collection(pathID[0]).doc(pathID[1]).get();
+    
+    Map<String, dynamic> allData = value.data() as Map<String, dynamic> ;
+
+
+    // var isliked = allData[currentUser!.email.toString()]["isliked"];
+    // var favorite_reference = allData[currentUser!.email.toString()]["favorite-reference"];
+    // var cart = allData[currentUser!.email.toString()]["cart"];
+    // var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
+    // var name = allData["name"];
+    // var price = allData["price"];
+    // var image = allData["img"];
+
+
+
+    Navigator.push(context, MaterialPageRoute(
+                  builder : (context) => ProductDetails({
+            "product-name": allData["name"],
+            "product-description": allData["description"],
+            "product-price": allData["price"],
+            "product-img": allData["img"],
+            "product-liked": allData[currentUser!.email.toString()]["isliked"],
+            "product-quantity": allData[currentUser.email.toString()]["quantity"],
+            "product-cart": allData[currentUser.email.toString()]["cart"],
+            "product-location": allData["reference"],
+            "cart-reference": allData[currentUser.email.toString()]["cart-reference"],
+            "favorite-reference": allData[currentUser.email.toString()]["favorite-reference"],
+            // "product-thumbnail": <String>[
+            //   allData["thumbnail1"].toString(),
+            //   allData["thumbnail2"].toString(),
+            //   allData["thumbnail3"].toString(),
+              // allData["thumbnail4"].toString()÷
+          },callback)));
+
+
   }
 }

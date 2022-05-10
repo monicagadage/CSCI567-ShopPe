@@ -47,12 +47,8 @@ Future<void> sendUserDataToDB() async {
         var dicref = _collectionRef.doc();
 
         dicref.set({
-          "cart": false,
-          "cart-reference" : null,
           "discription": _discriptionController.text,
-          "favoriate-reference" : null,
           "img" : imageURL.toList(),
-          "isliked" : false,
           "name": _nameController.text,
           "price": _priceController.text,
           "quantity": _quantityController.text,
@@ -65,14 +61,10 @@ Future<void> sendUserDataToDB() async {
         }).catchError((_){
           print("an error occured");
         });
-        
+
         FirebaseFirestore.instance.collection("Products").add({
-          "cart": false,
-          "cart-reference" : null,
           "discription": _discriptionController.text,
-          "favoriate-reference" : null,
           "img" : imageURL.toList(),
-          "isliked" : false,
           "name": _nameController.text,
           "price": _priceController.text,
           "quantity": _quantityController.text,

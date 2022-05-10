@@ -33,11 +33,9 @@
 
 # Web related
 lib/generated_plugin_registrant.dart
-<<<<<<< HEAD
 lib/ui/test.dart
 lib/info.txt
-=======
->>>>>>> 41a1558e885682796439a0db210ce8a4246d0eba
+assest/credentials.json
 
 # Symbolication related
 app.*.symbols

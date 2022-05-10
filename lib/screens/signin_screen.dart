@@ -75,7 +75,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SellerScreen()));
+                              builder: (context) => BottomNavController()));
 
                     }
               }).onError((error, stackTrace) {
@@ -85,7 +85,7 @@ class _SignInScreenState extends State<SignInScreen> {
             firebaseUIButton(context, "Google Sign In", () async {
               await signInWithGoogle();
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()));
+                  MaterialPageRoute(builder: (context) => BottomNavController()));
             }),
             signUpOption(),
             sellerSignin()

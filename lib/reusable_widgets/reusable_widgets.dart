@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 
 class SizeConfig {
   static late MediaQueryData _mediaQueryData;
@@ -38,10 +38,10 @@ class TitleText extends StatelessWidget {
   final FontWeight fontWeight;
   TitleText(
       {Key? key,
-        required this.text,
-        this.fontSize = 18,
-        this.color = const Color(0xff1d2635),
-        this.fontWeight = FontWeight.w800})
+      required this.text,
+      this.fontSize = 18,
+      this.color = const Color(0xff1d2635),
+      this.fontWeight = FontWeight.w800})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -52,10 +52,14 @@ class TitleText extends StatelessWidget {
 }
 
 Image logoWidget(String imageName) {
-
-   return Image.asset(imageName, fit: BoxFit.fitHeight,width: 240,height: 240,color: Colors.white,);
-
-  }
+  return Image.asset(
+    imageName,
+    fit: BoxFit.fitHeight,
+    width: 240,
+    height: 240,
+    color: Colors.white,
+  );
+}
 
 TextField reusableTextField(String text, IconData icon, bool isPasswordType,
     TextEditingController controller) {
@@ -111,5 +115,31 @@ Container firebaseUIButton(BuildContext context, String title, Function onTap) {
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
     ),
+  );
+}
+
+void showToast() {
+  Fluttertoast.showToast(
+    msg: "Hi Codesinsider !!",
+    toastLength: Toast.LENGTH_SHORT,
+  );
+}
+
+showCustomToast() {
+  FToast fToast;
+  fToast = FToast();
+  // fToast.init(context);
+  Widget toast = Container(
+    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(25.0),
+      color: Colors.greenAccent,
+    ),
+    child: Text("This is a Custom Toast"),
+  );
+
+  fToast.showToast(
+    child: toast,
+    toastDuration: Duration(seconds: 3),
   );
 }
