@@ -1,21 +1,30 @@
-// ignore_for_file: deprecated_member_use
-
-import 'package:awesome_card/awesome_card.dart';
+import 'package:awesome_card/credit_card.dart';
+import 'package:awesome_card/extra/card_type.dart';
+import 'package:awesome_card/style/card_background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:signup/ui/payment/constant.dart';
-// import 'package:signup/ui/payment/defaultAppBar.dart';
-// import 'package:signup/ui/payment/defaultBackButton.dart';
-// import 'package:signup/ui/payment/stickyLabel.dart';
 import 'package:flutter/material.dart';
-// import 'package:signup/ui/payment/constant.dart';
-import 'package:signup/ui/payment/paymentModal.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:signup/reusable_widgets/reusable_widgets.dart';
+import 'package:signup/screens/bottom_nav_controller.dart';
+import 'package:signup/ui/payment/paymentDetails.dart';
+import 'package:signup/ui/profile/components/body.dart';
+import 'package:signup/utils/color_utils.dart';
 
-class PaymentDetails extends StatefulWidget {
-  PaymentDetails({Key? key}) : super(key: key);
+import '../main.dart';
+
+class OrderPayment extends StatefulWidget {
+  String Address, Apt, City, State, PinCode, date;
+  var uuid;
+  double totalprice;
+  List cart_items;
+
+  OrderPayment(this.uuid, this.Address, this.City, this.Apt, this.PinCode,
+      this.State, this.date, this.totalprice, this.cart_items);
 
   @override
-  _PaymentDetailsState createState() => _PaymentDetailsState();
+  _OrderPayment createState() => _OrderPayment();
 }
 
 class StickyLabel extends StatelessWidget {
@@ -46,18 +55,71 @@ class StickyLabel extends StatelessWidget {
   }
 }
 
-class _PaymentDetailsState extends State<PaymentDetails> {
+class _OrderPayment extends State<OrderPayment> {
+  sendUserCardDataToDB() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection("Order_details");
+    return _collectionRef
+        .doc(currentUser!.email)
+        .collection("Orders")
+        .doc(widget.date + "-" + widget.uuid)
+        .set({
+          "orderid": widget.uuid,
+          "Address": widget.Address,
+          "Apt": widget.Apt,
+          "City": widget.City,
+          "State": widget.State,
+          "PinCode": widget.PinCode,
+          "date": widget.date,
+          "CardNumber": cardNumber,
+          "BankName": bankName,
+          "totalprice": widget.totalprice,
+          "Items": widget.cart_items
+        })
+        .then((value) => showToast("Address Saved"))
+        // .then((value) => Navigator.push(
+        //     context, MaterialPageRoute(builder: (_) => ProfileBody())))
+        .catchError((error) => print("something is wrong. $error"));
+  }
+
+  showToast(String textmessage) {
+    // var textmessage2 = this.textmessage;
+    Fluttertoast.showToast(
+      msg: textmessage,
+      toastLength: Toast.LENGTH_SHORT,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     fetch_card();
   }
 
-  late String cardNumber = " ",
-      cardExpiry = " ",
-      cardHolderName = " ",
-      bankName = " ",
-      cvv = " ";
+  void showNotification() {
+    setState(() {
+      // _counter++;
+    });
+    flutterLocalNotificationsPlugin.show(
+        0,
+        "ShopPe ",
+        "Order Placed",
+        NotificationDetails(
+            android: AndroidNotificationDetails(channel.id, channel.name,
+                importance: Importance.high,
+                color: Colors.blue,
+                playSound: true,
+                icon: '@mipmap/ic_launcher')));
+  }
+
+  late String cardNumber = "",
+      cardExpiry = "",
+      cardHolderName = "",
+      bankName = "",
+      cvv = "";
   List card_items = [];
   fetch_card() async {
     var _firestoreInstance = FirebaseFirestore.instance;
@@ -84,39 +146,6 @@ class _PaymentDetailsState extends State<PaymentDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final paymentDetailList = [
-      PaymentModal(
-          date: "Jan 01",
-          details: "Buy IPhoneX",
-          amount: 1000.0,
-          textColor: Colors.red),
-      PaymentModal(
-          date: "Aug 15",
-          details: "Flat ₹650 off",
-          amount: 650.0,
-          textColor: Colors.green),
-      PaymentModal(
-          date: "Dec 03",
-          details: "Congrats! Flat ₹180",
-          amount: 180.0,
-          textColor: Colors.green),
-      PaymentModal(
-          date: "Feb 14",
-          details: "Buy Shoes Upto 50% Off",
-          amount: 540.0,
-          textColor: Colors.red),
-      PaymentModal(
-          date: "Sep 08",
-          details: "Buy Footwear on Discount",
-          amount: 210.0,
-          textColor: Colors.red),
-      PaymentModal(
-          date: "Apr 18",
-          details: "Congrats! ₹375 Rewarded",
-          amount: 375.0,
-          textColor: Colors.green),
-    ];
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -288,58 +317,15 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                 ],
               ),
             ),
-            StickyLabel(text: "Transaction Details", textColor: Colors.black),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  width: 0.5,
-                  color: Colors.grey,
-                ),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: paymentDetailList.length,
-                itemBuilder: (context, index) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        paymentDetailList[index].date,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: Color(0xFF808080),
-                        ),
-                      ),
-                      Container(
-                        width: 190.0,
-                        child: Text(
-                          paymentDetailList[index].details,
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                      ),
-                      Container(
-                        width: 70.0,
-                        child: Text(
-                          "\$ ${paymentDetailList[index].amount}",
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: paymentDetailList[index].textColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Divider(thickness: 0.5, color: Colors.grey);
-                },
-              ),
-            ),
             SizedBox(height: 8.0),
+            firebaseUIButton(context, "Pay", () {
+              sendUserCardDataToDB();
+              showNotification();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BottomNavController()),
+              );
+            }),
           ],
         ),
       ),

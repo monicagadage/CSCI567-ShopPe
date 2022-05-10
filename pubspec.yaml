@@ -53,6 +53,8 @@ dependencies:
   flutter_slidable: ^1.2.0
   dialog_flowtter: ^0.3.3
   awesome_card: ^1.1.7
+  intl: ^0.17.0
+  # flutter_slidable: ^1.2.0
 
 dev_dependencies:
   flutter_test:

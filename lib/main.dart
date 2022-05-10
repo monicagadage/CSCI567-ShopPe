@@ -14,7 +14,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
     playSound: true);
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -27,7 +27,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -40,7 +40,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   static final ValueNotifier<ThemeMode> themeNotifier =
-  ValueNotifier(ThemeMode.light);
+      ValueNotifier(ThemeMode.light);
 
   const MyApp({Key? key}) : super(key: key);
 
@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             // Remove the debug banner
             debugShowCheckedModeBanner: false,
-            title: 'SHOPE',
+            title: 'ShoPee',
             theme: ThemeData(primarySwatch: Colors.amber),
             darkTheme: ThemeData.dark(),
             themeMode: currentMode,
