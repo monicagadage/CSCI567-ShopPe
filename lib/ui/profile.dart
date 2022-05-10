@@ -17,6 +17,7 @@ class _ProfileState extends State<Profile> {
   TextEditingController? _phoneController;
   TextEditingController? _ageController;
   FToast? fToast;
+  late String test;
 
   @override
   void initState() {
@@ -59,6 +60,8 @@ class _ProfileState extends State<Profile> {
                   child: CircularProgressIndicator(),
                 );
               }
+              test = data['name'];
+              print(test);
               return setDataToTextField(data);
             },
           ),

@@ -113,7 +113,7 @@ class _BodyState extends State<Body> {
   void doNothing(BuildContext context) { }
 
   Future _removefromCart(BuildContext context, action, index) async{
-  // return doNothing;
+    // return doNothing;
     print("${index} indexindexindexindexindexindex");
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
@@ -165,49 +165,49 @@ class _BodyState extends State<Body> {
       return ;
     }
 
-       final FirebaseAuth _auth = FirebaseAuth.instance;
-       var currentUser = _auth.currentUser;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
 
-       final s = widget.cart_item[index]["location"].split('/');
+    final s = widget.cart_item[index]["location"].split('/');
 
-       var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
-       Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
 
-       print("${allData} string string ${s[1]}");
+    print("${allData} string string ${s[1]}");
 
-       var isliked = allData[currentUser!.email.toString()]["isliked"];
-       var favorite_reference = allData[currentUser!.email.toString()]["favorite-reference"];
-       var reference = allData[currentUser!.email.toString()]['cart-reference'];
-       var cart = allData[currentUser!.email.toString()]["cart"];
-       var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
-       var quantity = allData[currentUser!.email.toString()]["quantity"];
+    var isliked = allData[currentUser!.email.toString()]["isliked"];
+    var favorite_reference = allData[currentUser!.email.toString()]["favorite-reference"];
+    var reference = allData[currentUser!.email.toString()]['cart-reference'];
+    var cart = allData[currentUser!.email.toString()]["cart"];
+    var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser!.email.toString()]["quantity"];
 
 
-       FirebaseFirestore.instance.collection(s[1]).doc(s[2])
-           .set({
-         currentUser.email.toString() : {
-           'isliked': isliked,
-           'favorite-reference': favorite_reference,
-           'cart': cart,
-           'cart-reference': cart_reference,
-           "quantity": quantity-1 }
-       }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
+        .set({
+      currentUser.email.toString() : {
+        'isliked': isliked,
+        'favorite-reference': favorite_reference,
+        'cart': cart,
+        'cart-reference': cart_reference,
+        "quantity": quantity-1 }
+    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
 
-       setState(() {
-         widget.cart_item[index]["quantity"]--;
-       });
+    setState(() {
+      widget.cart_item[index]["quantity"]--;
+    });
     widget.callback();
 
-       CollectionReference _collectionRef =
-       FirebaseFirestore.instance.collection("users-cart-items");
-       return _collectionRef
-           .doc(currentUser!.email)
-           .collection("items")
-           .doc(reference)
-           .update({
-         "quantity": quantity-1,
-       }).then((value) => print("quantity decreased"));
-   }
+    CollectionReference _collectionRef =
+    FirebaseFirestore.instance.collection("users-cart-items");
+    return _collectionRef
+        .doc(currentUser!.email)
+        .collection("items")
+        .doc(reference)
+        .update({
+      "quantity": quantity-1,
+    }).then((value) => print("quantity decreased"));
+  }
 
 
   Future increase_quantity(BuildContext context, action, index) async{
@@ -254,7 +254,7 @@ class _BodyState extends State<Body> {
         .collection("items")
         .doc(reference)
         .update({
-    "quantity": quantity+1,
+      "quantity": quantity+1,
     }).then((value) => print("quantity increased"));
   }
 

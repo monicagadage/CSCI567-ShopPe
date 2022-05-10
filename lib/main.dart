@@ -41,6 +41,9 @@ void main() async {
 // const Colors.lightBlue[800] = Color(0xff486579);
 
 class MyApp extends StatelessWidget {
+  static final ValueNotifier<ThemeMode> themeNotifier =
+      ValueNotifier(ThemeMode.light);
+
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
@@ -64,6 +67,43 @@ class MyApp extends StatelessWidget {
       ),
       home: SplashScreen(),
     );
+    // return MaterialApp(
+    //   title: 'ShoPee',
+    //   darkTheme: ThemeData.dark(),
+    //   themeMode: ThemeMode.system,
+    //   theme: ThemeData(
+    //     // This is the theme of your application.
+    //     //
+    //     // Try running your application with "flutter run". You'll see the
+    //     // application has a blue toolbar. Then, without quitting the app, try
+    //     // changing the primarySwatch below to Colors.green and then invoke
+    //     // "hot reload" (press "r" in the console where you ran "flutter run",
+    //     // or simply save your changes to "hot reload" in a Flutter IDE).
+    //     // Notice that the counter didn't reset back to zero; the application
+    //     // is not restarted.
+
+    //     primaryColor: Colors.lightBlue[800],
+    //   ),
+    //   debugShowCheckedModeBanner: false,
+    //   home: SplashScreen(),
+    // );
+
+    return ValueListenableBuilder<ThemeMode>(
+        valueListenable: themeNotifier,
+        builder: (_, ThemeMode currentMode, __) {
+          return MaterialApp(
+            // Remove the debug banner
+            debugShowCheckedModeBanner: false,
+            title: 'Kindacode.com',
+            theme: ThemeData(primarySwatch: Colors.amber),
+            darkTheme: ThemeData.dark(),
+            themeMode: currentMode,
+            // home: const HomeScreen(),
+
+            home: SplashScreen(),
+          );
+        });
+>>>>>>> 353c9d0cf6041f85f1310e31a065a35dbec5832e
   }
 }
 

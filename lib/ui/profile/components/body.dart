@@ -3,7 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:signup/screens/splash_screen.dart';
 import 'package:signup/ui/notifications.dart';
+import 'package:signup/ui/payment/add_card.dart';
+import 'package:signup/ui/payment/paymentDetails.dart';
 import 'package:signup/ui/profile.dart';
+import 'package:signup/ui/settings.dart';
 
 // import '../../chatbot.dart';
 import 'profile_menu.dart';
@@ -27,6 +30,22 @@ class ProfileBody extends StatelessWidget {
             },
           ),
           ProfileMenu(
+            text: "Payments",
+            icon: "assest/icons/Cash.svg",
+            press: () {
+              Navigator.push(context,
+                  CupertinoPageRoute(builder: (_) => PaymentDetails()));
+            },
+          ),
+          ProfileMenu(
+            text: "Add Card",
+            icon: "assest/icons/receipt.svg",
+            press: () {
+              Navigator.push(
+                  context, CupertinoPageRoute(builder: (_) => AddCard()));
+            },
+          ),
+          ProfileMenu(
             text: "Notifications",
             icon: "assest/icons/Bell.svg",
             press: () {
@@ -37,7 +56,10 @@ class ProfileBody extends StatelessWidget {
           ProfileMenu(
             text: "Settings",
             icon: "assest/icons/Settings.svg",
-            press: () {},
+            press: () {
+              Navigator.push(
+                  context, CupertinoPageRoute(builder: (_) => Settings()));
+            },
           ),
           ProfileMenu(
             text: "Help Center",
