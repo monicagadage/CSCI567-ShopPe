@@ -51,6 +51,7 @@ dependencies:
   uuid: ^3.0.6
   awesome_card: ^1.1.7
   intl: ^0.17.0
+  flutter_slidable: ^1.2.0
 
 dev_dependencies:
   flutter_test:
