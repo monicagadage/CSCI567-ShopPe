@@ -8,13 +8,10 @@ import 'dart:io';
 
 class ProfilePic extends StatelessWidget {
   late File file;
-  // const ProfilePic({
-  //   Key? key,
-  // }) : super(key: key);
+
 
   chooseImage() async {
     var xfile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    // print("file " + xfile.path);
     file = File(xfile!.path);
     setState(() {});
   }
@@ -47,7 +44,6 @@ class ProfilePic extends StatelessWidget {
                   backgroundColor: Color.fromARGB(255, 209, 209, 209),
                 ),
                 onPressed: () {
-                  // ignore: unnecessary_null_comparison
                 },
                 // child: (file == null)
                 //       ? InkWell(

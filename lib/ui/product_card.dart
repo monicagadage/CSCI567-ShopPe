@@ -2,40 +2,9 @@ import 'package:flutter/material.dart';
 import 'product_details_screen.dart';
 import 'package:signup/reusable_widgets/reusable_widgets.dart';
 
-// class TitleText extends StatelessWidget {
-//   final String text;
-//   final double fontSize;
-//   final Color color = Color(0xff1d2635);
-//   final FontWeight fontWeight;
-//   TitleText(
-//       {Key? key,
-//         required this.text,
-//         this.fontSize = 18,
-//         // this.color = Color(0xff1d2635),
-//         this.fontWeight = FontWeight.w800})
-//       : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     return Text(text,
-//         style: GoogleFonts.mulish(
-//             fontSize: fontSize, fontWeight: fontWeight, color: color));
-//   }
-// }
-
-// class Product{
-//   int id;
-//   String name ;
-//   String category ;
-//   String image ;
-//   double price ;
-//   bool isliked ;
-//   bool isSelected ;
-//   Product({this.id,this.name, this.category, this.price, this.isliked,this.isSelected = false,this.image});
-// }
 
 class ProductCard extends StatefulWidget {
   final Map<String, dynamic> product;
-  // final ValueChanged<Product> onSelected;
   ProductCard(this.product);
 
   @override
@@ -128,10 +97,6 @@ class _ProductCardState extends State<ProductCard> {
               ],
             ),
           )
-          //     .ripple(() {
-          //   Navigator.of(context).pushNamed('/detail');
-          //   // onSelected(product);
-          // }, borderRadius: BorderRadius.all(Radius.circular(20))),
           ),
     );
   }

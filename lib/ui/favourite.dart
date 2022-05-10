@@ -21,22 +21,6 @@ class _FavouriteState extends State<Favourite> {
     fetch_favorite();
   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Welcome to Flutter',
-//       home: Scaffold(
-//         appBar: AppBar(
-//           title: const Text('Welcome to Flutter'),
-//         ),
-//         body: const Center(
-//           child: Text('Hello World'),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
   callback()
   {
     favorite_items = [];
@@ -76,14 +60,6 @@ class _FavouriteState extends State<Favourite> {
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     body: SafeArea(
-  //       child: fetchData("users-favourite-items"),
-  //     ),
-  //   );
-  // }
 
   List favorite_items = [];
 
@@ -220,25 +196,7 @@ class _BodyState extends State<Body> {
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Dismissible(
                 key: Key(widget.fav_item[index].toString()),
-                // direction: DismissDirection.endToStart,
-                // onDismissed: (direction) {
-                //   setState(() {
-                //     widget.fav_item.removeAt(index);
-                //   });
-                // },
-                // background: Container(
-                //   padding: EdgeInsets.symmetric(horizontal: 20),
-                //   decoration: BoxDecoration(
-                //     color: Color(0xFFFFE6E6),
-                //     borderRadius: BorderRadius.circular(15),
-                //   ),
-                //   child: Row(
-                //     children: [
-                //       Spacer(),
-                //       SvgPicture.asset("assets/Trash.svg"),
-                //     ],
-                //   ),
-                // ),
+
                 background: slideRightBackground(),
                 secondaryBackground: slideLeftBackground(),
 
@@ -407,26 +365,3 @@ Widget slideLeftBackground() {
     ),
   );
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:signup/reusable_widgets/fetchProducts.dart';
-//
-// class Favourite extends StatefulWidget {
-//   @override
-//   _FavouriteState createState() => _FavouriteState();
-// }
-//
-// class _FavouriteState extends State<Favourite> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: SafeArea(
-//         child: fetchData("users-favourite-items"),
-//       ),
-//     );
-//   }
-// }

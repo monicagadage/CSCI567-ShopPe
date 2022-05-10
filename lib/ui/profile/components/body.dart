@@ -5,6 +5,7 @@ import 'package:signup/screens/splash_screen.dart';
 import 'package:signup/ui/notifications.dart';
 import 'package:signup/ui/profile.dart';
 
+// import '../../chatbot.dart';
 import 'profile_menu.dart';
 import 'profile_pic.dart';
 
@@ -41,7 +42,10 @@ class ProfileBody extends StatelessWidget {
           ProfileMenu(
             text: "Help Center",
             icon: "assest/icons/Question mark.svg",
-            press: () {},
+            press: () {
+              // Navigator.push(
+              //     context, CupertinoPageRoute(builder: (_) => HomePageDialogflow()));
+            },
           ),
           ProfileMenu(
             text: "Log Out",
