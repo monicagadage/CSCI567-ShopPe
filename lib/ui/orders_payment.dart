@@ -4,12 +4,15 @@ import 'package:awesome_card/style/card_background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:signup/reusable_widgets/reusable_widgets.dart';
 import 'package:signup/screens/bottom_nav_controller.dart';
 import 'package:signup/ui/payment/paymentDetails.dart';
 import 'package:signup/ui/profile/components/body.dart';
 import 'package:signup/utils/color_utils.dart';
+
+import '../main.dart';
 
 class OrderPayment extends StatefulWidget {
   String Address, Apt, City, State, PinCode, date;
@@ -76,15 +79,16 @@ class _OrderPayment extends State<OrderPayment> {
           "totalprice": widget.totalprice,
           "Items": widget.cart_items
         })
-        .then((value) => showToast())
+        .then((value) => showToast("Address Saved"))
         // .then((value) => Navigator.push(
         //     context, MaterialPageRoute(builder: (_) => ProfileBody())))
         .catchError((error) => print("something is wrong. $error"));
   }
 
-  void showToast() {
+  showToast(String textmessage) {
+    // var textmessage2 = this.textmessage;
     Fluttertoast.showToast(
-      msg: "Order Placed",
+      msg: textmessage,
       toastLength: Toast.LENGTH_SHORT,
     );
   }
@@ -95,7 +99,27 @@ class _OrderPayment extends State<OrderPayment> {
     fetch_card();
   }
 
-  late String cardNumber, cardExpiry, cardHolderName, bankName, cvv;
+  void showNotification() {
+    setState(() {
+      // _counter++;
+    });
+    flutterLocalNotificationsPlugin.show(
+        0,
+        "ShopPe ",
+        "Order Placed",
+        NotificationDetails(
+            android: AndroidNotificationDetails(channel.id, channel.name,
+                importance: Importance.high,
+                color: Colors.blue,
+                playSound: true,
+                icon: '@mipmap/ic_launcher')));
+  }
+
+  late String cardNumber = "",
+      cardExpiry = "",
+      cardHolderName = "",
+      bankName = "",
+      cvv = "";
   List card_items = [];
   fetch_card() async {
     var _firestoreInstance = FirebaseFirestore.instance;
@@ -296,6 +320,7 @@ class _OrderPayment extends State<OrderPayment> {
             SizedBox(height: 8.0),
             firebaseUIButton(context, "Pay", () {
               sendUserCardDataToDB();
+              showNotification();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => BottomNavController()),

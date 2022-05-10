@@ -44,52 +44,13 @@ class _OrderDetailsState extends State<OrderDetails> {
     // fToast.init(context);
   }
 
-  void showToast() {
+  void showToast(String message) {
     Fluttertoast.showToast(
-        msg: "Address Saved",
+        msg: message,
         toastLength: Toast.LENGTH_LONG,
         // gravity: ToastGravity.CENTER,
         gravity: ToastGravity.CENTER);
   }
-
-  // showCustomToast() {
-  //   Widget toast = Container(
-  //     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(25.0),
-  //       color: Colors.greenAccent,
-  //     ),
-  //     child: Text("Address Added"),
-  //   );
-
-  //   fToast!.showToast(
-  //     child: toast,
-  //     toastDuration: Duration(seconds: 3),
-  //   );
-  // }
-
-  // sendUserDataToDB() async {
-  //   final FirebaseAuth _auth = FirebaseAuth.instance;
-  //   var currentUser = _auth.currentUser;
-
-  //   CollectionReference _collectionRef =
-  //       FirebaseFirestore.instance.collection("Order_details");
-  //   return _collectionRef
-  //       .doc(currentUser!.email)
-  //       .set({
-  //         "orderid": uuid,
-  //         "Address": _Address.text,
-  //         "Apt": _Apt.text,
-  //         "City": _City.text,
-  //         "State": _State.text,
-  //         "PinCode": _PinCode.text,
-  //         "date": formatteddate,
-  //       })
-  //       .then((value) => showToast())
-  //       // .then((value) => Navigator.push(
-  //       //     context, MaterialPageRoute(builder: (_) => ProfileBody())))
-  //       .catchError((error) => print("something is wrong. $error"));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +61,8 @@ class _OrderDetailsState extends State<OrderDetails> {
         elevation: 0,
         title: const Text(
           "Order Details",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: Container(
@@ -119,47 +81,55 @@ class _OrderDetailsState extends State<OrderDetails> {
                 const SizedBox(
                   height: 20,
                 ),
+                reusableTextField("Address", Icons.pin_drop, false, _Address),
+                const SizedBox(
+                  height: 20,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                reusableTextField("Apt", Icons.home, false, _Apt),
+                const SizedBox(
+                  height: 20,
+                ),
+                reusableTextField("City", Icons.location_city, false, _City),
+                const SizedBox(
+                  height: 20,
+                ),
                 reusableTextField(
-                    "Address 1", Icons.lock_outlined, false, _Address),
+                    "State", Icons.location_city_sharp, false, _State),
                 const SizedBox(
                   height: 20,
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                reusableTextField("Apt", Icons.person_outline, false, _Apt),
-                const SizedBox(
-                  height: 20,
-                ),
-                reusableTextField("City", Icons.person_outline, false, _City),
-                const SizedBox(
-                  height: 20,
-                ),
-                reusableTextField("State", Icons.security, false, _State),
-                const SizedBox(
-                  height: 20,
-                ),
-                reusableTextField("Pin Code", Icons.security, false, _PinCode),
+                reusableTextField("Pin Code", Icons.code, false, _PinCode),
                 const SizedBox(
                   height: 20,
                 ),
                 firebaseUIButton(context, "Continue", () {
+                  if (!_Address.text.isEmpty &
+                      !_Apt.text.isEmpty &
+                      !_City.text.isEmpty &
+                      !_State.text.isEmpty &
+                      !_PinCode.text.isEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => OrderPayment(
+                                uuid,
+                                _Address.text,
+                                _City.text,
+                                _Apt.text,
+                                _PinCode.text,
+                                _State.text,
+                                formatteddate,
+                                widget.total,
+                                widget.cart_items,
+                              )),
+                    );
+                  } else {
+                    showToast("Values cannot be Empty");
+                  }
                   // sendUserDataToDB();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => OrderPayment(
-                              uuid,
-                              _Address.text,
-                              _City.text,
-                              _Apt.text,
-                              _PinCode.text,
-                              _State.text,
-                              formatteddate,
-                              widget.total,
-                              widget.cart_items,
-                            )),
-                  );
                 }),
               ],
             ),

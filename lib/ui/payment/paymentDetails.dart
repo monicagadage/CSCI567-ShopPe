@@ -47,27 +47,17 @@ class StickyLabel extends StatelessWidget {
 }
 
 class _PaymentDetailsState extends State<PaymentDetails> {
-  // setData(data) async {
-  //   var userData = FirebaseFirestore.instance
-  //       .collection("users-form-data")
-  //       .doc(FirebaseAuth.instance.currentUser!.email)
-  //       .snapshots();
-  //   var data = userData.;
-
-  //   cardNumber = data['cardNumber'];
-  //   cardExpiry = data['cardExpiry'];
-  //   cardHolderName = data['cardHolderName'];
-  //   bankName = data['bankName'];
-  //   cvv = data['cvv'];
-  // }
-
   @override
   void initState() {
     super.initState();
     fetch_card();
   }
 
-  late String cardNumber, cardExpiry, cardHolderName, bankName, cvv;
+  late String cardNumber = " ",
+      cardExpiry = " ",
+      cardHolderName = " ",
+      bankName = " ",
+      cvv = " ";
   List card_items = [];
   fetch_card() async {
     var _firestoreInstance = FirebaseFirestore.instance;
@@ -79,15 +69,15 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         .doc(currentUser!.email)
         .get();
 
-    // setState(()  {
-    //   // for (int i = 0; i < qn.docs.length; i++) {
-    //   cardNumber = qn['cardNumber'];
-    //   cardExpiry = qn['cardExpiry'];
-    //   cardHolderName = qn['cardHolderName'];
-    //   bankName = qn['bankName'];
-    //   cvv = qn['cvv'];
-    //   print("cardNumber ${cardNumber}");
-    // });
+    setState(() {
+      // for (int i = 0; i < qn.docs.length; i++) {
+      cardNumber = qn['cardNumber'];
+      cardExpiry = qn['cardExpiry'];
+      cardHolderName = qn['cardHolderName'];
+      bankName = qn['bankName'];
+      cvv = qn['cvv'];
+      print("cardNumber ${cardNumber}");
+    });
 
     return qn;
   }
