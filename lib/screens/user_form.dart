@@ -11,6 +11,7 @@ import 'package:signup/screens/bottom_nav_controller.dart';
 import '../reusable_widgets/reusable_widgets.dart';
 import '../ui/home.dart';
 import '../utils/color_utils.dart';
+import 'bottom_nav_controller.dart';
 
 class UserForm extends StatefulWidget {
   @override
@@ -53,8 +54,8 @@ class _UserFormState extends State<UserForm> {
           "gender": _genderController.text,
           "age": _ageController.text,
         })
-        .then((value) =>
-            Navigator.push(context, MaterialPageRoute(builder: (_) => Home())))
+        .then((value) => Navigator.push(
+            context, MaterialPageRoute(builder: (_) => BottomNavController())))
         .catchError((error) => print("something is wrong. $error"));
   }
 

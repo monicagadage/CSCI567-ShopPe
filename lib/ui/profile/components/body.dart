@@ -9,6 +9,7 @@ import 'package:signup/ui/payment/paymentDetails.dart';
 import 'package:signup/ui/profile.dart';
 import 'package:signup/ui/settings.dart';
 
+import '../../chatbot.dart';
 import 'profile_menu.dart';
 import 'profile_pic.dart';
 
@@ -65,10 +66,8 @@ class ProfileBody extends StatelessWidget {
             text: "Help Center",
             icon: "assest/icons/Question mark.svg",
             press: () {
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                      builder: (_) => OrderDetails(50, ["1", "2"])));
+              Navigator.push(context,
+                  CupertinoPageRoute(builder: (_) => HomePageDialogflow()));
             },
           ),
           ProfileMenu(

@@ -3,36 +3,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:signup/const/AppColors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signup/reusable_widgets/reusable_widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:uuid/uuid.dart';
-// import 'package:uuid/uuid.dart';
 
-// ignore: must_be_immutable
+
 class ProductDetails extends StatefulWidget {
   Map<String, dynamic> _product;
-  ProductDetails(this._product);
+  Function callback;
+  ProductDetails(this._product, this.callback);
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails>
     with TickerProviderStateMixin {
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //     title: 'Welcome to Flutter',
-  //     home: Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text('Welcome to Flutter'),
-  //       ),
-  //       body: const Center(
-  //         child: Text('Profile'),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   late AnimationController controller;
   late Animation<double> animation;
@@ -60,9 +44,27 @@ class _ProductDetailsState extends State<ProductDetails>
     var uuid = Uuid();
     var v1 = uuid.v1();
 
-    DocumentReference docRef =
-        FirebaseFirestore.instance.doc(widget._product["product-location"]);
-    docRef.update({"cart-reference": v1, "cart": true, "quantity": 1});
+    final s = widget._product["product-location"].split('/');
+
+    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+
+    print("${allData} string string ${s[1]}");
+
+    var isliked = allData[currentUser!.email.toString()]["isliked"];
+    var favorite_reference = allData[currentUser!.email.toString()]["favorite-reference"];
+
+
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
+        .set({
+      currentUser.email.toString() : {
+        'isliked': isliked,
+        'favorite-reference': favorite_reference,
+        'cart': true,
+        'cart-reference': v1,
+        "quantity": 1 }
+    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+
     widget._product["cart-reference"] = v1;
     widget._product["product-cart"] = true;
     widget._product["product-quantity"] = 1;
@@ -86,15 +88,37 @@ class _ProductDetailsState extends State<ProductDetails>
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var uuid = Uuid();
     var v1 = uuid.v1();
-    DocumentReference docRef =
-        FirebaseFirestore.instance.doc(widget._product["product-location"]);
-    docRef.update({
-      "favorite-reference": v1,
-      "isliked": true,
-    });
-    widget._product["favorite-reference"] = v1;
-    widget._product["product-liked"] = true;
     var currentUser = _auth.currentUser;
+
+    final s = widget._product["product-location"].split('/');
+
+    // QuerySnapshot qn = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+
+    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+
+    print("${allData} string string ${s[1]}");
+
+    var cart = allData[currentUser!.email.toString()]["cart"];
+    var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser!.email.toString()]["quantity"];
+
+
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
+        .set({
+      currentUser.email.toString() : {
+        'isliked': true,
+        'favorite-reference': v1,
+        'cart': cart,
+        'cart-reference': cart_reference,
+        "quantity": quantity }
+    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+
+    widget._product["favorite-reference"] = v1;
+    widget._product["isliked"] = true;
+
+    widget.callback(true);
+
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection("users-favourite-items");
     return _collectionRef
@@ -111,15 +135,35 @@ class _ProductDetailsState extends State<ProductDetails>
 
   Future removefromFavourite(String docId) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
-    DocumentReference docRef =
-        FirebaseFirestore.instance.doc(widget._product["product-location"]);
-    docRef.update({
-      "favorite-reference": "",
-      "isliked": false,
-    });
     var currentUser = _auth.currentUser;
+    final s = widget._product["product-location"].split('/');
+
+    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+
+    print("${allData} string string ${s[1]}");
+
+    var cart = allData[currentUser!.email.toString()]["cart"];
+    var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser!.email.toString()]["quantity"];
+
+
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
+        .set({
+      currentUser.email.toString() : {
+        'isliked': false,
+        'favorite-reference': "",
+        'cart': cart,
+        'cart-reference': cart_reference,
+        "quantity": quantity }
+    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+
+
     widget._product["favorite-reference"] = "";
     widget._product["product-liked"] = false;
+
+    widget.callback(false);
+
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection("users-favourite-items");
     return _collectionRef
@@ -241,12 +285,13 @@ class _ProductDetailsState extends State<ProductDetails>
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: (widget._product["product-thumbnail"])
-              .map((x) => _thumbnail(x))
-              .toList()),
+              .map<Widget>((x) => _thumbnail(x.toString()) ).toList()
+      ),
     );
   }
 
   Widget _thumbnail(String image) {
+    print("${image} imageimageimageimageimageimage");
     return AnimatedBuilder(
       animation: animation,
       //  builder: null,
@@ -509,7 +554,7 @@ class _ProductDetailsState extends State<ProductDetails>
                 children: <Widget>[
                   _appBar(),
                   _productImage(),
-                  // _categoryWidget(),
+                  _categoryWidget(),
                 ],
               ),
               _detailWidget()
@@ -520,341 +565,3 @@ class _ProductDetailsState extends State<ProductDetails>
     );
   }
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-// import 'package:carousel_slider/carousel_slider.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:signup/const/AppColors.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-// // ignore: must_be_immutable
-// class ProductDetails extends StatefulWidget {
-//   var _product;
-//   ProductDetails(this._product);
-//   @override
-//   _ProductDetailsState createState() => _ProductDetailsState();
-// }
-
-// class _ProductDetailsState extends State<ProductDetails> {
-//   Future addToCart() async {
-//     final FirebaseAuth _auth = FirebaseAuth.instance;
-//     var currentUser = _auth.currentUser;
-//     CollectionReference _collectionRef =
-//         FirebaseFirestore.instance.collection("users-cart-items");
-//     return _collectionRef
-//         .doc(currentUser!.email)
-//         .collection("items")
-//         .doc()
-//         .set({
-//       "name": widget._product["product-name"],
-//       "price": widget._product["product-price"],
-//       "images": widget._product["product-img"],
-//     }).then((value) => print("Added to cart"));
-//   }
-
-//   Future addToFavourite() async {
-//     final FirebaseAuth _auth = FirebaseAuth.instance;
-//     var currentUser = _auth.currentUser;
-//     CollectionReference _collectionRef =
-//         FirebaseFirestore.instance.collection("users-favourite-items");
-//     return _collectionRef
-//         .doc(currentUser!.email)
-//         .collection("items")
-//         .doc()
-//         .set({
-//       "name": widget._product["product-name"],
-//       "price": widget._product["product-price"],
-//       "images": widget._product["product-img"],
-//     }).then((value) => print("Added to favourite"));
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.transparent,
-//         elevation: 0,
-//         leading: Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: CircleAvatar(
-//             backgroundColor: AppColors.deep_orange,
-//             child: IconButton(
-//                 onPressed: () => Navigator.pop(context),
-//                 icon: Icon(
-//                   Icons.arrow_back,
-//                   color: Colors.white,
-//                 )),
-//           ),
-//         ),
-//         actions: [
-//           StreamBuilder(
-//             stream: FirebaseFirestore.instance
-//                 .collection("users-favourite-items")
-//                 .doc(FirebaseAuth.instance.currentUser!.email)
-//                 .collection("items")
-//                 .where("name", isEqualTo: widget._product['product-name'])
-//                 .snapshots(),
-//             builder: (BuildContext context, AsyncSnapshot snapshot) {
-//               if (snapshot.data == null) {
-//                 return Text("");
-//               }
-//               return Padding(
-//                 padding: const EdgeInsets.only(right: 8),
-//                 child: CircleAvatar(
-//                   backgroundColor: Colors.red,
-//                   child: IconButton(
-//                     onPressed: () => snapshot.data.docs.length == 0
-//                         ? addToFavourite()
-//                         : print("Already Added"),
-//                     icon: snapshot.data.docs.length == 0
-//                         ? Icon(
-//                             Icons.favorite_outline,
-//                             color: Colors.white,
-//                           )
-//                         : Icon(
-//                             Icons.favorite,
-//                             color: Colors.white,
-//                           ),
-//                   ),
-//                 ),
-//               );
-//             },
-//           ),
-//         ],
-//       ),
-//       body: SafeArea(
-//           child: Padding(
-//         padding: const EdgeInsets.only(left: 12, right: 12, top: 10),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             AspectRatio(
-//               aspectRatio: 3.5,
-//               child: CarouselSlider(
-//                   items: widget._product['product-img']
-//                       .map<Widget>((item) => Padding(
-//                             padding: const EdgeInsets.only(left: 3, right: 3),
-//                             child: Container(
-//                               decoration: BoxDecoration(
-//                                   image: DecorationImage(
-//                                       image: NetworkImage(item),
-//                                       fit: BoxFit.fitWidth)),
-//                             ),
-//                           ))
-//                       .toList(),
-//                   options: CarouselOptions(
-//                       autoPlay: false,
-//                       enlargeCenterPage: true,
-//                       viewportFraction: 0.8,
-//                       enlargeStrategy: CenterPageEnlargeStrategy.height,
-//                       onPageChanged: (val, carouselPageChangedReason) {
-//                         setState(() {});
-//                       })),
-//             ),
-//             Text(
-//               widget._product['product-name'],
-//               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-//             ),
-//             Text(widget._product['product-description']),
-//             SizedBox(
-//               height: 10,
-//             ),
-//             Text(
-//               "\$ ${widget._product['product-price'].toString()}",
-//               style: TextStyle(
-//                   fontWeight: FontWeight.bold, fontSize: 30, color: Colors.red),
-//             ),
-//             Divider(),
-//             SizedBox(
-//               width: 1.sw,
-//               height: 56.h,
-//               child: ElevatedButton(
-//                 onPressed: () => addToCart(),
-//                 child: Text(
-//                   "Add to cart",
-//                   style: TextStyle(color: Colors.white, fontSize: 18.sp),
-//                 ),
-//                 style: ElevatedButton.styleFrom(
-//                   primary: AppColors.deep_orange,
-//                   elevation: 3,
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       )),
-//     );
-//   }
-// }
-
-/////////////////////////////////////////////////////////////////////////////////////
-///
-// import 'package:carousel_slider/carousel_slider.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:signup/const/AppColors.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-// // ignore: must_be_immutable
-// class ProductDetails extends StatefulWidget {
-//   var _product;
-//   ProductDetails(this._product);
-//   @override
-//   _ProductDetailsState createState() => _ProductDetailsState();
-// }
-
-// class _ProductDetailsState extends State<ProductDetails> {
-//   Future addToCart() async {
-//     final FirebaseAuth _auth = FirebaseAuth.instance;
-//     var currentUser = _auth.currentUser;
-//     CollectionReference _collectionRef =
-//         FirebaseFirestore.instance.collection("users-cart-items");
-//     return _collectionRef
-//         .doc(currentUser!.email)
-//         .collection("items")
-//         .doc()
-//         .set({
-//       "name": widget._product["product-name"],
-//       "price": widget._product["product-price"],
-//       "images": widget._product["product-img"],
-//     }).then((value) => print("Added to cart"));
-//   }
-
-//   Future addToFavourite() async {
-//     final FirebaseAuth _auth = FirebaseAuth.instance;
-//     var currentUser = _auth.currentUser;
-//     CollectionReference _collectionRef =
-//         FirebaseFirestore.instance.collection("users-favourite-items");
-//     return _collectionRef
-//         .doc(currentUser!.email)
-//         .collection("items")
-//         .doc()
-//         .set({
-//       "name": widget._product["product-name"],
-//       "price": widget._product["product-price"],
-//       "images": widget._product["product-img"],
-//     }).then((value) => print("Added to favourite"));
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.transparent,
-//         elevation: 0,
-//         leading: Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: CircleAvatar(
-//             backgroundColor: AppColors.deep_orange,
-//             child: IconButton(
-//                 onPressed: () => Navigator.pop(context),
-//                 icon: Icon(
-//                   Icons.arrow_back,
-//                   color: Color.fromARGB(255, 255, 255, 255),
-//                 )),
-//           ),
-//         ),
-//         actions: [
-//           StreamBuilder(
-//             stream: FirebaseFirestore.instance
-//                 .collection("users-favourite-items")
-//                 .doc(FirebaseAuth.instance.currentUser!.email)
-//                 .collection("items")
-//                 .where("name", isEqualTo: widget._product['product-name'])
-//                 .snapshots(),
-//             builder: (BuildContext context, AsyncSnapshot snapshot) {
-//               if (snapshot.data == null) {
-//                 return Text("");
-//               }
-//               return Padding(
-//                 padding: const EdgeInsets.only(right: 8),
-//                 child: CircleAvatar(
-//                   backgroundColor: Colors.red,
-//                   child: IconButton(
-//                     onPressed: () => snapshot.data.docs.length == 0
-//                         ? addToFavourite()
-//                         : print("Already Added"),
-//                     icon: snapshot.data.docs.length == 0
-//                         ? Icon(
-//                             Icons.favorite_outline,
-//                             color: Colors.white,
-//                           )
-//                         : Icon(
-//                             Icons.favorite,
-//                             color: Colors.white,
-//                           ),
-//                   ),
-//                 ),
-//               );
-//             },
-//           ),
-//         ],
-//       ),
-//       body: SafeArea(
-//           child: Padding(
-//         padding: const EdgeInsets.only(left: 12, right: 12, top: 10),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // AspectRatio(
-//             //   aspectRatio: 3.5,
-//             //   child: CarouselSlider(
-//             //       items: widget._product['product-img']
-//             //           .map<Widget>((item) => Padding(
-//             //                 padding: const EdgeInsets.only(left: 3, right: 3),
-//             //                 child: Container(
-//             //                   decoration: BoxDecoration(
-//             //                       image: DecorationImage(
-//             //                           image: NetworkImage(item),
-//             //                           fit: BoxFit.fitWidth)),
-//             //                 ),
-//             //               ))
-//             //           .toList(),
-//             //       options: CarouselOptions(
-//             //           autoPlay: false,
-//             //           enlargeCenterPage: true,
-//             //           viewportFraction: 0.8,
-//             //           enlargeStrategy: CenterPageEnlargeStrategy.height,
-//             //           onPageChanged: (val, carouselPageChangedReason) {
-//             //             setState(() {});
-//             //           })),
-//             // ),
-//             Text(
-//               widget._product['product-name'],
-//               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-//             ),
-//             Text(widget._product['product-description']),
-//             SizedBox(
-//               height: 10,
-//             ),
-//             Text(
-//               "\$ ${widget._product['product-price'].toString()}",
-//               style: TextStyle(
-//                   fontWeight: FontWeight.bold, fontSize: 30, color: Colors.red),
-//             ),
-//             Divider(),
-//             SizedBox(
-//               width: 1,
-//               height: 56,
-//               child: ElevatedButton(
-//                 onPressed: () => addToCart(),
-//                 child: Text(
-//                   "Add to cart",
-//                   style: TextStyle(
-//                       color: Color.fromARGB(255, 236, 0, 0), fontSize: 18),
-//                 ),
-//                 style: ElevatedButton.styleFrom(
-//                   primary: Color.fromARGB(255, 0, 43, 236),
-//                   elevation: 3,
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       )),
-//     );
-//   }
-// }

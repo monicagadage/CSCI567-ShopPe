@@ -79,15 +79,15 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         .doc(currentUser!.email)
         .get();
 
-    setState(() {
-      // for (int i = 0; i < qn.docs.length; i++) {
-      cardNumber = qn['cardNumber'];
-      cardExpiry = qn['cardExpiry'];
-      cardHolderName = qn['cardHolderName'];
-      bankName = qn['bankName'];
-      cvv = qn['cvv'];
-      print("cardNumber ${cardNumber}");
-    });
+    // setState(()  {
+    //   // for (int i = 0; i < qn.docs.length; i++) {
+    //   cardNumber = qn['cardNumber'];
+    //   cardExpiry = qn['cardExpiry'];
+    //   cardHolderName = qn['cardHolderName'];
+    //   bankName = qn['bankName'];
+    //   cvv = qn['cvv'];
+    //   print("cardNumber ${cardNumber}");
+    // });
 
     return qn;
   }

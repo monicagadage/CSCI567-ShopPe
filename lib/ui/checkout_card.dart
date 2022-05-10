@@ -281,6 +281,7 @@ class CheckoutCard extends StatefulWidget {
   List cart_items;
 
   CheckoutCard(this.total, this.cart_items);
+
   @override
   _CheckoutCardState createState() => _CheckoutCardState();
 }

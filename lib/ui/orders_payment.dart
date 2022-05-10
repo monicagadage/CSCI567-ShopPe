@@ -62,7 +62,7 @@ class _OrderPayment extends State<OrderPayment> {
     return _collectionRef
         .doc(currentUser!.email)
         .collection("Orders")
-        .doc(widget.uuid + "-" + widget.date)
+        .doc(widget.date + "-" + widget.uuid)
         .set({
           "orderid": widget.uuid,
           "Address": widget.Address,
@@ -80,6 +80,13 @@ class _OrderPayment extends State<OrderPayment> {
         // .then((value) => Navigator.push(
         //     context, MaterialPageRoute(builder: (_) => ProfileBody())))
         .catchError((error) => print("something is wrong. $error"));
+  }
+
+  void showToast() {
+    Fluttertoast.showToast(
+      msg: "Order Placed",
+      toastLength: Toast.LENGTH_SHORT,
+    );
   }
 
   @override
