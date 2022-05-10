@@ -18,6 +18,7 @@ class _CartState extends State<Cart> {
     fetch_cart();
   }
 
+  late double totalprice;
   List cart_items = [];
   fetch_cart() async {
     var _firestoreInstance = FirebaseFirestore.instance;
@@ -30,6 +31,7 @@ class _CartState extends State<Cart> {
         .collection("items")
         .get();
     setState(() {
+      totalprice = 0;
       for (int i = 0; i < qn.docs.length; i++) {
         cart_items.add({
           "name": qn.docs[i]["name"],
@@ -38,6 +40,7 @@ class _CartState extends State<Cart> {
           "quantity": qn.docs[i]["quantity"],
           "location": qn.docs[i]["reference"]
         });
+        totalprice = totalprice + qn.docs[i]["price"] * qn.docs[i]["quantity"];
         print("cart cart cart cart ${qn.docs[i].reference.path}");
       }
     });
@@ -68,7 +71,7 @@ class _CartState extends State<Cart> {
     return Scaffold(
       appBar: buildAppBar(context),
       body: Body(cart_items),
-      bottomNavigationBar: CheckoutCard(cart_items),
+      bottomNavigationBar: CheckoutCard(totalprice, cart_items),
     );
     // ),
   }

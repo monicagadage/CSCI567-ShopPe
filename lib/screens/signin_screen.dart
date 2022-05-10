@@ -65,8 +65,10 @@ class _SignInScreenState extends State<SignInScreen> {
             }),
             firebaseUIButton(context, "Google Sign In", () async {
               await signInWithGoogle();
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BottomNavController()));
             }),
             signUpOption()
           ]),

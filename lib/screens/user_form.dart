@@ -6,6 +6,7 @@ import 'package:signup/const/AppColors.dart';
 import 'package:signup/reusable_widgets/customButton.dart';
 import 'package:signup/reusable_widgets/myTextField.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:signup/screens/bottom_nav_controller.dart';
 
 import '../reusable_widgets/reusable_widgets.dart';
 import '../ui/home.dart';
@@ -52,8 +53,8 @@ class _UserFormState extends State<UserForm> {
           "gender": _genderController.text,
           "age": _ageController.text,
         })
-        .then((value) => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => Home())))
+        .then((value) =>
+            Navigator.push(context, MaterialPageRoute(builder: (_) => Home())))
         .catchError((error) => print("something is wrong. $error"));
   }
 
@@ -152,7 +153,7 @@ class _UserFormState extends State<UserForm> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home()),
+                        builder: (context) => BottomNavController()),
                   );
                 }),
               ],

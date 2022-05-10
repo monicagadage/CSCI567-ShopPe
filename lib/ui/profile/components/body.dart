@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:signup/screens/splash_screen.dart';
 import 'package:signup/ui/notifications.dart';
+import 'package:signup/ui/order_details.dart';
 import 'package:signup/ui/payment/add_card.dart';
 import 'package:signup/ui/payment/paymentDetails.dart';
 import 'package:signup/ui/profile.dart';
@@ -63,7 +64,12 @@ class ProfileBody extends StatelessWidget {
           ProfileMenu(
             text: "Help Center",
             icon: "assest/icons/Question mark.svg",
-            press: () {},
+            press: () {
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                      builder: (_) => OrderDetails(50, ["1", "2"])));
+            },
           ),
           ProfileMenu(
             text: "Log Out",
