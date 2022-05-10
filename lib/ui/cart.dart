@@ -47,6 +47,7 @@ class _CartState extends State<Cart> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+      backgroundColor: Color.fromARGB(255, 158, 69, 69),
       title: Column(
         children: [
           Text(

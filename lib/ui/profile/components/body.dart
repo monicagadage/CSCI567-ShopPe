@@ -6,6 +6,7 @@ import 'package:signup/ui/notifications.dart';
 import 'package:signup/ui/payment/add_card.dart';
 import 'package:signup/ui/payment/paymentDetails.dart';
 import 'package:signup/ui/profile.dart';
+import 'package:signup/ui/settings.dart';
 
 import 'profile_menu.dart';
 import 'profile_pic.dart';
@@ -29,7 +30,7 @@ class ProfileBody extends StatelessWidget {
           ),
           ProfileMenu(
             text: "Payments",
-            icon: "assest/icons/Bell.svg",
+            icon: "assest/icons/Cash.svg",
             press: () {
               Navigator.push(context,
                   CupertinoPageRoute(builder: (_) => PaymentDetails()));
@@ -37,7 +38,7 @@ class ProfileBody extends StatelessWidget {
           ),
           ProfileMenu(
             text: "Add Card",
-            icon: "assest/icons/Bell.svg",
+            icon: "assest/icons/receipt.svg",
             press: () {
               Navigator.push(
                   context, CupertinoPageRoute(builder: (_) => AddCard()));
@@ -54,7 +55,10 @@ class ProfileBody extends StatelessWidget {
           ProfileMenu(
             text: "Settings",
             icon: "assest/icons/Settings.svg",
-            press: () {},
+            press: () {
+              Navigator.push(
+                  context, CupertinoPageRoute(builder: (_) => Settings()));
+            },
           ),
           ProfileMenu(
             text: "Help Center",

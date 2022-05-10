@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+// import 'package:signup/ui/cart.dart';
 
-
+// ignore: must_be_immutable
 class CheckoutCard extends StatefulWidget {
   List cart_item;
 
@@ -10,6 +13,40 @@ class CheckoutCard extends StatefulWidget {
 }
 
 class _CheckoutCardState extends State<CheckoutCard> {
+  @override
+  void initState() {
+    super.initState();
+    fetch_price();
+  }
+
+  late double totalprice;
+  List cart_items2 = [];
+  fetch_price() async {
+    var _firestoreInstance = FirebaseFirestore.instance;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+    totalprice = 0;
+    QuerySnapshot qn = await _firestoreInstance
+        .collection("users-cart-items")
+        .doc(currentUser!.email)
+        .collection("items")
+        .get();
+    setState(() {
+      for (int i = 0; i < qn.docs.length; i++) {
+        cart_items2.add({
+          // "name": qn.docs[i]["name"],
+          "price": qn.docs[i]["price"],
+          // "img": qn.docs[i]["images"],
+          "quantity": qn.docs[i]["quantity"],
+          // "location": qn.docs[i]["reference"]
+        });
+        totalprice = totalprice + qn.docs[i]["price"] * qn.docs[i]["quantity"];
+        // print("cart cart cart cart ${qn.docs[i].reference.path}");
+      }
+    });
+
+    return totalprice;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +106,10 @@ class _CheckoutCardState extends State<CheckoutCard> {
                     text: "Total:\n",
                     children: [
                       TextSpan(
-                        text: "\$337.15",
+                        text: totalprice.toStringAsFixed(
+                            totalprice.truncateToDouble() == totalprice
+                                ? 0
+                                : 2),
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                     ],
@@ -82,8 +122,8 @@ class _CheckoutCardState extends State<CheckoutCard> {
                     height: (56),
                     child: TextButton(
                       style: TextButton.styleFrom(
-                        shape:
-                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
                         primary: Colors.white,
                         backgroundColor: Color(0xFFFF7643),
                       ),

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +49,7 @@ class _FavouriteState extends State<Favourite> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+      backgroundColor: Color.fromARGB(255, 158, 69, 69),
       title: Column(
         children: [
           Text(
@@ -55,10 +58,7 @@ class _FavouriteState extends State<Favourite> {
           ),
           Text(
             "${favorite_items.length} items",
-            style: Theme
-                .of(context)
-                .textTheme
-                .caption,
+            style: Theme.of(context).textTheme.caption,
           ),
         ],
       ),
@@ -83,25 +83,26 @@ class _FavouriteState extends State<Favourite> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
 
-    QuerySnapshot qn = await _firestoreInstance.collection(
-        "users-favourite-items").doc(currentUser!.email)
-        .collection("items").get();
+    QuerySnapshot qn = await _firestoreInstance
+        .collection("users-favourite-items")
+        .doc(currentUser!.email)
+        .collection("items")
+        .get();
     setState(() {
       for (int i = 0; i < qn.docs.length; i++) {
         favorite_items.add({
           "name": qn.docs[i]["name"],
           "price": qn.docs[i]["price"],
           "img": qn.docs[i]["images"],
-          "location": qn.docs[i]["reference"]});
+          "location": qn.docs[i]["reference"]
+        });
         print("jjjjjjjjjkllll ${qn.docs[i].reference.path}");
       }
     });
 
     return qn.docs;
   }
-
 }
-
 
 class Body extends StatefulWidget {
   List fav_item;
@@ -111,12 +112,11 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-
   Future removefromFavourite(String docId) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
 
-    DocumentReference docRef = await FirebaseFirestore.instance.doc(
-        docId); //.get() as DocumentReference<Object?>;
+    DocumentReference docRef = await FirebaseFirestore.instance
+        .doc(docId); //.get() as DocumentReference<Object?>;
     Map<String, dynamic> pro = await docRef.get() as Map<String, dynamic>;
     print(docRef);
 
@@ -132,99 +132,97 @@ class _BodyState extends State<Body> {
     var currentUser = _auth.currentUser;
 
     CollectionReference _collectionRef =
-    FirebaseFirestore.instance.collection("users-favourite-items");
+        FirebaseFirestore.instance.collection("users-favourite-items");
     return _collectionRef
         .doc(currentUser!.email)
         .collection("items")
         .doc(reference)
-        .delete().then((value) => print("Removed from favourite"));
+        .delete()
+        .then((value) => print("Removed from favourite"));
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-      EdgeInsets.symmetric(horizontal: 50), // getProportionateScreenWidth(20)
+      padding: EdgeInsets.symmetric(
+          horizontal: 50), // getProportionateScreenWidth(20)
       child: ListView.builder(
         itemCount: widget.fav_item.length,
-        itemBuilder: (context, index) =>
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Dismissible(
-                key: Key(widget.fav_item[index].toString()),
-                // direction: DismissDirection.endToStart,
-                // onDismissed: (direction) {
-                //   setState(() {
-                //     widget.fav_item.removeAt(index);
-                //   });
-                // },
-                // background: Container(
-                //   padding: EdgeInsets.symmetric(horizontal: 20),
-                //   decoration: BoxDecoration(
-                //     color: Color(0xFFFFE6E6),
-                //     borderRadius: BorderRadius.circular(15),
-                //   ),
-                //   child: Row(
-                //     children: [
-                //       Spacer(),
-                //       SvgPicture.asset("assets/Trash.svg"),
-                //     ],
-                //   ),
-                // ),
-                background: slideRightBackground(),
-                secondaryBackground: slideLeftBackground(),
+        itemBuilder: (context, index) => Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Dismissible(
+            key: Key(widget.fav_item[index].toString()),
+            // direction: DismissDirection.endToStart,
+            // onDismissed: (direction) {
+            //   setState(() {
+            //     widget.fav_item.removeAt(index);
+            //   });
+            // },
+            // background: Container(
+            //   padding: EdgeInsets.symmetric(horizontal: 20),
+            //   decoration: BoxDecoration(
+            //     color: Color(0xFFFFE6E6),
+            //     borderRadius: BorderRadius.circular(15),
+            //   ),
+            //   child: Row(
+            //     children: [
+            //       Spacer(),
+            //       SvgPicture.asset("assets/Trash.svg"),
+            //     ],
+            //   ),
+            // ),
+            background: slideRightBackground(),
+            secondaryBackground: slideLeftBackground(),
 
-                confirmDismiss: (direction) async {
-                  if (direction == DismissDirection.endToStart) {
-                    final bool res = await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            content: Text(
-                                "Are you sure you want to delete ${widget
-                                    .fav_item[index]["name"]}?"),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text(
-                                  "Cancel",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              FlatButton(
-                                child: Text(
-                                  "Delete",
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                                onPressed: () {
-                                  // TODO: Delete the item from DB etc..
-                                  removefromFavourite(
-                                      widget.fav_item[index]["location"]);
-                                  setState(() {
-                                    widget.fav_item.removeAt(index);
-                                  });
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        });
-                    return res;
-                  } else {
-                    // TODO: Navigate to edit page;
-                    print("swipe right right right right");
-                  }
-                },
+            confirmDismiss: (direction) async {
+              if (direction == DismissDirection.endToStart) {
+                final bool res = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Text(
+                            "Are you sure you want to delete ${widget.fav_item[index]["name"]}?"),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          FlatButton(
+                            child: Text(
+                              "Delete",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            onPressed: () {
+                              // TODO: Delete the item from DB etc..
+                              removefromFavourite(
+                                  widget.fav_item[index]["location"]);
+                              setState(() {
+                                widget.fav_item.removeAt(index);
+                              });
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    });
+                return res;
+              } else {
+                // TODO: Navigate to edit page;
+                print("swipe right right right right");
+              }
+            },
 
-                child: CartCard(widget.fav_item[index]),
-              ),
-            ),
+            child: CartCard(widget.fav_item[index]),
+          ),
+        ),
       ),
     );
   }
-
 }
 
 class CartCard extends StatelessWidget {
@@ -243,7 +241,7 @@ class CartCard extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: 0.88,
             child: Container(
-              padding: EdgeInsets.all(20),     // getProportionateScreenWidth(10)
+              padding: EdgeInsets.all(20), // getProportionateScreenWidth(10)
               decoration: BoxDecoration(
                 color: Color(0xFFF5F6F9),
                 borderRadius: BorderRadius.circular(15),
