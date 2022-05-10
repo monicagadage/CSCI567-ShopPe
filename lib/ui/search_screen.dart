@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:signup/ui/product_details_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -39,9 +40,8 @@ class _SearchScreenState extends State<SearchScreen> {
               Expanded(
                 child: Container(
                   child: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection("products")
-                          .where("product-name",
+                      stream: FirebaseFirestore.instance.collection("Products")
+                          .where("name",
                               isGreaterThanOrEqualTo: inputText)
                           .snapshots(),
                       builder: (BuildContext context,
@@ -67,10 +67,16 @@ class _SearchScreenState extends State<SearchScreen> {
                             return Card(
                               elevation: 5,
                               child: ListTile(
-                                title: Text(data['product-name']),
+                                title: Text(data['name']),
                                 // leading: Image.network(
                                 //     // 'https://picsum.photos/250?image=9')
-                                leading: Image.network(data['product-img']),
+                                leading: Image.network(data['img']),
+
+                                onTap: ()=> Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                builder : (context) => ProductDetails(data))),
+
                               ),
                             );
                           }).toList(),

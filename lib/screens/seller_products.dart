@@ -1,176 +1,112 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_ecommerce/widgets/fetchProducts.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:signup/reusable_widgets/reusable_widgets.dart';
 
-import '../screens/bottom_nav_controller.dart';
-
-class Favourite extends StatefulWidget {
+class sellerProduct extends StatefulWidget {
   @override
-  _FavouriteState createState() => _FavouriteState();
+  _sellerProductState createState() => _sellerProductState();
 }
 
-class _FavouriteState extends State<Favourite> {
+class _sellerProductState extends State<sellerProduct> {
+
   @override
   void initState() {
     super.initState();
-    fetch_favorite();
+    List<String> category = ["Dress","Watch","Tech",];
+    fetch_products();
   }
+  List seller_items = [];
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Welcome to Flutter',
-//       home: Scaffold(
-//         appBar: AppBar(
-//           title: const Text('Welcome to Flutter'),
-//         ),
-//         body: const Center(
-//           child: Text('Hello World'),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context),
-      body: Body(favorite_items),
+        appBar: buildAppBar(context),
+        body: Body(seller_items),
       // bottomNavigationBar: BottomNavController("favorite"),
-    );
-    // ),
+        );
+      // ),
   }
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Color.fromARGB(255, 158, 69, 69),
       title: Column(
         children: [
           Text(
-            "Favorite Items",
+            "Your Cart",
             style: TextStyle(color: Colors.black),
           ),
           Text(
-            "${favorite_items.length} items",
-            style: Theme.of(context).textTheme.caption,
+            "${seller_items.length} items",
+            style: Theme
+                .of(context)
+                .textTheme
+                .caption,
           ),
         ],
       ),
     );
   }
+  
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     body: SafeArea(
-  //       child: fetchData("users-favourite-items"),
-  //     ),
-  //   );
-  // }
-
-  List favorite_items = [];
-
-// var _firestoreInstance = FirebaseFirestore.instance;
-
-  fetch_favorite() async {
+  fetch_products() async {
     var _firestoreInstance = FirebaseFirestore.instance;
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
 
-    QuerySnapshot qn = await _firestoreInstance
-        .collection("users-favourite-items")
-        .doc(currentUser!.email)
-        .collection("items")
-        .get();
+    QuerySnapshot<Map<String, dynamic>> querry = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection("Dress").get();;
+    print(querry.docs.length);
     setState(() {
-      for (int i = 0; i < qn.docs.length; i++) {
-        favorite_items.add({
-          "name": qn.docs[i]["name"],
-          "price": qn.docs[i]["price"],
-          "img": qn.docs[i]["images"],
-          "location": qn.docs[i]["reference"]
-        });
-        print("jjjjjjjjjkllll ${qn.docs[i].reference.path}");
+      for (int i = 0; i < querry.docs.length; i++) {
+        print('in');
+        seller_items.add({
+        
+          "name": querry.docs[i]["name"],
+          "price": querry.docs[i]["price"],
+          "img": querry.docs[i]["img"][0],
+          "location": querry.docs[i]["reference"],
+          "path": querry.docs[i].reference.path });
+        print("path ${querry.docs[i].reference.path}");
       }
     });
 
-    return qn.docs;
+    return querry.docs;
   }
+
 }
 
 class Body extends StatefulWidget {
-  List fav_item;
-  Body(this.fav_item);
+  List product;
+  Body(this.product);
   @override
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-  Future removefromFavourite(String docId) async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
 
-    DocumentReference docRef = await FirebaseFirestore.instance
-        .doc(docId); //.get() as DocumentReference<Object?>;
-    Map<String, dynamic> pro = await docRef.get() as Map<String, dynamic>;
-    print(docRef);
+  Future removefromFavourite(String docId,String path) async {
 
-    var reference = pro['favorite-reference'];
+    print(path);
+    print(docId);
+    final pathID = path.split("/");
+    final docID = path.split("/");
+    FirebaseFirestore.instance.collection(pathID[0]).doc(pathID[1]).collection(pathID[2]).doc(pathID[3]).delete().then((value) => print("Removed from Seller "));
+    FirebaseFirestore.instance.collection(docID[0]).doc(docID[1]).delete().then((value) => print("Removed from category "));
 
-    print("${reference} 111111111111111");
-
-    docRef.update({
-      "favorite-reference": "",
-      "isliked": false,
-    });
-
-    var currentUser = _auth.currentUser;
-
-    CollectionReference _collectionRef =
-        FirebaseFirestore.instance.collection("users-favourite-items");
-    return _collectionRef
-        .doc(currentUser!.email)
-        .collection("items")
-        .doc(reference)
-        .delete()
-        .then((value) => print("Removed from favourite"));
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: 50), // getProportionateScreenWidth(20)
+      padding:
+      EdgeInsets.symmetric(horizontal: 50 ),    // getProportionateScreenWidth(20)
       child: ListView.builder(
-        itemCount: widget.fav_item.length,
+        itemCount: widget.product.length,
         itemBuilder: (context, index) => Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
           child: Dismissible(
-            key: Key(widget.fav_item[index].toString()),
-            // direction: DismissDirection.endToStart,
-            // onDismissed: (direction) {
-            //   setState(() {
-            //     widget.fav_item.removeAt(index);
-            //   });
-            // },
-            // background: Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 20),
-            //   decoration: BoxDecoration(
-            //     color: Color(0xFFFFE6E6),
-            //     borderRadius: BorderRadius.circular(15),
-            //   ),
-            //   child: Row(
-            //     children: [
-            //       Spacer(),
-            //       SvgPicture.asset("assets/Trash.svg"),
-            //     ],
-            //   ),
-            // ),
+            key: Key(widget.product[index].toString()),
             background: slideRightBackground(),
             secondaryBackground: slideLeftBackground(),
 
@@ -181,9 +117,9 @@ class _BodyState extends State<Body> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         content: Text(
-                            "Are you sure you want to delete ${widget.fav_item[index]["name"]}?"),
+                            "Are you sure you want to delete ${widget.product[index]["name"]}?"),
                         actions: <Widget>[
-                          FlatButton(
+                          ElevatedButton(
                             child: Text(
                               "Cancel",
                               style: TextStyle(color: Colors.black),
@@ -192,17 +128,17 @@ class _BodyState extends State<Body> {
                               Navigator.of(context).pop();
                             },
                           ),
-                          FlatButton(
+                          ElevatedButton(
                             child: Text(
                               "Delete",
                               style: TextStyle(color: Colors.red),
                             ),
                             onPressed: () {
                               // TODO: Delete the item from DB etc..
-                              removefromFavourite(
-                                  widget.fav_item[index]["location"]);
+                              print(widget.product[index]["location"]);
+                              removefromFavourite(widget.product[index]["location"].toString(),widget.product[index]["path"].toString());
                               setState(() {
-                                widget.fav_item.removeAt(index);
+                                widget.product.removeAt(index);
                               });
                               Navigator.of(context).pop();
                             },
@@ -217,14 +153,13 @@ class _BodyState extends State<Body> {
               }
             },
 
-            child: CartCard(widget.fav_item[index]),
+            child: CartCard(widget.product[index]),
           ),
         ),
       ),
     );
   }
 }
-
 class CartCard extends StatelessWidget {
   var item;
 
@@ -241,7 +176,7 @@ class CartCard extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: 0.88,
             child: Container(
-              padding: EdgeInsets.all(20), // getProportionateScreenWidth(10)
+              padding: EdgeInsets.all(20),     // getProportionateScreenWidth(10)
               decoration: BoxDecoration(
                 color: Color(0xFFF5F6F9),
                 borderRadius: BorderRadius.circular(15),
@@ -278,7 +213,6 @@ class CartCard extends StatelessWidget {
     );
   }
 }
-
 Widget slideRightBackground() {
   return Container(
     color: Colors.green,
@@ -336,26 +270,3 @@ Widget slideLeftBackground() {
     ),
   );
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:signup/reusable_widgets/fetchProducts.dart';
-//
-// class Favourite extends StatefulWidget {
-//   @override
-//   _FavouriteState createState() => _FavouriteState();
-// }
-//
-// class _FavouriteState extends State<Favourite> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: SafeArea(
-//         child: fetchData("users-favourite-items"),
-//       ),
-//     );
-//   }
-// }
