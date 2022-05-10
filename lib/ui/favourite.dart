@@ -119,6 +119,9 @@ class _BodyState extends State<Body> {
     var price = allData["price"];
     var image = allData["img"];
 
+    if(allData[currentUser.email.toString()]["cart"] == true)
+      return Fluttertoast.showToast(msg: 'Already in the cart');
+
 
     FirebaseFirestore.instance.collection(s[1]).doc(s[2])
         .set({
@@ -181,7 +184,7 @@ class _BodyState extends State<Body> {
         .doc(currentUser!.email)
         .collection("items")
         .doc(reference)
-        .delete().then((value) => print("Removed from favourite"));
+        .delete().then((value) => Fluttertoast.showToast(msg: "Removed from favourite"));
   }
 
   @override

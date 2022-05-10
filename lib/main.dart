@@ -14,7 +14,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
     playSound: true);
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -27,7 +27,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+      AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -38,35 +38,15 @@ void main() async {
   runApp(const MyApp());
 }
 
-// const Colors.lightBlue[800] = Color(0xff486579);
-
 class MyApp extends StatelessWidget {
   static final ValueNotifier<ThemeMode> themeNotifier =
-      ValueNotifier(ThemeMode.light);
+  ValueNotifier(ThemeMode.light);
 
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ShoPe',
-      // themeMode: ThemeMode.dark,
-      theme: ThemeData(
-        // brightness: Brightness.dark,
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primaryColor: Colors.lightBlue,
-      ),
-      home: SplashScreen(),
-    );
     // return MaterialApp(
     //   title: 'ShoPee',
     //   darkTheme: ThemeData.dark(),
@@ -94,7 +74,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             // Remove the debug banner
             debugShowCheckedModeBanner: false,
-            title: 'Kindacode.com',
+            title: 'SHOPE',
             theme: ThemeData(primarySwatch: Colors.amber),
             darkTheme: ThemeData.dark(),
             themeMode: currentMode,
@@ -103,7 +83,6 @@ class MyApp extends StatelessWidget {
             home: SplashScreen(),
           );
         });
->>>>>>> 353c9d0cf6041f85f1310e31a065a35dbec5832e
   }
 }
 

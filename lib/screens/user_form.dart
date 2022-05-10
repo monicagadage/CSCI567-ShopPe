@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../reusable_widgets/reusable_widgets.dart';
 import '../ui/home.dart';
 import '../utils/color_utils.dart';
+import 'bottom_nav_controller.dart';
 
 class UserForm extends StatefulWidget {
   @override
@@ -53,7 +54,7 @@ class _UserFormState extends State<UserForm> {
           "age": _ageController.text,
         })
         .then((value) => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => Home())))
+            context, MaterialPageRoute(builder: (_) => BottomNavController())))
         .catchError((error) => print("something is wrong. $error"));
   }
 
