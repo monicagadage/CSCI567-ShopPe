@@ -253,11 +253,11 @@ Future<void> saveImages(List<File> _images, DocumentReference ref) async {
                 ),
                 firebaseUIButton(context, "Save", () {
                 sendUserDataToDB();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => productcategory()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => productcategory()),
+                  // );
                 }),
               ],
             ),

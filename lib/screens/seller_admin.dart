@@ -15,9 +15,13 @@ enum Page { dashboard, manage }
 class Admin extends StatefulWidget {
   @override
   _AdminState createState() => _AdminState();
+
+
 }
 
 class _AdminState extends State<Admin> {
+        List<String> cat = ["Dress","watch","Tech","Shirt"];
+
   // @override
   // void initState() {
   //   super.initState();
@@ -25,6 +29,7 @@ class _AdminState extends State<Admin> {
   //   size = 0;
 
   //   getCategoryNumber();
+
   // }
  List<dynamic> value = [];
 
@@ -49,40 +54,39 @@ class _AdminState extends State<Admin> {
     int product_size = 0;
     int size = 0;
     
-    print("h");
     var dress = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection('Dress').get();
-    var watch = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection('Watch').get();
-    var shirt = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection('Shirt').get();
-    var tech = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection('Tech').get();
-    var home = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection('Home').get();
-    var jewel = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection('Jewel').get();
+    var watch = await _firestoreInstance.collection("seller-products").doc(currentUser.email).collection('Watch').get();
+    var shirt = await _firestoreInstance.collection("seller-products").doc(currentUser.email).collection('Shirt').get();
+    var tech = await _firestoreInstance.collection("seller-products").doc(currentUser.email).collection('Tech').get();
+    var home = await _firestoreInstance.collection("seller-products").doc(currentUser.email).collection('Home').get();
+    var jewel = await _firestoreInstance.collection("seller-products").doc(currentUser.email).collection('Jewel').get();
 
     if(await !(dress.docs.isEmpty)){
      product_size = product_size + dress.docs.length;
       size=size+1;
     }
     if(await !(watch.docs.isEmpty)){
-           product_size = product_size + dress.docs.length;
+           product_size = product_size + watch.docs.length;
 
       size=size+1;
     }
      if(await !(shirt.docs.isEmpty)){
-            product_size = product_size + dress.docs.length;
+            product_size = product_size + shirt.docs.length;
 
       size=size+1;
     }
      if(await !(tech.docs.isEmpty)){
-            product_size = product_size + dress.docs.length;
+            product_size = product_size + tech.docs.length;
 
       size=size+1;
     }
      if(await !(home.docs.isEmpty)){
-            product_size = product_size + dress.docs.length;
+            product_size = product_size + home.docs.length;
 
       size=size+1;
     }
      if(await !(jewel.docs.isEmpty)){
-            product_size = product_size + dress.docs.length;
+            product_size = product_size + jewel.docs.length;
 
       size=size+1;
     }
@@ -110,14 +114,14 @@ class _AdminState extends State<Admin> {
 
    for(int i = 0; i< second.docs.length; i++){
      List<dynamic> count = second.docs[i]["Items"];
-     print(count.length);
+    //  print(count.length);
      for(int j =0; j< count.length; j ++){
-        print(second.docs[i]["Items"][j]["seller-name"] );
+        // print(second.docs[i]["Items"][j]["seller-name"] );
               
               if(second.docs[i]["Items"][j]["seller-name"] == _auth.currentUser!.email){
 
-                    print("in");
-                    print(second.docs[i]["Items"][j]["quantity"]);
+                    // print("in");
+                    // print(second.docs[i]["Items"][j]["quantity"]);
                     int v = second.docs[i]["Items"][j]["quantity"];
                         sold = v + sold;
                         // sold = second.docs[i]["Items"][j]["quantity"]+1;
@@ -158,7 +162,7 @@ class _AdminState extends State<Admin> {
       if(sample.docs.length > 0){
 
        for(int i = 0 ; i < sample.docs.length ; i ++){
-          print(sample.docs[i]["seller-name"]);
+          // print(sample.docs[i]["seller-name"]);
          if (sample.docs[i]["seller-name"] == _auth.currentUser!.email){
               int val = sample.docs[i]["quantity"];
               
@@ -172,17 +176,46 @@ class _AdminState extends State<Admin> {
     //   // for(int i = 0; i< second.docs.length; i++){
 
       }
-      print(items);
+      // print(items);
     // }
     value[3] = items;
     
 
 
   }
+  revenue() async {
+
+     var _firestoreInstance = FirebaseFirestore.instance;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+    int product_size = 0;
+    int size = 0;
+    
+    // print("h");
+    // var dress = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection('Dress').get();
+    // var watch = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection('Watch').get();
+    // var shirt = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection('Shirt').get();
+    // var tech = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection('Tech').get();
+    // var home = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection('Home').get();
+    // var jewel = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection('Jewel').get();
+
+    QuerySnapshot<Map<String, dynamic>> querry ;
+    for(int i = 0; i< cat.length; i++){
+          querry = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection(cat[i]).get();
+          if(querry.docs.length > 0){
+            for (int i = 0; i < querry.docs.length; i++) {
+             
 
 
+          }
+
+    }
+    }
+
+    }
   @override
   Widget build(BuildContext context)  {
+
   value.add(0);
   value.add(0);
   value.add(0);
@@ -190,35 +223,20 @@ class _AdminState extends State<Admin> {
     return Scaffold(
   
         appBar: AppBar(
-          title: Row(
-            children: <Widget>[
-              Expanded(
-                  child: ElevatedButton.icon(
-                      onPressed: () {
-                        setState(() => _selectedPage = Page.dashboard);
-                      },
-                      icon: Icon(
-                        Icons.dashboard,
-                        color: _selectedPage == Page.dashboard
-                            ? active
-                            : notActive,
-                      ),
-                      label: Text('Dashboard'))),
-              Expanded(
-                  child: ElevatedButton.icon(
-                      onPressed: () {
-                        setState(() => _selectedPage = Page.manage);
-                      },
-                      icon: Icon(
-                        Icons.sort,
-                        color:
-                            _selectedPage == Page.manage ? active : notActive,
-                      ),
-                      label: Text('Manage'))),
-            ],
+         
+          title: Column(
+          children: [
+          Text(
+            "DashBoard Details",
+            style: TextStyle(color: Colors.black),
           ),
+          ]
+          ),
+          automaticallyImplyLeading: false,
+        
           elevation: 0.0,
           backgroundColor: Colors.pink,
+
           
         ),
         body : Container(
@@ -270,7 +288,6 @@ child: Padding(
                               onPressed: (){
                                 setState((){
                                   getCategoryNumber();
-                                  print(value[0]);
 
                                 });
                               },
@@ -303,7 +320,12 @@ child: Padding(
                     child: Card(
                       child: ListTile(
                           title: ElevatedButton.icon(
-                              onPressed: () => getOrder() ,
+                             onPressed: (){
+                                setState((){
+                                  getOrder();
+
+                                });
+                              },
                               icon: Icon(Icons.tag_faces),
                               label: Text("Sold")),
                           subtitle: Text(
@@ -318,7 +340,12 @@ child: Padding(
                     child: Card(
                       child: ListTile(
                           title: ElevatedButton.icon(
-                              onPressed: () => getCartItems(),
+                              onPressed: (){
+                                setState((){
+                                  getCartItems();
+
+                                });
+                              },
                               icon: Icon(Icons.shopping_cart),
                               label: Text("Orders")),
                           subtitle: Text(
@@ -351,5 +378,4 @@ child: Padding(
         ));
   }
 
- 
-}
+  }
