@@ -11,6 +11,8 @@ class productcategory extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+       automaticallyImplyLeading: false,
+
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
