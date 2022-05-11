@@ -28,7 +28,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         elevation: 0,
         title: const Text(
           "Sign Up",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: Container(
@@ -48,22 +49,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                reusableTextField("Enter UserName", Icons.person_outline, false,
-                    _userNameTextController),
-                const SizedBox(
-                  height: 20,
-                ),
+                // reusableTextField("Username", Icons.person_outline, false,
+                //     _userNameTextController),
+                // const SizedBox(
+                //   height: 20,
+                // ),fire
                 // reusableTextField("Enter Data of birth(mm/dd/yyyy)",
                 //     Icons.person_outline, false, _DOBTextController),
                 // const SizedBox(
                 //   height: 20,
                 // ),
-                reusableTextField("Enter Email Id", Icons.person_outline, false,
+                reusableTextField("Email Id", Icons.person_outline, false,
                     _emailTextController),
                 const SizedBox(
                   height: 20,
                 ),
-                reusableTextField("Enter Password", Icons.lock_outlined, true,
+                reusableTextField("Password", Icons.lock_outlined, true,
                     _passwordTextController),
                 const SizedBox(
                   height: 20,

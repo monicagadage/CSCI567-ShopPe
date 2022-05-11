@@ -234,7 +234,13 @@ class _HomeState extends State<Home> {
   //
   //   return qn.docs;
   fetch_watch() async {
-    var details = {'isliked': false, 'favorite-reference': '', 'cart': false, 'cart-reference': '', "quantity": 0 };
+    var details = {
+      'isliked': false,
+      'favorite-reference': '',
+      'cart': false,
+      'cart-reference': '',
+      "quantity": 0
+    };
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
     _firestoreInstance = FirebaseFirestore.instance;
@@ -243,19 +249,22 @@ class _HomeState extends State<Home> {
 
     // setState(()  {
     for (int i = 0; i < qn.docs.length; i++) {
-
-      print("currentUser!.email currentUser!.email currentUser!.email ${currentUser!.email}");
+      print(
+          "currentUser!.email currentUser!.email currentUser!.email ${currentUser!.email}");
       var is_present;
-      is_present = await countDocuments(qn.docs[i].reference.id.toString(), "watch");
+      is_present =
+          await countDocuments(qn.docs[i].reference.id.toString(), "watch");
 
-      print("is_present is_present is_present is_present is_present ${is_present}");
+      print(
+          "is_present is_present is_present is_present is_present ${is_present}");
       Map<String, dynamic> allData = qn.docs[i].data() as Map<String, dynamic>;
       List img_list = allData["img"];
       // img_list.removeAt(0);
 
       var price = allData["price"];
-      if(allData["price"].runtimeType == String)
+      if (allData["price"].runtimeType == String)
         price = double.parse(allData["price"]);
+
 
       var location = allData["reference"];
       if(allData["reference"][0] != '/')
@@ -272,6 +281,7 @@ class _HomeState extends State<Home> {
       //     }
       // );
 
+
       if(is_present)
       {
         print("is_present is_present is_present is_present is_present ${location} ddddddd ${allData['price']}");
@@ -281,18 +291,18 @@ class _HomeState extends State<Home> {
           "product-description": allData["description"],
           "product-price": price,
           "product-img": allData["img"][0],
-          "product-liked": allData[currentUser.email.toString()]["isliked"],
+          "product-liked": allData[currentUser.email]["isliked"],
           "product-quantity": allData[currentUser.email.toString()]["quantity"],
           "product-cart": allData[currentUser.email.toString()]["cart"],
           "product-location": location,
           "product-seller": allData["seller-name"],
-          "cart-reference": allData[currentUser.email.toString()]["cart-reference"],
-          "favorite-reference": allData[currentUser.email.toString()]["favorite-reference"],
+          "cart-reference": allData[currentUser.email.toString()]
+              ["cart-reference"],
+          "favorite-reference": allData[currentUser.email.toString()]
+              ["favorite-reference"],
           "product-thumbnail": img_list
         });
-      }
-      else
-      {
+      } else {
         _watches.add({
           "product-name": qn.docs[i]["name"],
           "product-description": qn.docs[i]["description"],
@@ -308,21 +318,31 @@ class _HomeState extends State<Home> {
           "product-thumbnail": img_list
         });
 
-        FirebaseFirestore.instance.collection("watch").doc(qn.docs[i].reference.id.toString())
-            .set({
-          currentUser.email.toString() : details,
-        },
+        FirebaseFirestore.instance
+            .collection("watch")
+            .doc(qn.docs[i].reference.id.toString())
+            .set(
+          {
+            currentUser.email.toString(): details,
+          },
           SetOptions(merge: true),
         );
       }
-    };
+    }
+    ;
     setState(() {
       _watches;
     });
   }
 
   fetch_dress() async {
-    var details = {'isliked': false, 'favorite-reference': '', 'cart': false, 'cart-reference': '', "quantity": 0 };
+    var details = {
+      'isliked': false,
+      'favorite-reference': '',
+      'cart': false,
+      'cart-reference': '',
+      "quantity": 0
+    };
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
     _firestoreInstance = FirebaseFirestore.instance;
@@ -331,19 +351,23 @@ class _HomeState extends State<Home> {
 
     // setState(()  {
     for (int i = 0; i < qn.docs.length; i++) {
-
-      print("currentUser!.email currentUser!.email currentUser!.email ${currentUser!.email}");
+      print(
+          "currentUser!.email currentUser!.email currentUser!.email ${currentUser!.email}");
       var is_present;
-      is_present = await countDocuments(qn.docs[i].reference.id.toString(), "Dress");
+      is_present =
+          await countDocuments(qn.docs[i].reference.id.toString(), "Dress");
 
-      print("is_present is_present is_present is_present is_present ${is_present}");
+      print(
+          "is_present is_present is_present is_present is_present ${is_present}");
       Map<String, dynamic> allData = qn.docs[i].data() as Map<String, dynamic>;
       List img_list = allData["img"];
       // img_list.removeAt(0);
 
       var price = allData["price"];
-      print("${allData["price"].runtimeType} allData[""].runtimeType allData[""].runtimeType");
-      if(allData["price"].runtimeType == String)
+      print("${allData["price"].runtimeType} allData["
+          "].runtimeType allData["
+          "].runtimeType");
+      if (allData["price"].runtimeType == String)
         price = double.parse(allData["price"]);
 
       var location = allData["reference"];
@@ -361,6 +385,7 @@ class _HomeState extends State<Home> {
       //     }
       // );
 
+
       if(is_present)
       {
         print("is_present is_present is_present is_present is_present ${location} ddddddd ${allData["reference"][0]}");
@@ -375,13 +400,13 @@ class _HomeState extends State<Home> {
           "product-cart": allData[currentUser.email.toString()]["cart"],
           "product-location": location,
           "product-seller": allData["seller-name"],
-          "cart-reference": allData[currentUser.email.toString()]["cart-reference"],
-          "favorite-reference": allData[currentUser.email.toString()]["favorite-reference"],
+          "cart-reference": allData[currentUser.email.toString()]
+              ["cart-reference"],
+          "favorite-reference": allData[currentUser.email.toString()]
+              ["favorite-reference"],
           "product-thumbnail": img_list
         });
-      }
-      else
-      {
+      } else {
         _dress.add({
           "product-name": qn.docs[i]["name"],
           "product-description": qn.docs[i]["description"],
@@ -397,14 +422,18 @@ class _HomeState extends State<Home> {
           "product-thumbnail": img_list
         });
 
-        FirebaseFirestore.instance.collection("Dress").doc(qn.docs[i].reference.id.toString())
-            .set({
-          currentUser.email.toString() : details,
-        },
+        FirebaseFirestore.instance
+            .collection("Dress")
+            .doc(qn.docs[i].reference.id.toString())
+            .set(
+          {
+            currentUser.email.toString(): details,
+          },
           SetOptions(merge: true),
         );
       }
-    };
+    }
+    ;
     setState(() {
       _dress;
     });
@@ -429,7 +458,13 @@ class _HomeState extends State<Home> {
   // }
 
   fetch_shirt() async {
-    var details = {'isliked': false, 'favorite-reference': '', 'cart': false, 'cart-reference': '', "quantity": 0 };
+    var details = {
+      'isliked': false,
+      'favorite-reference': '',
+      'cart': false,
+      'cart-reference': '',
+      "quantity": 0
+    };
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
     _firestoreInstance = FirebaseFirestore.instance;
@@ -437,24 +472,26 @@ class _HomeState extends State<Home> {
     // CollectionReference _collectionRef = await _firestoreInstance.collection("Shirts").doc().collection(currentUser!.email ?? "");
 
     // setState(()  {
-      for (int i = 0; i < qn.docs.length; i++) {
+    for (int i = 0; i < qn.docs.length; i++) {
+      print(
+          "currentUser!.email currentUser!.email currentUser!.email ${currentUser!.email}");
+      var is_present;
+      is_present =
+          await countDocuments(qn.docs[i].reference.id.toString(), "Shirts");
 
-        print("currentUser!.email currentUser!.email currentUser!.email ${currentUser!.email}");
-        var is_present;
-        is_present = await countDocuments(qn.docs[i].reference.id.toString(), "Shirts");
+      print(
+          "is_present is_present is_present is_present is_present ${is_present}");
 
-        print("is_present is_present is_present is_present is_present ${is_present}");
+      Map<String, dynamic> allData = qn.docs[i].data() as Map<String, dynamic>;
+      List img_list = allData["img"];
+      // img_list.removeAt(0);
 
-        Map<String, dynamic> allData = qn.docs[i].data() as Map<String, dynamic>;
-        List img_list = allData["img"];
-        // img_list.removeAt(0);
-
-
-
-        var price = allData["price"];
-        print("${allData["price"].runtimeType} allData[""].runtimeType allData[""].runtimeType");
-        if(allData["price"].runtimeType == String)
-          price = double.parse(allData["price"]);
+      var price = allData["price"];
+      print("${allData["price"].runtimeType} allData["
+          "].runtimeType allData["
+          "].runtimeType");
+      if (allData["price"].runtimeType == String)
+        price = double.parse(allData["price"]);
 
         var location = allData["reference"];
         if(allData["reference"][0] != '/')
@@ -518,21 +555,22 @@ class _HomeState extends State<Home> {
       setState(() {
         _shirts;
       });
+
   }
 
   Future<bool> countDocuments(String docid, String cat) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
-    CollectionReference users  = await FirebaseFirestore.instance.collection(cat); //.doc(docid).collection(currentUser!.email ?? "");
+    CollectionReference users = await FirebaseFirestore.instance
+        .collection(cat); //.doc(docid).collection(currentUser!.email ?? "");
     var doc = await users.doc(docid).get();
-    if(doc.exists){
+    if (doc.exists) {
       Map<String, dynamic> map = doc.data() as Map<String, dynamic>;
-      if(map.containsKey(currentUser!.email)){// Replace field by the field you want to check.
+      if (map.containsKey(currentUser!.email)) {
+        // Replace field by the field you want to check.
         return true;
-      }
-      else
-      {
-          return false;
+      } else {
+        return false;
       }
     }
     return true;

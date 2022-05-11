@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 
-
 class HomePageDialogflow extends StatefulWidget {
-
   @override
   _HomePageDialogflow createState() => new _HomePageDialogflow();
 }
@@ -22,13 +20,12 @@ class _HomePageDialogflow extends State<HomePageDialogflow> {
   }
 
   setup_cred() async {
-    DialogAuthCredentials credentials = await DialogAuthCredentials.fromFile("assest/credentials.json");
+    DialogAuthCredentials credentials =
+        await DialogAuthCredentials.fromFile("assest/credentials.json");
     instance = DialogFlowtter(
       credentials: credentials,
     );
   }
-
-
 
   Widget _buildTextComposer() {
     return new IconTheme(
@@ -42,7 +39,7 @@ class _HomePageDialogflow extends State<HomePageDialogflow> {
                 controller: _textController,
                 onSubmitted: _handleSubmitted,
                 decoration:
-                new InputDecoration.collapsed(hintText: "Send a message"),
+                    new InputDecoration.collapsed(hintText: "Send a message"),
               ),
             ),
             new Container(
@@ -79,7 +76,6 @@ class _HomePageDialogflow extends State<HomePageDialogflow> {
       false,
     );
 
-
     setState(() {
       _messages.insert(0, message);
     });
@@ -102,17 +98,17 @@ class _HomePageDialogflow extends State<HomePageDialogflow> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        centerTitle: true,
-        title: new Text("Flutter and Dialogflow"),
+        // centerTitle: true,
+        title: new Text("Helping Bot"),
       ),
       body: new Column(children: <Widget>[
         new Flexible(
             child: new ListView.builder(
-              padding: new EdgeInsets.all(8.0),
-              reverse: true,
-              itemBuilder: (_, int index) => _messages[index],
-              itemCount: _messages.length,
-            )),
+          padding: new EdgeInsets.all(8.0),
+          reverse: true,
+          itemBuilder: (_, int index) => _messages[index],
+          itemCount: _messages.length,
+        )),
         new Divider(height: 1.0),
         new Container(
           decoration: new BoxDecoration(color: Theme.of(context).cardColor),
@@ -170,9 +166,9 @@ class ChatMessage extends StatelessWidget {
         margin: const EdgeInsets.only(left: 16.0),
         child: new CircleAvatar(
             child: new Text(
-              this.name[0],
-              style: new TextStyle(fontWeight: FontWeight.bold),
-            )),
+          this.name[0],
+          style: new TextStyle(fontWeight: FontWeight.bold),
+        )),
       ),
     ];
   }
