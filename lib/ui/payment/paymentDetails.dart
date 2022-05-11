@@ -51,6 +51,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
   void initState() {
     super.initState();
     fetch_card();
+    fetch_orders();
   }
 
   late String cardNumber = " ",
@@ -82,40 +83,35 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     return qn;
   }
 
+  List orders_list = [];
+  fetch_orders() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection("Order_details");
+    QuerySnapshot qn =
+        await _collectionRef.doc(currentUser!.email).collection("Orders").get();
+
+    setState(() {
+      for (int i = 0; i < qn.docs.length; i++) {
+        print("${qn.docs[i].reference.id}");
+        orders_list.add({
+          // "reference": qn.docs[i].reference.id,
+          // "order_id": qn.docs[i]["orderid"],
+          "total": qn.docs[i]["totalprice"],
+          "date": qn.docs[i]["date"]
+        });
+      }
+      // orders_list;
+    });
+
+    return orders_list;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final paymentDetailList = [
-      PaymentModal(
-          date: "Jan 01",
-          details: "Buy IPhoneX",
-          amount: 1000.0,
-          textColor: Colors.red),
-      PaymentModal(
-          date: "Aug 15",
-          details: "Flat ₹650 off",
-          amount: 650.0,
-          textColor: Colors.green),
-      PaymentModal(
-          date: "Dec 03",
-          details: "Congrats! Flat ₹180",
-          amount: 180.0,
-          textColor: Colors.green),
-      PaymentModal(
-          date: "Feb 14",
-          details: "Buy Shoes Upto 50% Off",
-          amount: 540.0,
-          textColor: Colors.red),
-      PaymentModal(
-          date: "Sep 08",
-          details: "Buy Footwear on Discount",
-          amount: 210.0,
-          textColor: Colors.red),
-      PaymentModal(
-          date: "Apr 18",
-          details: "Congrats! ₹375 Rewarded",
-          amount: 375.0,
-          textColor: Colors.green),
-    ];
+    final paymentDetailList = orders_list;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -308,26 +304,26 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        paymentDetailList[index].date,
+                        paymentDetailList[index]['date'].toString(),
                         style: TextStyle(
                           fontSize: 16.0,
                           color: Color(0xFF808080),
                         ),
                       ),
-                      Container(
-                        width: 190.0,
-                        child: Text(
-                          paymentDetailList[index].details,
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                      ),
+                      // Container(
+                      //   width: 190.0,
+                      //   child: Text(
+                      //     paymentDetailList[index]['total'].toString(),
+                      //     style: TextStyle(fontSize: 16.0),
+                      //   ),
+                      // ),
                       Container(
                         width: 70.0,
                         child: Text(
-                          "\$ ${paymentDetailList[index].amount}",
+                          "\$ ${paymentDetailList[index]['total'].toStringAsFixed(2)}",
                           style: TextStyle(
                             fontSize: 16.0,
-                            color: paymentDetailList[index].textColor,
+                            color: Colors.green,
                           ),
                         ),
                       ),

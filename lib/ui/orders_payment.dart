@@ -1,3 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
+// import 'dart:html';
+
 import 'package:awesome_card/credit_card.dart';
 import 'package:awesome_card/extra/card_type.dart';
 import 'package:awesome_card/style/card_background.dart';
@@ -56,25 +60,24 @@ class StickyLabel extends StatelessWidget {
 }
 
 class _OrderPayment extends State<OrderPayment> {
-
   _removefromCart() async {
     // return doNothing;
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
 
-    for(int i=0; i<widget.cart_items.length; i++) {
+    for (int i = 0; i < widget.cart_items.length; i++) {
       final s = widget.cart_items[i]["location"].split('/');
 
       var docref =
-      await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+          await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
       Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
 
       print("${allData} string string ${s[1]}");
 
       var isliked = allData[currentUser!.email.toString()]["isliked"];
       var favorite_reference =
-      allData[currentUser!.email.toString()]["favorite-reference"];
-      var reference = allData[currentUser!.email.toString()]['cart-reference'];
+          allData[currentUser.email.toString()]["favorite-reference"];
+      var reference = allData[currentUser.email.toString()]['cart-reference'];
 
       FirebaseFirestore.instance.collection(s[1]).doc(s[2]).set(
         {
@@ -90,9 +93,9 @@ class _OrderPayment extends State<OrderPayment> {
       ).then((value) => print("updated the item item item item"));
 
       CollectionReference _collectionRef =
-      FirebaseFirestore.instance.collection("users-cart-items");
+          FirebaseFirestore.instance.collection("users-cart-items");
       _collectionRef
-          .doc(currentUser!.email)
+          .doc(currentUser.email)
           .collection("items")
           .doc(reference)
           .delete()
@@ -355,7 +358,61 @@ class _OrderPayment extends State<OrderPayment> {
                         "Edit Detail",
                         style: TextStyle(fontSize: 16.0),
                       ),
-                      onPressed: () => print("Edit Detail"),
+                      onPressed: () => print("Edit"),
+                      // {
+                      //   showDialog(
+                      //       context: context,
+                      //       builder: (BuildContext context) {
+                      //         return AlertDialog(
+                      //           content: Stack(
+                      //             overflow: Overflow.visible,
+                      //             children: <Widget>[
+                      //               Positioned(
+                      //                 right: -40.0,
+                      //                 top: -40.0,
+                      //                 child: InkResponse(
+                      //                   onTap: () {
+                      //                     Navigator.of(context).pop();
+                      //                   },
+                      //                   child: CircleAvatar(
+                      //                     child: Icon(Icons.close),
+                      //                     backgroundColor: Colors.red,
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               Form(
+                      //                 // key: _formKey,
+                      //                 child: Column(
+                      //                   mainAxisSize: MainAxisSize.min,
+                      //                   children: <Widget>[
+                      //                     Text("data"),
+                      //                     Padding(
+                      //                       padding: EdgeInsets.all(8.0),
+                      //                       child: Text("Enter Cvv"),
+                      //                     ),
+                      //                     Padding(
+                      //                       padding: EdgeInsets.all(8.0),
+                      //                       child: TextFormField(),
+                      //                     ),
+                      //                     Padding(
+                      //                       padding: const EdgeInsets.all(8.0),
+                      //                       child: RaisedButton(
+                      //                         child: Text("Submit"),
+                      //                         onPressed: () {
+                      //                           // if (_formKey.currentState!.validate()) {
+                      //                           //   _formKey.currentState!.save();
+                      //                           // }
+                      //                         },
+                      //                       ),
+                      //                     )
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //             ],
+                      //           ),
+                      //         );
+                      //       });
+                      // },
                     ),
                   ),
                 ],
