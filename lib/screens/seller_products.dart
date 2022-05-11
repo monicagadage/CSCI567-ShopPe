@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:signup/reusable_widgets/reusable_widgets.dart';
 
 class sellerProduct extends StatefulWidget {
   @override
@@ -122,8 +123,8 @@ class _BodyState extends State<Body> {
     print(docId);
     final pathID = path.split("/");
     final docID = path.split("/");
-    FirebaseFirestore.instance.collection(pathID[0]).doc(pathID[1]).collection(pathID[2]).doc(pathID[3]).delete().then((value) => print("Removed from Seller "));
-    FirebaseFirestore.instance.collection(docID[0]).doc(docID[1]).delete().then((value) => print("Removed from category "));
+    FirebaseFirestore.instance.collection(pathID[0]).doc(pathID[1]).collection(pathID[2]).doc(pathID[3]).delete().then((value) => showToast("Deleted from Products"));
+    FirebaseFirestore.instance.collection(docID[0]).doc(docID[1]).delete().then((value) => showToast("Deleted from Products"));
 
   }
 

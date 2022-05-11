@@ -33,7 +33,18 @@ class _AdminState extends State<Admin> {
   // }
  List<dynamic> value = [];
 
+@override
+  void initState() {
+    super.initState();
+      value.add(0);
+  value.add(0);
+  value.add(0);
+  value.add(0);
+    getCategoryNumber();
+    getOrder();
+    getCartItems();
 
+  }
 
 
 
@@ -216,10 +227,7 @@ class _AdminState extends State<Admin> {
   @override
   Widget build(BuildContext context)  {
 
-  value.add(0);
-  value.add(0);
-  value.add(0);
-  value.add(0);
+
     return Scaffold(
   
         appBar: AppBar(
@@ -263,7 +271,7 @@ child: Padding(
                   size: 30.0,
                   color: Colors.green,
                 ),
-                label: Text('12,000',
+                label: Text('120',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 30.0, color: Colors.green)),
               ),
@@ -347,7 +355,7 @@ child: Padding(
                                 });
                               },
                               icon: Icon(Icons.shopping_cart),
-                              label: Text("Orders")),
+                              label: Text("Cart")),
                           subtitle: Text(
                             value[3].toString(),
                             textAlign: TextAlign.center,
