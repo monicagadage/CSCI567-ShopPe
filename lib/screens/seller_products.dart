@@ -14,7 +14,7 @@ class _sellerProductState extends State<sellerProduct> {
   @override
   void initState() {
     super.initState();
-    List<String> category = ["Dress","Watch","Tech",];
+    List<String> category = ["Dress","watch","Tech","Shirt"];
     fetch_products();
   }
   List seller_items = [];
@@ -54,7 +54,7 @@ class _sellerProductState extends State<sellerProduct> {
     var _firestoreInstance = FirebaseFirestore.instance;
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
-
+    var doc = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).get();
     QuerySnapshot<Map<String, dynamic>> querry = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection("Dress").get();;
     print(querry.docs.length);
     setState(() {

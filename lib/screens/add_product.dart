@@ -47,13 +47,13 @@ Future<void> sendUserDataToDB() async {
         var dicref = _collectionRef.doc();
 
         dicref.set({
-          "discription": _discriptionController.text,
+          "description": _discriptionController.text,
           "img" : imageURL.toList(),
           "name": _nameController.text,
           "price": _priceController.text,
           "quantity": _quantityController.text,
           "seller-name": currentUser.email,
-          "reference": dicref,
+          "reference": dicref.path.toString(),
 
         })
         .then((_){
@@ -63,14 +63,14 @@ Future<void> sendUserDataToDB() async {
         });
 
         FirebaseFirestore.instance.collection("Products").add({
-          "discription": _discriptionController.text,
-          "img" : imageURL.toList(),
+          "description": _discriptionController.text,
+          "img" : imageURL[0],
           "name": _nameController.text,
           "price": _priceController.text,
           "quantity": _quantityController.text,
           "remaining-quantity": _quantityController.text,
           "seller-name": currentUser.email,
-          "reference": dicref,
+          "reference": dicref.path.toString(),
 
           }).then((_){
           print("collection created");
@@ -83,15 +83,15 @@ Future<void> sendUserDataToDB() async {
   var doc = _collectionRef3.doc();
     doc.set({
           "sold": false,
-          "discription": _discriptionController.text,
+          "description": _discriptionController.text,
           "img" : imageURL.toList(),
           "name": _nameController.text,
           "price": _priceController.text,
           "quantity": _quantityController.text,
           "return" : false,
-          "reference":   dicref,
+          "reference":   dicref.path.toString(),
         }).then((_){
-          print("collection created");
+          showToast("Data Saved");
         }).catchError((_){
           print("an error occured");
         });
@@ -135,7 +135,7 @@ Future<void> sendUserDataToDB() async {
   String? returnURL ;
   await (await storageReference).getDownloadURL().then((fileURL) {
     returnURL =  fileURL;
-  });
+  }).then((value) => showToast("Image Uploaded"));
   return returnURL;
 }
 
@@ -165,6 +165,7 @@ Future<void> saveImages(List<File> _images, DocumentReference ref) async {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
@@ -200,7 +201,7 @@ Future<void> saveImages(List<File> _images, DocumentReference ref) async {
                   height: 20,
                 ),
                 reusableTextField(
-                    "Enter price of Product", Icons.onetwothree, false, _quantityController),
+                    "Enter Quantity of Product", Icons.onetwothree, false, _quantityController),
                 const SizedBox(
                   height: 20,
                 ),
@@ -209,6 +210,11 @@ Future<void> saveImages(List<File> _images, DocumentReference ref) async {
                 const SizedBox(
                   height: 20,
                 ),
+            
+                Title(color: Colors.black, child: Text("Click to select Image")),
+                const SizedBox(
+                  height: 10,
+                ),
                  RawMaterialButton(
                     fillColor: Theme.of(context).colorScheme.secondary,
                     child: Icon(Icons.add_photo_alternate_rounded,
@@ -216,7 +222,7 @@ Future<void> saveImages(List<File> _images, DocumentReference ref) async {
                     elevation: 8,
 
                     onPressed: () {
-                      getImage(true);
+                      getImage(true).then((value) => showToast("Image Selected"));
                     },
           
                     padding: EdgeInsets.all(15),
@@ -225,7 +231,12 @@ Future<void> saveImages(List<File> _images, DocumentReference ref) async {
                  const SizedBox(
                   height: 20,
                 ),
+                Title(color: Colors.black, child: Text("Click to save Image")),
+                const SizedBox(
+                  height: 10,
+                ),
                 RawMaterialButton(
+              
                 fillColor: Theme.of(context).colorScheme.secondary,
                 child: Icon(Icons.add_circle,
                 color: Colors.white,),
