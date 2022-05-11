@@ -43,8 +43,10 @@ class _ProductDetailsState extends State<ProductDetails>
     var currentUser = _auth.currentUser;
     var uuid = Uuid();
     var v1 = uuid.v1();
-
+    print("${widget._product["product-location"]} string string string string ");
     final s = widget._product["product-location"].split('/');
+
+    print("${s[0]} string string ${s[1]}");
 
     var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
     Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
@@ -395,14 +397,14 @@ class _ProductDetailsState extends State<ProductDetails>
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                _availableSize(),
-                SizedBox(
-                  height: 20,
-                ),
-                _availableColor(),
+                // SizedBox(
+                //   height: 20,
+                // ),
+                // _availableSize(),
+                // SizedBox(
+                //   height: 20,
+                // ),
+                // _availableColor(),
                 SizedBox(
                   height: 20,
                 ),
@@ -511,7 +513,7 @@ class _ProductDetailsState extends State<ProductDetails>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TitleText(
-          text: "Available Size",
+          text: "Product Description",
           fontSize: 14,
         ),
         SizedBox(height: 20),

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -50,10 +52,7 @@ class _FavouriteState extends State<Favourite> {
           ),
           Text(
             "${favorite_items.length} items",
-            style: Theme
-                .of(context)
-                .textTheme
-                .caption,
+            style: Theme.of(context).textTheme.caption,
           ),
         ],
       ),
@@ -86,9 +85,7 @@ class _FavouriteState extends State<Favourite> {
 
     return qn.docs;
   }
-
 }
-
 
 class Body extends StatefulWidget {
   List fav_item;
@@ -143,7 +140,7 @@ class _BodyState extends State<Body> {
         .set({
       "name": name,
       "price": price,
-      "images": image,
+      "images": image[0],
       "quantity": 1,
       "reference": docId,
     }).then((value) => Fluttertoast.showToast(msg: 'Added to cart'));
@@ -179,7 +176,7 @@ class _BodyState extends State<Body> {
     widget.callback();
 
     CollectionReference _collectionRef =
-    FirebaseFirestore.instance.collection("users-favourite-items");
+        FirebaseFirestore.instance.collection("users-favourite-items");
     return _collectionRef
         .doc(currentUser!.email)
         .collection("items")
@@ -273,7 +270,7 @@ class CartCard extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: 0.88,
             child: Container(
-              padding: EdgeInsets.all(20),     // getProportionateScreenWidth(10)
+              padding: EdgeInsets.all(20), // getProportionateScreenWidth(10)
               decoration: BoxDecoration(
                 color: Color(0xFFF5F6F9),
                 borderRadius: BorderRadius.circular(15),
@@ -368,3 +365,26 @@ Widget slideLeftBackground() {
     ),
   );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:signup/reusable_widgets/fetchProducts.dart';
+//
+// class Favourite extends StatefulWidget {
+//   @override
+//   _FavouriteState createState() => _FavouriteState();
+// }
+//
+// class _FavouriteState extends State<Favourite> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SafeArea(
+//         child: fetchData("users-favourite-items"),
+//       ),
+//     );
+//   }
+// }
