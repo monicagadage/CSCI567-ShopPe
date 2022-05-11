@@ -83,6 +83,7 @@ class _ProductDetailsState extends State<ProductDetails>
       "images": widget._product["product-img"],
       "quantity": widget._product["product-quantity"],
       "reference": widget._product["product-location"],
+      "seller-name": widget._product["seller-name"]
     }).then((value) => print("Added to cart"));
   }
 
@@ -556,7 +557,7 @@ class _ProductDetailsState extends State<ProductDetails>
                 children: <Widget>[
                   _appBar(),
                   _productImage(),
-                  _categoryWidget(),
+                  // _categoryWidget(),
                 ],
               ),
               _detailWidget()

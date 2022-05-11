@@ -56,6 +56,50 @@ class StickyLabel extends StatelessWidget {
 }
 
 class _OrderPayment extends State<OrderPayment> {
+
+  _removefromCart() async {
+    // return doNothing;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+
+    for(int i=0; i<widget.cart_items.length; i++) {
+      final s = widget.cart_items[i]["location"].split('/');
+
+      var docref =
+      await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+      Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
+
+      print("${allData} string string ${s[1]}");
+
+      var isliked = allData[currentUser!.email.toString()]["isliked"];
+      var favorite_reference =
+      allData[currentUser!.email.toString()]["favorite-reference"];
+      var reference = allData[currentUser!.email.toString()]['cart-reference'];
+
+      FirebaseFirestore.instance.collection(s[1]).doc(s[2]).set(
+        {
+          currentUser.email.toString(): {
+            'isliked': isliked,
+            'favorite-reference': favorite_reference,
+            'cart': false,
+            'cart-reference': "",
+            "quantity": 0
+          }
+        },
+        SetOptions(merge: true),
+      ).then((value) => print("updated the item item item item"));
+
+      CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection("users-cart-items");
+      _collectionRef
+          .doc(currentUser!.email)
+          .collection("items")
+          .doc(reference)
+          .delete()
+          .then((value) => print("Removed from cart"));
+    }
+  }
+
   sendUserCardDataToDB() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
@@ -321,6 +365,7 @@ class _OrderPayment extends State<OrderPayment> {
             firebaseUIButton(context, "Pay", () {
               sendUserCardDataToDB();
               showNotification();
+              _removefromCart();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => BottomNavController()),

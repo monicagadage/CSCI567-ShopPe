@@ -115,6 +115,7 @@ class _BodyState extends State<Body> {
     var name = allData["name"];
     var price = allData["price"];
     var image = allData["img"];
+    var seller = allData["seller-name"];
 
     if(allData[currentUser.email.toString()]["cart"] == true)
       return Fluttertoast.showToast(msg: 'Already in the cart');
@@ -143,6 +144,7 @@ class _BodyState extends State<Body> {
       "images": image[0],
       "quantity": 1,
       "reference": docId,
+      "seller-name": seller
     }).then((value) => Fluttertoast.showToast(msg: 'Added to cart'));
   }
 

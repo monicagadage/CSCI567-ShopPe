@@ -257,7 +257,7 @@ class _HomeState extends State<Home> {
       if(allData["price"].runtimeType == String)
         price = double.parse(allData["price"]);
 
-      var location;
+      var location = allData["reference"];
       if(allData["reference"][0] != '/')
         location = "/${allData["reference"]}";
 
@@ -274,7 +274,7 @@ class _HomeState extends State<Home> {
 
       if(is_present)
       {
-        print("is_present is_present is_present is_present is_present ${qn.docs[i].reference.id} ddddddd ${allData['price']}");
+        print("is_present is_present is_present is_present is_present ${location} ddddddd ${allData['price']}");
 
         _watches.add({
           "product-name": allData["name"],
@@ -346,7 +346,7 @@ class _HomeState extends State<Home> {
       if(allData["price"].runtimeType == String)
         price = double.parse(allData["price"]);
 
-      var location;
+      var location = allData["reference"];
       if(allData["reference"][0] != '/')
         location = "/${allData["reference"]}";
 
@@ -363,7 +363,7 @@ class _HomeState extends State<Home> {
 
       if(is_present)
       {
-        print("is_present is_present is_present is_present is_present ${qn.docs[i].reference.id} ddddddd ${allData["reference"][0]}");
+        print("is_present is_present is_present is_present is_present ${location} ddddddd ${allData["reference"][0]}");
 
         _dress.add({
           "product-name": allData["name"],
@@ -456,7 +456,7 @@ class _HomeState extends State<Home> {
         if(allData["price"].runtimeType == String)
           price = double.parse(allData["price"]);
 
-        var location;
+        var location = allData["reference"];
         if(allData["reference"][0] != '/')
           location = "/${allData["reference"]}";
 
@@ -473,7 +473,7 @@ class _HomeState extends State<Home> {
 
         if(is_present)
         {
-          print("is_present is_present is_present is_present is_present ${qn.docs[i].reference.id} ddddddd ${allData['price']}");
+          print("is_present is_present is_present is_present is_present ${location} ddddddd ${allData['price']}");
 
           _shirts.add({
             "product-name": allData["name"],
