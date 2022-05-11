@@ -118,9 +118,9 @@ Container firebaseUIButton(BuildContext context, String title, Function onTap) {
   );
 }
 
-void showToast() {
+void showToast(String s) {
   Fluttertoast.showToast(
-    msg: "Hi Codesinsider !!",
+    msg: s,
     toastLength: Toast.LENGTH_SHORT,
   );
 }

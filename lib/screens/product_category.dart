@@ -44,7 +44,7 @@ class productcategory extends StatelessWidget {
             ),
             CategoryCard(
             "assest/image/watch.jpeg",
-            'Watch'
+            'watch'
             ),
             CategoryCard(
            "assest/image/tech.jpeg",

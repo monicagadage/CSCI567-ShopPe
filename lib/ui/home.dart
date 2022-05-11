@@ -374,16 +374,16 @@ class _HomeState extends State<Home> {
       if(allData["reference"][0] != '/')
         location = "/${allData["reference"]}";
 
-      // FirebaseFirestore.instance.collection("Products").doc().set(
-      //     {
-      //       "product-name": allData["name"],
-      //       "product-description": allData["description"],
-      //       "product-price": price,
-      //       "product-img": allData["img"][0],
-      //       "product-location": location,
-      //       "product-seller": allData["seller-name"],
-      //     }
-      // );
+// FirebaseFirestore.instance.collection("Products").doc().set(
+//           {
+//             "name": allData["name"],
+//             "description": allData["description"],
+//             "price": price,
+//             "img": allData["img"][0],
+//             "reference": location,
+//             "seller": allData["seller-name"],
+//           }
+//       );
 
 
       if(is_present)
@@ -497,16 +497,16 @@ class _HomeState extends State<Home> {
         if(allData["reference"][0] != '/')
           location = "/${allData["reference"]}";
 
-        // FirebaseFirestore.instance.collection("Products").doc().set(
-        //   {
-        //     "product-name": allData["name"],
-        //     "product-description": allData["description"],
-        //     "product-price": price,
-        //     "product-img": allData["img"][0],
-        //     "product-location": location,
-        //     "product-seller": allData["seller-name"],
-        //   }
-        // );
+      //   FirebaseFirestore.instance.collection("Products").doc().set(
+      //     {
+      //       "name": allData["name"],
+      //       "description": allData["description"],
+      //       "price": price,
+      //       "img": allData["img"][0],
+      //       "reference": location,
+      //       "seller": allData["seller-name"],
+      //     }
+      // );
 
         if(is_present)
         {
