@@ -89,7 +89,7 @@ class _ProductDetailsState extends State<ProductDetails>
       "quantity": widget._product["product-quantity"],
       "reference": widget._product["product-location"],
       "seller-name": widget._product["seller-name"]
-    }).then((value) => print("Added to cart"));
+    }).then((value) => Fluttertoast.showToast(msg: "Added to cart"));
   }
 
   Future addToFavourite() async {
@@ -142,7 +142,7 @@ class _ProductDetailsState extends State<ProductDetails>
       "price": widget._product["product-price"],
       "images": widget._product["product-img"],
       "reference": widget._product["product-location"],
-    }).then((value) => print("Added to favourite"));
+    }).then((value) => Fluttertoast.showToast(msg: "Added to favourite"));
   }
 
   Future removefromFavourite(String docId) async {
@@ -186,7 +186,7 @@ class _ProductDetailsState extends State<ProductDetails>
         .collection("items")
         .doc(docId)
         .delete()
-        .then((value) => print("Removed from favourite"));
+        .then((value) => Fluttertoast.showToast(msg: "Removed from favourite"));
   }
 
   Widget _appBar() {

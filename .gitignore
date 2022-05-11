@@ -36,6 +36,7 @@ lib/generated_plugin_registrant.dart
 lib/ui/test.dart
 lib/info.txt
 assest/credentials.json
+assest/dialogflow_credentials.json
 
 # Symbolication related
 app.*.symbols

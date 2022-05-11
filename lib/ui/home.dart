@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:signup/const/AppColors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../screens/bottom_nav_controller.dart';
@@ -90,7 +91,8 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
+      body: RefreshIndicator(
+        child: SingleChildScrollView(
           child: SafeArea(
               child: Container(
         child: Column(children: <Widget>[
@@ -204,6 +206,17 @@ class _HomeState extends State<Home> {
           _productWidget(_dress),
         ]),
       ))),
+        onRefresh: () async {
+          _dress = [];
+          _watches = [];
+          _shirts = [];
+          fetch_watch();
+          fetch_shirt();
+          fetch_dress();
+
+          Fluttertoast.showToast(msg:"Page refreshed");
+        },
+    )
       // bottomNavigationBar: BottomNavController("home"),
     );
   }
@@ -245,9 +258,7 @@ class _HomeState extends State<Home> {
     var currentUser = _auth.currentUser;
     _firestoreInstance = FirebaseFirestore.instance;
     QuerySnapshot qn = await _firestoreInstance.collection("watch").get();
-    // CollectionReference _collectionRef = await _firestoreInstance.collection("Shirts").doc().collection(currentUser!.email ?? "");
 
-    // setState(()  {
     for (int i = 0; i < qn.docs.length; i++) {
       print(
           "currentUser!.email currentUser!.email currentUser!.email ${currentUser!.email}");
@@ -455,7 +466,6 @@ class _HomeState extends State<Home> {
     return qn.docs;
   }
 
-  // }
 
   fetch_shirt() async {
     var details = {
