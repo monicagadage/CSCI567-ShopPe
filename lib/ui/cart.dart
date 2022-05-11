@@ -122,8 +122,8 @@ class _BodyState extends State<Body> {
 
     var isliked = allData[currentUser!.email.toString()]["isliked"];
     var favorite_reference =
-        allData[currentUser!.email.toString()]["favorite-reference"];
-    var reference = allData[currentUser!.email.toString()]['cart-reference'];
+        allData[currentUser.email.toString()]["favorite-reference"];
+    var reference = allData[currentUser.email.toString()]['cart-reference'];
 
     FirebaseFirestore.instance.collection(s[1]).doc(s[2]).set(
       {
@@ -148,7 +148,7 @@ class _BodyState extends State<Body> {
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection("users-cart-items");
     return _collectionRef
-        .doc(currentUser!.email)
+        .doc(currentUser.email)
         .collection("items")
         .doc(reference)
         .delete()
@@ -177,12 +177,12 @@ class _BodyState extends State<Body> {
 
     var isliked = allData[currentUser!.email.toString()]["isliked"];
     var favorite_reference =
-        allData[currentUser!.email.toString()]["favorite-reference"];
-    var reference = allData[currentUser!.email.toString()]['cart-reference'];
-    var cart = allData[currentUser!.email.toString()]["cart"];
+        allData[currentUser.email.toString()]["favorite-reference"];
+    var reference = allData[currentUser.email.toString()]['cart-reference'];
+    var cart = allData[currentUser.email.toString()]["cart"];
     var cart_reference =
-        allData[currentUser!.email.toString()]["cart-reference"];
-    var quantity = allData[currentUser!.email.toString()]["quantity"];
+        allData[currentUser.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser.email.toString()]["quantity"];
 
     FirebaseFirestore.instance.collection(s[1]).doc(s[2]).set(
       {
@@ -205,7 +205,7 @@ class _BodyState extends State<Body> {
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection("users-cart-items");
     return _collectionRef
-        .doc(currentUser!.email)
+        .doc(currentUser.email)
         .collection("items")
         .doc(reference)
         .update({
@@ -229,12 +229,12 @@ class _BodyState extends State<Body> {
 
     var isliked = allData[currentUser!.email.toString()]["isliked"];
     var favorite_reference =
-        allData[currentUser!.email.toString()]["favorite-reference"];
-    var reference = allData[currentUser!.email.toString()]['cart-reference'];
-    var cart = allData[currentUser!.email.toString()]["cart"];
+        allData[currentUser.email.toString()]["favorite-reference"];
+    var reference = allData[currentUser.email.toString()]['cart-reference'];
+    var cart = allData[currentUser.email.toString()]["cart"];
     var cart_reference =
-        allData[currentUser!.email.toString()]["cart-reference"];
-    var quantity = allData[currentUser!.email.toString()]["quantity"];
+        allData[currentUser.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser.email.toString()]["quantity"];
 
     FirebaseFirestore.instance.collection(s[1]).doc(s[2]).set(
       {
@@ -258,7 +258,7 @@ class _BodyState extends State<Body> {
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection("users-cart-items");
     return _collectionRef
-        .doc(currentUser!.email)
+        .doc(currentUser.email)
         .collection("items")
         .doc(reference)
         .update({

@@ -98,7 +98,7 @@ class _HomePageDialogflow extends State<HomePageDialogflow> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        centerTitle: true,
+        // centerTitle: true,
         title: new Text("Helping Bot"),
       ),
       body: new Column(children: <Widget>[

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:signup/reusable_widgets/reusable_widgets.dart';
@@ -27,7 +26,6 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -42,12 +40,16 @@ class _SignInScreenState extends State<SignInScreen> {
           padding: EdgeInsets.fromLTRB(
               20, MediaQuery.of(context).size.height * 0.2, 20, 0),
           child: Column(children: <Widget>[
-            logoWidget("assest/images/Shopee_logo.png"),
-            CheckboxListTile(title: const Text('Are you a seller'), value: seller_value, onChanged:(bool? value) {
-              setState(() {
-                seller_value = value! ? true: false;
-              });
-            },),
+            logoWidget("assest/images/Shopee_logo_2.png"),
+            CheckboxListTile(
+              title: const Text('Are you a seller'),
+              value: seller_value,
+              onChanged: (bool? value) {
+                setState(() {
+                  seller_value = value! ? true : false;
+                });
+              },
+            ),
             reusableTextField("Enter UserName", Icons.person_outline, false,
                 _emailTextController),
             const SizedBox(
@@ -65,19 +67,15 @@ class _SignInScreenState extends State<SignInScreen> {
                       email: _emailTextController.text,
                       password: _passwordTextController.text)
                   .then((value) {
-                    if(seller_value){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SellerScreen()));
-                    }
-                    else{
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => BottomNavController()));
-
-                    }
+                if (seller_value) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SellerScreen()));
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BottomNavController()));
+                }
               }).onError((error, stackTrace) {
                 print("Error ${error.toString()}");
               });
@@ -121,8 +119,7 @@ class _SignInScreenState extends State<SignInScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text("Are you a Seller",
-            style: TextStyle(color: Colors.white70)),
+        const Text("Are you a Seller", style: TextStyle(color: Colors.white70)),
         GestureDetector(
           onTap: () {
             Navigator.push(context,
@@ -172,7 +169,3 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 }
-
-
-
-

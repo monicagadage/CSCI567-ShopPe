@@ -4,12 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_ecommerce/widgets/fetchProducts.dart';
-import 'package:flutter_svg/svg.dart';
+// import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:signup/reusable_widgets/reusable_widgets.dart';
+// import 'package:signup/reusable_widgets/reusable_widgets.dart';
 import 'package:uuid/uuid.dart';
 
-import '../screens/bottom_nav_controller.dart';
+// import '../screens/bottom_nav_controller.dart';
 
 class Favourite extends StatefulWidget {
   @override
@@ -23,8 +23,7 @@ class _FavouriteState extends State<Favourite> {
     fetch_favorite();
   }
 
-  callback()
-  {
+  callback() {
     favorite_items = [];
     fetch_favorite();
   }
@@ -59,7 +58,6 @@ class _FavouriteState extends State<Favourite> {
     );
   }
 
-
   List favorite_items = [];
 
 // var _firestoreInstance = FirebaseFirestore.instance;
@@ -69,17 +67,21 @@ class _FavouriteState extends State<Favourite> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
 
-    QuerySnapshot qn = await _firestoreInstance.collection(
-        "users-favourite-items").doc(currentUser!.email)
-        .collection("items").get();
+    QuerySnapshot qn = await _firestoreInstance
+        .collection("users-favourite-items")
+        .doc(currentUser!.email)
+        .collection("items")
+        .get();
     setState(() {
       for (int i = 0; i < qn.docs.length; i++) {
         favorite_items.add({
           "name": qn.docs[i]["name"],
           "price": qn.docs[i]["price"],
           "img": qn.docs[i]["images"],
-          "location": qn.docs[i]["reference"]});
-        print("favourite favourite favourite favourite ${qn.docs[i].reference.path}");
+          "location": qn.docs[i]["reference"]
+        });
+        print(
+            "favourite favourite favourite favourite ${qn.docs[i].reference.path}");
       }
     });
 
@@ -87,6 +89,7 @@ class _FavouriteState extends State<Favourite> {
   }
 }
 
+// ignore: must_be_immutable
 class Body extends StatefulWidget {
   List fav_item;
   Function callback;
@@ -96,7 +99,6 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-
   Future addToCart(String docId) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
@@ -105,36 +107,39 @@ class _BodyState extends State<Body> {
 
     final s = docId.split('/');
 
-    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    var docref =
+        await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
     Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
 
     print("${allData} string string ${s[1]}");
 
     var isliked = allData[currentUser!.email.toString()]["isliked"];
-    var favorite_reference = allData[currentUser!.email.toString()]["favorite-reference"];
+    var favorite_reference =
+        allData[currentUser.email.toString()]["favorite-reference"];
     var name = allData["name"];
     var price = allData["price"];
     var image = allData["img"];
 
-    if(allData[currentUser.email.toString()]["cart"] == true)
+    if (allData[currentUser.email.toString()]["cart"] == true)
       return Fluttertoast.showToast(msg: 'Already in the cart');
 
-
-    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
-        .set({
-      currentUser.email.toString() : {
-        'isliked': isliked,
-        'favorite-reference': favorite_reference,
-        'cart': true,
-        'cart-reference': v1,
-        "quantity": 1 }
-    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
-
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2]).set(
+      {
+        currentUser.email.toString(): {
+          'isliked': isliked,
+          'favorite-reference': favorite_reference,
+          'cart': true,
+          'cart-reference': v1,
+          "quantity": 1
+        }
+      },
+      SetOptions(merge: true),
+    ).then((value) => print("updated the item item item item"));
 
     CollectionReference _collectionRef =
-    FirebaseFirestore.instance.collection("users-cart-items");
+        FirebaseFirestore.instance.collection("users-cart-items");
     return _collectionRef
-        .doc(currentUser!.email)
+        .doc(currentUser.email)
         .collection("items")
         .doc(v1)
         .set({
@@ -152,106 +157,105 @@ class _BodyState extends State<Body> {
 
     final s = docId.split('/');
 
-    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    var docref =
+        await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
     Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
 
     print("${allData} string string ${s[1]}");
 
     var cart = allData[currentUser!.email.toString()]["cart"];
-    var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
-    var quantity = allData[currentUser!.email.toString()]["quantity"];
-    var reference = allData[currentUser!.email.toString()]['favorite-reference'];
+    var cart_reference =
+        allData[currentUser.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser.email.toString()]["quantity"];
+    var reference = allData[currentUser.email.toString()]['favorite-reference'];
 
-
-    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
-        .set({
-      currentUser.email.toString() : {
-        'isliked': false,
-        'favorite-reference': "",
-        'cart': cart,
-        'cart-reference': cart_reference,
-        "quantity": quantity }
-    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2]).set(
+      {
+        currentUser.email.toString(): {
+          'isliked': false,
+          'favorite-reference': "",
+          'cart': cart,
+          'cart-reference': cart_reference,
+          "quantity": quantity
+        }
+      },
+      SetOptions(merge: true),
+    ).then((value) => print("updated the item item item item"));
 
     widget.callback();
 
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection("users-favourite-items");
     return _collectionRef
-        .doc(currentUser!.email)
+        .doc(currentUser.email)
         .collection("items")
         .doc(reference)
-        .delete().then((value) => Fluttertoast.showToast(msg: "Removed from favourite"));
+        .delete()
+        .then((value) => Fluttertoast.showToast(msg: "Removed from favourite"));
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-      EdgeInsets.symmetric(horizontal: 50), // getProportionateScreenWidth(20)
+      padding: EdgeInsets.symmetric(
+          horizontal: 50), // getProportionateScreenWidth(20)
       child: ListView.builder(
         itemCount: widget.fav_item.length,
-        itemBuilder: (context, index) =>
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Dismissible(
-                key: Key(widget.fav_item[index].toString()),
-
-                background: slideRightBackground(),
-                secondaryBackground: slideLeftBackground(),
-
-                confirmDismiss: (direction) async {
-                  if (direction == DismissDirection.endToStart) {
-                    final bool res = await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            content: Text(
-                                "Are you sure you want to delete ${widget
-                                    .fav_item[index]["name"]}?"),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text(
-                                  "Cancel",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              FlatButton(
-                                child: Text(
-                                  "Delete",
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                                onPressed: () {
-                                  // TODO: Delete the item from DB etc..
-                                  removefromFavourite(
-                                      widget.fav_item[index]["location"]);
-                                  setState(() {
-                                    widget.fav_item.removeAt(index);
-                                  });
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        });
-                    return res;
-                  } else {
-                    // TODO: Navigate to edit page;
-                    addToCart(widget.fav_item[index]["location"]);
-                    print("swipe right right right right");
-                  }
-                },
-
-                child: CartCard(widget.fav_item[index]),
-              ),
-            ),
+        itemBuilder: (context, index) => Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Dismissible(
+            key: Key(widget.fav_item[index].toString()),
+            background: slideRightBackground(),
+            secondaryBackground: slideLeftBackground(),
+            confirmDismiss: (direction) async {
+              if (direction == DismissDirection.endToStart) {
+                final bool res = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Text(
+                            "Are you sure you want to delete ${widget.fav_item[index]["name"]}?"),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          FlatButton(
+                            child: Text(
+                              "Delete",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            onPressed: () {
+                              // TODO: Delete the item from DB etc..
+                              removefromFavourite(
+                                  widget.fav_item[index]["location"]);
+                              setState(() {
+                                widget.fav_item.removeAt(index);
+                              });
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    });
+                return res;
+              } else {
+                // TODO: Navigate to edit page;
+                addToCart(widget.fav_item[index]["location"]);
+                print("swipe right right right right");
+              }
+            },
+            child: CartCard(widget.fav_item[index]),
+          ),
+        ),
       ),
     );
   }
-
 }
 
 class CartCard extends StatelessWidget {
@@ -319,11 +323,11 @@ Widget slideRightBackground() {
             width: 20,
           ),
           Icon(
-            Icons.edit,
+            Icons.shopping_basket,
             color: Colors.white,
           ),
           Text(
-            " Edit",
+            " Add to Cart",
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w700,

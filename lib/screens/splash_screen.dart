@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "ShoPee",
+                "ShoPe",
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

@@ -2,10 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:signup/const/AppColors.dart';
 import 'package:signup/reusable_widgets/reusable_widgets.dart';
 import 'package:uuid/uuid.dart';
-
 
 class ProductDetails extends StatefulWidget {
   Map<String, dynamic> _product;
@@ -17,7 +17,6 @@ class ProductDetails extends StatefulWidget {
 
 class _ProductDetailsState extends State<ProductDetails>
     with TickerProviderStateMixin {
-
   late AnimationController controller;
   late Animation<double> animation;
   late bool isLiked;
@@ -43,29 +42,34 @@ class _ProductDetailsState extends State<ProductDetails>
     var currentUser = _auth.currentUser;
     var uuid = Uuid();
     var v1 = uuid.v1();
-    print("${widget._product["product-location"]} string string string string ");
+    print(
+        "${widget._product["product-location"]} string string string string ");
     final s = widget._product["product-location"].split('/');
 
     print("${s[0]} string string ${s[1]}");
 
-    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    var docref =
+        await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
     Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
 
     print("${allData} string string ${s[1]}");
 
     var isliked = allData[currentUser!.email.toString()]["isliked"];
-    var favorite_reference = allData[currentUser!.email.toString()]["favorite-reference"];
+    var favorite_reference =
+        allData[currentUser.email.toString()]["favorite-reference"];
 
-
-    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
-        .set({
-      currentUser.email.toString() : {
-        'isliked': isliked,
-        'favorite-reference': favorite_reference,
-        'cart': true,
-        'cart-reference': v1,
-        "quantity": 1 }
-    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2]).set(
+      {
+        currentUser.email.toString(): {
+          'isliked': isliked,
+          'favorite-reference': favorite_reference,
+          'cart': true,
+          'cart-reference': v1,
+          "quantity": 1
+        }
+      },
+      SetOptions(merge: true),
+    ).then((value) => print("updated the item item item item"));
 
     widget._product["cart-reference"] = v1;
     widget._product["product-cart"] = true;
@@ -73,8 +77,9 @@ class _ProductDetailsState extends State<ProductDetails>
 
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection("users-cart-items");
+    showToast("Item added to cart");
     return _collectionRef
-        .doc(currentUser!.email)
+        .doc(currentUser.email)
         .collection("items")
         .doc(v1)
         .set({
@@ -96,25 +101,29 @@ class _ProductDetailsState extends State<ProductDetails>
 
     // QuerySnapshot qn = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
 
-    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    var docref =
+        await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
     Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
 
     print("${allData} string string ${s[1]}");
 
     var cart = allData[currentUser!.email.toString()]["cart"];
-    var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
-    var quantity = allData[currentUser!.email.toString()]["quantity"];
+    var cart_reference =
+        allData[currentUser.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser.email.toString()]["quantity"];
 
-
-    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
-        .set({
-      currentUser.email.toString() : {
-        'isliked': true,
-        'favorite-reference': v1,
-        'cart': cart,
-        'cart-reference': cart_reference,
-        "quantity": quantity }
-    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2]).set(
+      {
+        currentUser.email.toString(): {
+          'isliked': true,
+          'favorite-reference': v1,
+          'cart': cart,
+          'cart-reference': cart_reference,
+          "quantity": quantity
+        }
+      },
+      SetOptions(merge: true),
+    ).then((value) => print("updated the item item item item"));
 
     widget._product["favorite-reference"] = v1;
     widget._product["isliked"] = true;
@@ -124,7 +133,7 @@ class _ProductDetailsState extends State<ProductDetails>
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection("users-favourite-items");
     return _collectionRef
-        .doc(currentUser!.email)
+        .doc(currentUser.email)
         .collection("items")
         .doc(v1)
         .set({
@@ -140,26 +149,29 @@ class _ProductDetailsState extends State<ProductDetails>
     var currentUser = _auth.currentUser;
     final s = widget._product["product-location"].split('/');
 
-    var docref = await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
+    var docref =
+        await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
     Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
 
     print("${allData} string string ${s[1]}");
 
     var cart = allData[currentUser!.email.toString()]["cart"];
-    var cart_reference = allData[currentUser!.email.toString()]["cart-reference"];
-    var quantity = allData[currentUser!.email.toString()]["quantity"];
+    var cart_reference =
+        allData[currentUser.email.toString()]["cart-reference"];
+    var quantity = allData[currentUser.email.toString()]["quantity"];
 
-
-    FirebaseFirestore.instance.collection(s[1]).doc(s[2])
-        .set({
-      currentUser.email.toString() : {
-        'isliked': false,
-        'favorite-reference': "",
-        'cart': cart,
-        'cart-reference': cart_reference,
-        "quantity": quantity }
-    }, SetOptions(merge: true),).then((value) => print("updated the item item item item"));
-
+    FirebaseFirestore.instance.collection(s[1]).doc(s[2]).set(
+      {
+        currentUser.email.toString(): {
+          'isliked': false,
+          'favorite-reference': "",
+          'cart': cart,
+          'cart-reference': cart_reference,
+          "quantity": quantity
+        }
+      },
+      SetOptions(merge: true),
+    ).then((value) => print("updated the item item item item"));
 
     widget._product["favorite-reference"] = "";
     widget._product["product-liked"] = false;
@@ -169,7 +181,7 @@ class _ProductDetailsState extends State<ProductDetails>
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection("users-favourite-items");
     return _collectionRef
-        .doc(currentUser!.email)
+        .doc(currentUser.email)
         .collection("items")
         .doc(docId)
         .delete()
@@ -279,17 +291,29 @@ class _ProductDetailsState extends State<ProductDetails>
   Widget _categoryWidget() {
     print("gggggggg ${widget._product["product-thumbnail"]}");
 
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 0),
-      width: 100,
-      height: 80,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
       child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: (widget._product["product-thumbnail"])
-              .map<Widget>((x) => _thumbnail(x.toString()) ).toList()
-      ),
+              .map<Widget>((x) => _thumbnail(x.toString()))
+              .toList()),
     );
+
+    //  Container(
+    //   margin: EdgeInsets.symmetric(vertical: 0),
+    //   width: 100,
+    //   height: 80,
+
+    //     child: Row(
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         mainAxisAlignment: MainAxisAlignment.center,
+    //         children: (widget._product["product-thumbnail"])
+    //             .map<Widget>((x) => _thumbnail(x.toString()))
+    //             .toList()),
+
+    // );
   }
 
   Widget _thumbnail(String image) {
@@ -526,7 +550,7 @@ class _ProductDetailsState extends State<ProductDetails>
     return FloatingActionButton(
       onPressed: () {
         widget._product["product-cart"]
-            ? print("Already added to cart!!")
+            ? showToast("Already added to cart!!")
             : addToCart();
       },
       backgroundColor: AppColors.orange,
@@ -564,6 +588,14 @@ class _ProductDetailsState extends State<ProductDetails>
           ),
         ),
       ),
+    );
+  }
+
+  showToast(String textmessage) {
+    // var textmessage2 = this.textmessage;
+    Fluttertoast.showToast(
+      msg: textmessage,
+      toastLength: Toast.LENGTH_SHORT,
     );
   }
 }
