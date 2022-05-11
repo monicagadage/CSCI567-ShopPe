@@ -87,7 +87,9 @@ flutter:
     - assest/fonts/
     - assest/icons/
     - assest/images/
+    - assest/image/
     - assest/credentials.json
+    - assest/dialogflow_credentials.json
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

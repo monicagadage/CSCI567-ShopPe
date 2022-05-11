@@ -126,9 +126,9 @@ class _detailState extends State<Detail> {
                   padding: EdgeInsets.symmetric(vertical: 15),
                   // child: GestureDetector(
                   //   onTap: () => {},
-                    // Navigator.push(context,
-                    // MaterialPageRoute(builder: (_) => ProductDetails(product, callback))),
-                    child: CartCard(items[index]),
+                  // Navigator.push(context,
+                  // MaterialPageRoute(builder: (_) => ProductDetails(product, callback))),
+                  child: CartCard(items[index]),
                   // ),
                 ),
           ),
