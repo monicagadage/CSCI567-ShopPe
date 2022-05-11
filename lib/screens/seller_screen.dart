@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,8 @@ import 'package:signup/reusable_widgets/reusable_widgets.dart';
 import 'package:signup/screens/product_category.dart';
 import 'package:signup/screens/seller_admin.dart';
 import 'package:signup/screens/seller_products.dart';
+import 'package:signup/screens/splash_screen.dart';
+import 'package:signup/ui/profile/components/profile_menu.dart';
 import 'package:signup/utils/color_utils.dart'; 
 
 class SellerScreen extends StatefulWidget {
@@ -61,7 +64,21 @@ class _SellerScreenState extends State<SellerScreen> {
                           MaterialPageRoute(
                               builder: (context) => Admin()));
 
-            })
+            }),
+            const SizedBox(
+              height: 100,
+            ),
+             ProfileMenu(
+            text: "Log Out",
+            icon: "assest/icons/Log out.svg",
+            press: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (ctx) => SplashScreen()),
+                  (route) => false);
+            },
+          ),
 
           ]),
         )),

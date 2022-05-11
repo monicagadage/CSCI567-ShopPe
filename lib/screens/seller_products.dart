@@ -10,17 +10,23 @@ class sellerProduct extends StatefulWidget {
 }
 
 class _sellerProductState extends State<sellerProduct> {
+      List<String> cat = ["Dress","watch","Tech","Shirt"];
+          List seller_items = [];
+
+
+
+
 
   @override
   void initState() {
     super.initState();
-    List<String> category = ["Dress","watch","Tech","Shirt"];
     fetch_products();
+
   }
-  List seller_items = [];
 
  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: buildAppBar(context),
         body: Body(seller_items),
@@ -31,10 +37,11 @@ class _sellerProductState extends State<sellerProduct> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+       automaticallyImplyLeading: false,
       title: Column(
         children: [
           Text(
-            "Your Cart",
+            "Your Products",
             style: TextStyle(color: Colors.black),
           ),
           Text(
@@ -54,24 +61,48 @@ class _sellerProductState extends State<sellerProduct> {
     var _firestoreInstance = FirebaseFirestore.instance;
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
-    var doc = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).get();
-    QuerySnapshot<Map<String, dynamic>> querry = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection("Dress").get();;
-    print(querry.docs.length);
-    setState(() {
-      for (int i = 0; i < querry.docs.length; i++) {
-        print('in');
-        seller_items.add({
-        
-          "name": querry.docs[i]["name"],
-          "price": querry.docs[i]["price"],
-          "img": querry.docs[i]["img"][0],
-          "location": querry.docs[i]["reference"],
-          "path": querry.docs[i].reference.path });
-        print("path ${querry.docs[i].reference.path}");
+  QuerySnapshot<Map<String, dynamic>> querry ;
+    for(int i = 0; i< cat.length; i++){
+          querry = await _firestoreInstance.collection("seller-products").doc(currentUser?.email).collection(cat[i]).get();
+          if(querry.docs.length > 0){
+            for (int i = 0; i < querry.docs.length; i++) {
+              print('in');
+              seller_items.add({
+              
+                "name": querry.docs[i]["name"],
+                "price": querry.docs[i]["price"],
+                "img": querry.docs[i]["img"][0],
+                "location": querry.docs[i]["reference"],
+                "path": querry.docs[i].reference.path });
+              print("path ${querry.docs[i].reference.path}");
       }
-    });
 
-    return querry.docs;
+          }
+
+    }
+    
+    // QuerySnapshot<Map<String, dynamic>> querry = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection("Dress").get();
+    // // QuerySnapshot<Map<String, dynamic>> querry = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection("Dress").get();
+    // // QuerySnapshot<Map<String, dynamic>> querry = await _firestoreInstance.collection("seller-products").doc(currentUser!.email).collection("Dress").get();
+
+    // print(querry.docs.length);
+    // setState(() {
+    //   for (int i = 0; i < querry.docs.length; i++) {
+    //     print('in');
+    //     seller_items.add({
+        
+    //       "name": querry.docs[i]["name"],
+    //       "price": querry.docs[i]["price"],
+    //       "img": querry.docs[i]["img"][0],
+    //       "location": querry.docs[i]["reference"],
+    //       "path": querry.docs[i].reference.path });
+    //     print("path ${querry.docs[i].reference.path}");
+    //   }
+    // });
+
+   setState(() {
+      seller_items;
+    });
   }
 
 }
