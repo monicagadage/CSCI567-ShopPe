@@ -88,7 +88,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       builder: (context) => BottomNavController()));
             }),
             signUpOption(),
-            sellerSignin()
+            // sellerSignin()
           ]),
         )),
       ),
@@ -115,24 +115,24 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Row sellerSignin() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text("Are you a Seller", style: TextStyle(color: Colors.white70)),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SignUpScreen()));
-          },
-          child: const Text(
-            " Sign Up",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-        )
-      ],
-    );
-  }
+  // Row sellerSignin() {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.center,
+  //     children: [
+  //       const Text("Are you a Seller", style: TextStyle(color: Colors.white70)),
+  //       GestureDetector(
+  //         onTap: () {
+  //           Navigator.push(context,
+  //               MaterialPageRoute(builder: (context) => SignUpScreen()));
+  //         },
+  //         child: const Text(
+  //           " Sign Up",
+  //           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  //         ),
+  //       )
+  //     ],
+  //   );
+  // }
 
   Widget forgetPassword(BuildContext context) {
     return Container(
