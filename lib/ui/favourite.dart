@@ -140,7 +140,7 @@ class _BodyState extends State<Body> {
         .set({
       "name": name,
       "price": price,
-      "images": image,
+      "images": image[0],
       "quantity": 1,
       "reference": docId,
     }).then((value) => Fluttertoast.showToast(msg: 'Added to cart'));

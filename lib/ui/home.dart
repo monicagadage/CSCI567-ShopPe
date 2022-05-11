@@ -198,6 +198,10 @@ class _HomeState extends State<Home> {
           _categoryRow("Clothes"),
 
           _productWidget(_shirts),
+
+          _categoryRow("Dresses"),
+
+          _productWidget(_dress),
         ]),
       ))),
       // bottomNavigationBar: BottomNavController("home"),
@@ -208,25 +212,10 @@ class _HomeState extends State<Home> {
   List<String> _carouselImages = [];
   var _dotPosition = 0;
   List _products = [];
+  List _dress = [];
   List _watches = [];
   List _shirts = [];
   var _firestoreInstance = FirebaseFirestore.instance;
-
-  fetchCarouselImages() async {
-    QuerySnapshot qn =
-        await _firestoreInstance.collection("carousel-slider").get();
-
-    setState(() {
-      for (int i = 0; i < qn.docs.length; i++) {
-        _carouselImages.add(
-          qn.docs[i]["img-path"],
-        );
-        print(qn.docs[i]["img-path"]);
-      }
-    });
-
-    return qn.docs;
-  }
 
   // fetchProducts() async {
   //   _firestoreInstance = FirebaseFirestore.instance;
@@ -244,8 +233,6 @@ class _HomeState extends State<Home> {
   //   });
   //
   //   return qn.docs;
-  // }
-
   fetch_watch() async {
     var details = {'isliked': false, 'favorite-reference': '', 'cart': false, 'cart-reference': '', "quantity": 0 };
     final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -262,29 +249,46 @@ class _HomeState extends State<Home> {
       is_present = await countDocuments(qn.docs[i].reference.id.toString(), "watch");
 
       print("is_present is_present is_present is_present is_present ${is_present}");
+      Map<String, dynamic> allData = qn.docs[i].data() as Map<String, dynamic>;
+      List img_list = allData["img"];
+      // img_list.removeAt(0);
+
+      var price = allData["price"];
+      if(allData["price"].runtimeType == String)
+        price = double.parse(allData["price"]);
+
+      var location;
+      if(allData["reference"][0] != '/')
+        location = "/${allData["reference"]}";
+
+      // FirebaseFirestore.instance.collection("Products").doc().set(
+      //     {
+      //       "name": allData["name"],
+      //       "description": allData["description"],
+      //       "price": price,
+      //       "img": allData["img"][0],
+      //       "reference": location,
+      //       "seller": allData["seller-name"],
+      //     }
+      // );
 
       if(is_present)
       {
-        Map<String, dynamic> allData = qn.docs[i].data() as Map<String, dynamic>;
         print("is_present is_present is_present is_present is_present ${qn.docs[i].reference.id} ddddddd ${allData['price']}");
 
         _watches.add({
           "product-name": allData["name"],
           "product-description": allData["description"],
-          "product-price": allData["price"],
-          "product-img": allData["img"],
+          "product-price": price,
+          "product-img": allData["img"][0],
           "product-liked": allData[currentUser.email.toString()]["isliked"],
           "product-quantity": allData[currentUser.email.toString()]["quantity"],
           "product-cart": allData[currentUser.email.toString()]["cart"],
-          "product-location": allData["reference"],
+          "product-location": location,
+          "product-seller": allData["seller-name"],
           "cart-reference": allData[currentUser.email.toString()]["cart-reference"],
           "favorite-reference": allData[currentUser.email.toString()]["favorite-reference"],
-          "product-thumbnail": <String>[
-            allData["thumbnail1"].toString(),
-            allData["thumbnail2"].toString(),
-            allData["thumbnail3"].toString(),
-            allData["thumbnail4"].toString()
-          ]
+          "product-thumbnail": img_list
         });
       }
       else
@@ -292,20 +296,16 @@ class _HomeState extends State<Home> {
         _watches.add({
           "product-name": qn.docs[i]["name"],
           "product-description": qn.docs[i]["description"],
-          "product-price": qn.docs[i]["price"],
-          "product-img": qn.docs[i]["img"],
+          "product-price": price,
+          "product-img": qn.docs[i]["img"][0],
           "product-liked": false,
           "product-quantity": 0,
           "product-cart": false,
-          "product-location": qn.docs[i]["reference"],
+          "product-location": location,
+          "product-seller": allData["seller-name"],
           "cart-reference": "",
           "favorite-reference": "",
-          "product-thumbnail": <String>[
-            qn.docs[i]["thumbnail1"].toString(),
-            qn.docs[i]["thumbnail2"].toString(),
-            qn.docs[i]["thumbnail3"].toString(),
-            qn.docs[i]["thumbnail4"].toString()
-          ]
+          "product-thumbnail": img_list
         });
 
         FirebaseFirestore.instance.collection("watch").doc(qn.docs[i].reference.id.toString())
@@ -320,6 +320,113 @@ class _HomeState extends State<Home> {
       _watches;
     });
   }
+
+  fetch_dress() async {
+    var details = {'isliked': false, 'favorite-reference': '', 'cart': false, 'cart-reference': '', "quantity": 0 };
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+    _firestoreInstance = FirebaseFirestore.instance;
+    QuerySnapshot qn = await _firestoreInstance.collection("Dress").get();
+    // CollectionReference _collectionRef = await _firestoreInstance.collection("Shirts").doc().collection(currentUser!.email ?? "");
+
+    // setState(()  {
+    for (int i = 0; i < qn.docs.length; i++) {
+
+      print("currentUser!.email currentUser!.email currentUser!.email ${currentUser!.email}");
+      var is_present;
+      is_present = await countDocuments(qn.docs[i].reference.id.toString(), "Dress");
+
+      print("is_present is_present is_present is_present is_present ${is_present}");
+      Map<String, dynamic> allData = qn.docs[i].data() as Map<String, dynamic>;
+      List img_list = allData["img"];
+      // img_list.removeAt(0);
+
+      var price = allData["price"];
+      print("${allData["price"].runtimeType} allData[""].runtimeType allData[""].runtimeType");
+      if(allData["price"].runtimeType == String)
+        price = double.parse(allData["price"]);
+
+      var location;
+      if(allData["reference"][0] != '/')
+        location = "/${allData["reference"]}";
+
+      // FirebaseFirestore.instance.collection("Products").doc().set(
+      //     {
+      //       "product-name": allData["name"],
+      //       "product-description": allData["description"],
+      //       "product-price": price,
+      //       "product-img": allData["img"][0],
+      //       "product-location": location,
+      //       "product-seller": allData["seller-name"],
+      //     }
+      // );
+
+      if(is_present)
+      {
+        print("is_present is_present is_present is_present is_present ${qn.docs[i].reference.id} ddddddd ${allData["reference"][0]}");
+
+        _dress.add({
+          "product-name": allData["name"],
+          "product-description": allData["description"],
+          "product-price": price,
+          "product-img": allData["img"][0],
+          "product-liked": allData[currentUser.email.toString()]["isliked"],
+          "product-quantity": allData[currentUser.email.toString()]["quantity"],
+          "product-cart": allData[currentUser.email.toString()]["cart"],
+          "product-location": location,
+          "product-seller": allData["seller-name"],
+          "cart-reference": allData[currentUser.email.toString()]["cart-reference"],
+          "favorite-reference": allData[currentUser.email.toString()]["favorite-reference"],
+          "product-thumbnail": img_list
+        });
+      }
+      else
+      {
+        _dress.add({
+          "product-name": qn.docs[i]["name"],
+          "product-description": qn.docs[i]["description"],
+          "product-price": price,
+          "product-img": qn.docs[i]["img"][0],
+          "product-liked": false,
+          "product-quantity": 0,
+          "product-cart": false,
+          "product-location": location,
+          "product-seller": allData["seller-name"],
+          "cart-reference": "",
+          "favorite-reference": "",
+          "product-thumbnail": img_list
+        });
+
+        FirebaseFirestore.instance.collection("Dress").doc(qn.docs[i].reference.id.toString())
+            .set({
+          currentUser.email.toString() : details,
+        },
+          SetOptions(merge: true),
+        );
+      }
+    };
+    setState(() {
+      _dress;
+    });
+  }
+
+  fetchCarouselImages() async {
+    QuerySnapshot qn =
+        await _firestoreInstance.collection("carousel-slider").get();
+
+    setState(() {
+      for (int i = 0; i < qn.docs.length; i++) {
+        _carouselImages.add(
+          qn.docs[i]["img-path"],
+        );
+        print(qn.docs[i]["img-path"]);
+      }
+    });
+
+    return qn.docs;
+  }
+
+  // }
 
   fetch_shirt() async {
     var details = {'isliked': false, 'favorite-reference': '', 'cart': false, 'cart-reference': '', "quantity": 0 };
@@ -338,28 +445,49 @@ class _HomeState extends State<Home> {
 
         print("is_present is_present is_present is_present is_present ${is_present}");
 
+        Map<String, dynamic> allData = qn.docs[i].data() as Map<String, dynamic>;
+        List img_list = allData["img"];
+        // img_list.removeAt(0);
+
+
+
+        var price = allData["price"];
+        print("${allData["price"].runtimeType} allData[""].runtimeType allData[""].runtimeType");
+        if(allData["price"].runtimeType == String)
+          price = double.parse(allData["price"]);
+
+        var location;
+        if(allData["reference"][0] != '/')
+          location = "/${allData["reference"]}";
+
+        // FirebaseFirestore.instance.collection("Products").doc().set(
+        //   {
+        //     "product-name": allData["name"],
+        //     "product-description": allData["description"],
+        //     "product-price": price,
+        //     "product-img": allData["img"][0],
+        //     "product-location": location,
+        //     "product-seller": allData["seller-name"],
+        //   }
+        // );
+
         if(is_present)
         {
-          Map<String, dynamic> allData = qn.docs[i].data() as Map<String, dynamic>;
           print("is_present is_present is_present is_present is_present ${qn.docs[i].reference.id} ddddddd ${allData['price']}");
 
           _shirts.add({
             "product-name": allData["name"],
             "product-description": allData["description"],
-            "product-price": allData["price"],
-            "product-img": allData["img"],
+            "product-price": price,
+            "product-img": allData["img"][0],
             "product-liked": allData[currentUser.email.toString()]["isliked"],
             "product-quantity": allData[currentUser.email.toString()]["quantity"],
             "product-cart": allData[currentUser.email.toString()]["cart"],
-            "product-location": allData["reference"],
+            "product-location": location,
+            "product-seller": allData["seller-name"],
             "cart-reference": allData[currentUser.email.toString()]["cart-reference"],
             "favorite-reference": allData[currentUser.email.toString()]["favorite-reference"],
-            "product-thumbnail": <String>[
-              allData["thumbnail1"].toString(),
-              allData["thumbnail2"].toString(),
-              allData["thumbnail3"].toString(),
-              allData["thumbnail4"].toString()
-            ]
+            "product-thumbnail": img_list
           });
         }
         else
@@ -367,21 +495,16 @@ class _HomeState extends State<Home> {
           _shirts.add({
             "product-name": qn.docs[i]["name"],
             "product-description": qn.docs[i]["description"],
-            "product-price": qn.docs[i]["price"],
-            "product-img": qn.docs[i]["img"],
+            "product-price": price,
+            "product-img": qn.docs[i]["img"][0],
             "product-liked": false,
             "product-quantity": 0,
             "product-cart": false,
-            "product-location": qn.docs[i]["reference"],
-
+            "product-location": location,
+            "product-seller": qn.docs[i]["seller-name"],
             "cart-reference": "",
             "favorite-reference": "",
-            "product-thumbnail": <String>[
-              qn.docs[i]["thumbnail1"].toString(),
-              qn.docs[i]["thumbnail2"].toString(),
-              qn.docs[i]["thumbnail3"].toString(),
-              qn.docs[i]["thumbnail4"].toString()
-            ]
+            "product-thumbnail": img_list
           });
 
           FirebaseFirestore.instance.collection("Shirts").doc(qn.docs[i].reference.id.toString())
@@ -422,5 +545,6 @@ class _HomeState extends State<Home> {
     // fetchProducts();
     fetch_watch();
     fetch_shirt();
+    fetch_dress();
   }
 }

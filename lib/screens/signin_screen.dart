@@ -42,7 +42,7 @@ class _SignInScreenState extends State<SignInScreen> {
           padding: EdgeInsets.fromLTRB(
               20, MediaQuery.of(context).size.height * 0.2, 20, 0),
           child: Column(children: <Widget>[
-            logoWidget("assest/image/Shopee_logo.png"),
+            logoWidget("assest/images/Shopee_logo.png"),
             CheckboxListTile(title: const Text('Are you a seller'), value: seller_value, onChanged:(bool? value) {
               setState(() {
                 seller_value = value! ? true: false;

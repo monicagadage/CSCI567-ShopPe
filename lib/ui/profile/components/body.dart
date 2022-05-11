@@ -10,6 +10,7 @@ import 'package:signup/ui/profile.dart';
 import 'package:signup/ui/settings.dart';
 
 import '../../chatbot.dart';
+import '../../past_orders.dart';
 import 'profile_menu.dart';
 import 'profile_pic.dart';
 
@@ -47,11 +48,11 @@ class ProfileBody extends StatelessWidget {
             },
           ),
           ProfileMenu(
-            text: "Notifications",
+            text: "Past Orders",
             icon: "assest/icons/Bell.svg",
             press: () {
               Navigator.push(
-                  context, CupertinoPageRoute(builder: (_) => Notifications()));
+                  context, CupertinoPageRoute(builder: (_) => order_body()));
             },
           ),
           ProfileMenu(
