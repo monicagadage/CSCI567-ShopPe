@@ -167,6 +167,7 @@ class _OrderPayment extends State<OrderPayment> {
       cardHolderName = "",
       bankName = "",
       cvv = "";
+
   List card_items = [];
   fetch_card() async {
     var _firestoreInstance = FirebaseFirestore.instance;

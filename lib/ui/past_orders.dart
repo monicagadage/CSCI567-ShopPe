@@ -71,7 +71,6 @@ class order_body extends StatefulWidget {
 }
 
 class _OrderState extends State<order_body> {
-
   List items = [];
   @override
   void initState() {
@@ -85,11 +84,10 @@ class _OrderState extends State<order_body> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
 
-    CollectionReference _collectionRef = FirebaseFirestore.instance.collection("Order_details");
-    QuerySnapshot qn = await _collectionRef
-        .doc(currentUser!.email)
-        .collection("Orders")
-        .get();
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection("Order_details");
+    QuerySnapshot qn =
+        await _collectionRef.doc(currentUser!.email).collection("Orders").get();
 
     for (int i = 0; i < qn.docs.length; i++) {
       print("${qn.docs[i].reference.id}");
@@ -109,40 +107,39 @@ class _OrderState extends State<order_body> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepOrangeAccent[200],
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        title: Column(
-          children: [
-            Text(
-              "Past Orders",
-              style: TextStyle(color: Colors.black),
-            ),
-            Text(
-              "${items.length} items",
-              style: Theme.of(context).textTheme.caption,
-            ),
-          ],
+        appBar: AppBar(
+          backgroundColor: Colors.deepOrangeAccent[200],
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          title: Column(
+            children: [
+              Text(
+                "Past Orders",
+                style: TextStyle(color: Colors.black),
+              ),
+              Text(
+                "${items.length} items",
+                style: Theme.of(context).textTheme.caption,
+              ),
+            ],
+          ),
         ),
-      ),
-      body: Padding(
-      padding:
-      EdgeInsets.symmetric(horizontal: 50), // getProportionateScreenWidth(20)
-      child: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) =>
-            Padding(
+        body: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: 50), // getProportionateScreenWidth(20)
+          child: ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.symmetric(vertical: 15),
               child: GestureDetector(
-                onTap: () =>
-                    Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => Detail(items[index]["reference"]))),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => Detail(items[index]["reference"]))),
                 child: CartCard(items[index]),
               ),
             ),
-      ),
-    )
-    );
+          ),
+        ));
   }
 }
