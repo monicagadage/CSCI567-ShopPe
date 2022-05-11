@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'product_details_screen.dart';
 import 'package:signup/reusable_widgets/reusable_widgets.dart';
 
-
 class ProductCard extends StatefulWidget {
   final Map<String, dynamic> product;
   ProductCard(this.product);
@@ -19,8 +18,7 @@ class _ProductCardState extends State<ProductCard> {
     super.initState();
   }
 
-  callback(new_map)
-  {
+  callback(new_map) {
     print("inside callback inside callback inside callback inside callback");
     setState(() {
       product["product-liked"] = new_map;
@@ -39,10 +37,11 @@ class _ProductCardState extends State<ProductCard> {
       ),
       // margin: EdgeInsets.symmetric(vertical: !product.isSelected ? 20 : 0),
       child: GestureDetector(
-          onTap: () => Navigator.push(context,
-              MaterialPageRoute(builder: (_) => ProductDetails(product, callback))),
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => ProductDetails(product, callback))),
           child: Container(
-
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Stack(
               alignment: Alignment.center,
@@ -52,9 +51,12 @@ class _ProductCardState extends State<ProductCard> {
                   top: 0,
                   child: IconButton(
                     icon: Icon(
-                      product["product-liked"] ? Icons.favorite : Icons.favorite_border,
-                      color:
-                      product["product-liked"] ? Color(0xffF72804) : Color(0xffa8a09b),
+                      product["product-liked"]
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: product["product-liked"]
+                          ? Color(0xffF72804)
+                          : Color(0xffa8a09b),
                     ),
                     onPressed: () {},
                   ),
@@ -96,8 +98,7 @@ class _ProductCardState extends State<ProductCard> {
                 ),
               ],
             ),
-          )
-          ),
+          )),
     );
   }
 }
