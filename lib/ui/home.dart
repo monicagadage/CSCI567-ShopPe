@@ -73,152 +73,153 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        elevation: 0,
-        title: Text(
-          "ShoPee",
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: <Widget>[
-          new IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    CupertinoPageRoute(builder: (_) => SearchScreen()));
-              },
-              icon: Icon(Icons.search, color: Color.fromARGB(255, 2, 2, 2)))
-        ],
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      body: RefreshIndicator(
-        child: SingleChildScrollView(
-          child: SafeArea(
-              child: Container(
-        child: Column(children: <Widget>[
-          // Padding(
-          //   padding: EdgeInsets.only(left: 20, right: 20),
-          //   child: TextFormField(
-          //     readOnly: true,
-          //     decoration: InputDecoration(
-          //       fillColor: Colors.white,
-          //       focusedBorder: OutlineInputBorder(
-          //           borderRadius: BorderRadius.all(Radius.circular(0)),
-          //           borderSide: BorderSide(color: Colors.blue)),
-          //       enabledBorder: OutlineInputBorder(
-          //           borderRadius: BorderRadius.all(Radius.circular(0)),
-          //           borderSide: BorderSide(color: Colors.grey)),
-          //       hintText: 'Enter a search term',
-          //       hintStyle: TextStyle(fontSize: 15),
-          //     ),
-          //     onTap: () => Navigator.push(
-          //         context, CupertinoPageRoute(builder: (_) => SearchScreen())),
-          //   ),
-          // ),
-          CarouselSlider(
-              items: _carouselImages
-                  .map((item) => Padding(
-                        padding: const EdgeInsets.only(left: 3, right: 3),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: NetworkImage(item),
-                                  fit: BoxFit.fitWidth)),
-                        ),
-                      ))
-                  // .map((item) => Container(
-                  //       child: Container(
-                  //           child: Image.network(item,
-                  //               fit: BoxFit.fitWidth, width: 1200)),
-                  //     ))
-                  .toList(),
-              options: CarouselOptions(
-                  viewportFraction: 1.0,
-                  enlargeCenterPage: false,
-                  // autoPlay: false,
-                  // enlargeCenterPage: true,
-                  // viewportFraction: 0.8,
-                  // enlargeStrategy: CenterPageEnlargeStrategy.height,
-                  disableCenter: true,
-                  onPageChanged: (val, carouselPageChangedReason) {
-                    setState(() {
-                      _dotPosition = val;
-                    });
-                  })),
-          DotsIndicator(
-            dotsCount: _carouselImages.length == 0 ? 1 : _carouselImages.length,
-            position: _dotPosition.toDouble(),
-            decorator: DotsDecorator(
-              activeColor: AppColors.deep_orange,
-              color: AppColors.deep_orange.withOpacity(0.5),
-              spacing: EdgeInsets.all(2),
-              activeSize: Size(8, 8),
-              size: Size(6, 6),
-            ),
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          elevation: 0,
+          title: Text(
+            "ShoPee",
+            style: TextStyle(color: Colors.black),
           ),
-          // Expanded(
-          //   child: GridView.builder(
-          //       scrollDirection: Axis.horizontal,
-          //       itemCount: _products.length,
-          //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //           crossAxisCount: 2, childAspectRatio: 1),
-          //       itemBuilder: (_, index) {
-          //         return GestureDetector(
-          //           onTap: () => Navigator.push(
-          //               context,
-          //               MaterialPageRoute(
-          //                   builder: (_) => ProductDetails(_products[index]))),
-          //           child: Card(
-          //             elevation: 3,
-          //             child: Column(
-          //               children: [
-          //                 AspectRatio(
-          //                     aspectRatio: 2,
-          //                     child: Container(
-          //                         color: Colors.yellow,
-          //                         child: Image.network(
-          //                           // 'https://picsum.photos/250?image=9'
-          //                           _products[index]["product-img"],
-          //                         ))),
-          //                 Text("${_products[index]["product-name"]}"),
-          //                 Text("${_products[index]["product-price"].toString()}"),
-          //               ],
-          //             ),
-          //           ),
-          //         );
-          //       }),
-          // ),
+          actions: <Widget>[
+            new IconButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (_) => SearchScreen()));
+                },
+                icon: Icon(Icons.search, color: Color.fromARGB(255, 2, 2, 2)))
+          ],
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+        ),
+        body: RefreshIndicator(
+          child: SingleChildScrollView(
+              child: SafeArea(
+                  child: Container(
+            child: Column(children: <Widget>[
+              // Padding(
+              //   padding: EdgeInsets.only(left: 20, right: 20),
+              //   child: TextFormField(
+              //     readOnly: true,
+              //     decoration: InputDecoration(
+              //       fillColor: Colors.white,
+              //       focusedBorder: OutlineInputBorder(
+              //           borderRadius: BorderRadius.all(Radius.circular(0)),
+              //           borderSide: BorderSide(color: Colors.blue)),
+              //       enabledBorder: OutlineInputBorder(
+              //           borderRadius: BorderRadius.all(Radius.circular(0)),
+              //           borderSide: BorderSide(color: Colors.grey)),
+              //       hintText: 'Enter a search term',
+              //       hintStyle: TextStyle(fontSize: 15),
+              //     ),
+              //     onTap: () => Navigator.push(
+              //         context, CupertinoPageRoute(builder: (_) => SearchScreen())),
+              //   ),
+              // ),
+              CarouselSlider(
+                  items: _carouselImages
+                      .map((item) => Padding(
+                            padding: const EdgeInsets.only(left: 3, right: 3),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(item),
+                                      fit: BoxFit.fitWidth)),
+                            ),
+                          ))
+                      // .map((item) => Container(
+                      //       child: Container(
+                      //           child: Image.network(item,
+                      //               fit: BoxFit.fitWidth, width: 1200)),
+                      //     ))
+                      .toList(),
+                  options: CarouselOptions(
+                      viewportFraction: 1.0,
+                      enlargeCenterPage: false,
+                      // autoPlay: false,
+                      // enlargeCenterPage: true,
+                      // viewportFraction: 0.8,
+                      // enlargeStrategy: CenterPageEnlargeStrategy.height,
+                      disableCenter: true,
+                      onPageChanged: (val, carouselPageChangedReason) {
+                        setState(() {
+                          _dotPosition = val;
+                        });
+                      })),
+              DotsIndicator(
+                dotsCount:
+                    _carouselImages.length == 0 ? 1 : _carouselImages.length,
+                position: _dotPosition.toDouble(),
+                decorator: DotsDecorator(
+                  activeColor: AppColors.deep_orange,
+                  color: AppColors.deep_orange.withOpacity(0.5),
+                  spacing: EdgeInsets.all(2),
+                  activeSize: Size(8, 8),
+                  size: Size(6, 6),
+                ),
+              ),
+              // Expanded(
+              //   child: GridView.builder(
+              //       scrollDirection: Axis.horizontal,
+              //       itemCount: _products.length,
+              //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //           crossAxisCount: 2, childAspectRatio: 1),
+              //       itemBuilder: (_, index) {
+              //         return GestureDetector(
+              //           onTap: () => Navigator.push(
+              //               context,
+              //               MaterialPageRoute(
+              //                   builder: (_) => ProductDetails(_products[index]))),
+              //           child: Card(
+              //             elevation: 3,
+              //             child: Column(
+              //               children: [
+              //                 AspectRatio(
+              //                     aspectRatio: 2,
+              //                     child: Container(
+              //                         color: Colors.yellow,
+              //                         child: Image.network(
+              //                           // 'https://picsum.photos/250?image=9'
+              //                           _products[index]["product-img"],
+              //                         ))),
+              //                 Text("${_products[index]["product-name"]}"),
+              //                 Text("${_products[index]["product-price"].toString()}"),
+              //               ],
+              //             ),
+              //           ),
+              //         );
+              //       }),
+              // ),
 
-          // _categoryRow("Electronics"),
-          //
-          // _productWidget(_products),
+              // _categoryRow("Electronics"),
+              //
+              // _productWidget(_products),
 
-          _categoryRow("Watches"),
+              _categoryRow("Watches"),
 
-          _productWidget(_watches),
+              _productWidget(_watches),
 
-          _categoryRow("Clothes"),
+              _categoryRow("Clothes"),
 
-          _productWidget(_shirts),
+              _productWidget(_shirts),
 
-          _categoryRow("Dresses"),
+              _categoryRow("Dresses"),
 
-          _productWidget(_dress),
-        ]),
-      ))),
-        onRefresh: () async {
-          _dress = [];
-          _watches = [];
-          _shirts = [];
-          fetch_watch();
-          fetch_shirt();
-          fetch_dress();
+              _productWidget(_dress),
+            ]),
+          ))),
+          onRefresh: () async {
+            _dress = [];
+            _watches = [];
+            _shirts = [];
+            fetch_watch();
+            fetch_shirt();
+            fetch_dress();
 
-          Fluttertoast.showToast(msg:"Page refreshed");
-        },
-    )
-      // bottomNavigationBar: BottomNavController("home"),
-    );
+            Fluttertoast.showToast(msg: "Page refreshed");
+          },
+        )
+        // bottomNavigationBar: BottomNavController("home"),
+        );
   }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -276,10 +277,8 @@ class _HomeState extends State<Home> {
       if (allData["price"].runtimeType == String)
         price = double.parse(allData["price"]);
 
-
       var location = allData["reference"];
-      if(allData["reference"][0] != '/')
-        location = "/${allData["reference"]}";
+      if (allData["reference"][0] != '/') location = "/${allData["reference"]}";
 
       // FirebaseFirestore.instance.collection("Products").doc().set(
       //     {
@@ -292,10 +291,9 @@ class _HomeState extends State<Home> {
       //     }
       // );
 
-
-      if(is_present)
-      {
-        print("is_present is_present is_present is_present is_present ${location} ddddddd ${allData['price']}");
+      if (is_present) {
+        print(
+            "is_present is_present is_present is_present is_present ${location} ddddddd ${allData['price']}");
 
         _watches.add({
           "product-name": allData["name"],
@@ -375,15 +373,14 @@ class _HomeState extends State<Home> {
       // img_list.removeAt(0);
 
       var price = allData["price"];
-      print("${allData["price"].runtimeType} allData["
-          "].runtimeType allData["
-          "].runtimeType");
+      // print("${allData["price"].runtimeType} allData["
+      //     "].runtimeType allData["
+      //     "].runtimeType");
       if (allData["price"].runtimeType == String)
         price = double.parse(allData["price"]);
 
       var location = allData["reference"];
-      if(allData["reference"][0] != '/')
-        location = "/${allData["reference"]}";
+      if (allData["reference"][0] != '/') location = "/${allData["reference"]}";
 
 // FirebaseFirestore.instance.collection("Products").doc().set(
 //           {
@@ -396,10 +393,9 @@ class _HomeState extends State<Home> {
 //           }
 //       );
 
-
-      if(is_present)
-      {
-        print("is_present is_present is_present is_present is_present ${location} ddddddd ${allData["reference"][0]}");
+      if (is_present) {
+        // print(
+        //     "is_present is_present is_present is_present is_present ${location} ddddddd ${allData["reference"][0]}");
 
         _dress.add({
           "product-name": allData["name"],
@@ -459,13 +455,12 @@ class _HomeState extends State<Home> {
         _carouselImages.add(
           qn.docs[i]["img-path"],
         );
-        print(qn.docs[i]["img-path"]);
+        // print(qn.docs[i]["img-path"]);
       }
     });
 
     return qn.docs;
   }
-
 
   fetch_shirt() async {
     var details = {
@@ -503,9 +498,8 @@ class _HomeState extends State<Home> {
       if (allData["price"].runtimeType == String)
         price = double.parse(allData["price"]);
 
-        var location = allData["reference"];
-        if(allData["reference"][0] != '/')
-          location = "/${allData["reference"]}";
+      var location = allData["reference"];
+      if (allData["reference"][0] != '/') location = "/${allData["reference"]}";
 
       //   FirebaseFirestore.instance.collection("Products").doc().set(
       //     {
@@ -518,54 +512,57 @@ class _HomeState extends State<Home> {
       //     }
       // );
 
-        if(is_present)
-        {
-          print("is_present is_present is_present is_present is_present ${location} ddddddd ${allData['price']}");
+      if (is_present) {
+        print(
+            "is_present is_present is_present is_present is_present ${location} ddddddd ${allData['price']}");
 
-          _shirts.add({
-            "product-name": allData["name"],
-            "product-description": allData["description"],
-            "product-price": price,
-            "product-img": allData["img"][0],
-            "product-liked": allData[currentUser.email.toString()]["isliked"],
-            "product-quantity": allData[currentUser.email.toString()]["quantity"],
-            "product-cart": allData[currentUser.email.toString()]["cart"],
-            "product-location": location,
-            "product-seller": allData["seller-name"],
-            "cart-reference": allData[currentUser.email.toString()]["cart-reference"],
-            "favorite-reference": allData[currentUser.email.toString()]["favorite-reference"],
-            "product-thumbnail": img_list
-          });
-        }
-        else
-        {
-          _shirts.add({
-            "product-name": qn.docs[i]["name"],
-            "product-description": qn.docs[i]["description"],
-            "product-price": price,
-            "product-img": qn.docs[i]["img"][0],
-            "product-liked": false,
-            "product-quantity": 0,
-            "product-cart": false,
-            "product-location": location,
-            "product-seller": qn.docs[i]["seller-name"],
-            "cart-reference": "",
-            "favorite-reference": "",
-            "product-thumbnail": img_list
-          });
+        _shirts.add({
+          "product-name": allData["name"],
+          "product-description": allData["description"],
+          "product-price": price,
+          "product-img": allData["img"][0],
+          "product-liked": allData[currentUser.email.toString()]["isliked"],
+          "product-quantity": allData[currentUser.email.toString()]["quantity"],
+          "product-cart": allData[currentUser.email.toString()]["cart"],
+          "product-location": location,
+          "product-seller": allData["seller-name"],
+          "cart-reference": allData[currentUser.email.toString()]
+              ["cart-reference"],
+          "favorite-reference": allData[currentUser.email.toString()]
+              ["favorite-reference"],
+          "product-thumbnail": img_list
+        });
+      } else {
+        _shirts.add({
+          "product-name": qn.docs[i]["name"],
+          "product-description": qn.docs[i]["description"],
+          "product-price": price,
+          "product-img": qn.docs[i]["img"][0],
+          "product-liked": false,
+          "product-quantity": 0,
+          "product-cart": false,
+          "product-location": location,
+          "product-seller": qn.docs[i]["seller-name"],
+          "cart-reference": "",
+          "favorite-reference": "",
+          "product-thumbnail": img_list
+        });
 
-          FirebaseFirestore.instance.collection("Shirts").doc(qn.docs[i].reference.id.toString())
-              .set({
-            currentUser.email.toString() : details,
-            },
-              SetOptions(merge: true),
-            );
-        }
-      };
-      setState(() {
-        _shirts;
-      });
-
+        FirebaseFirestore.instance
+            .collection("Shirts")
+            .doc(qn.docs[i].reference.id.toString())
+            .set(
+          {
+            currentUser.email.toString(): details,
+          },
+          SetOptions(merge: true),
+        );
+      }
+    }
+    ;
+    setState(() {
+      _shirts;
+    });
   }
 
   Future<bool> countDocuments(String docid, String cat) async {

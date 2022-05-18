@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:signup/ui/checkout_card.dart';
 // import 'package:flutter_ecommerce/widgets/fetchProducts.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -28,7 +29,7 @@ class _CartState extends State<Cart> {
   }
 
   calculate_total() {
-    print("${cart_items.length} lengthlengthlengthlengthlength");
+    // print("${cart_items.length} lengthlengthlengthlengthlength");
     setState(() {
       for (int i = 0; i < cart_items.length; i++) {
         total = total + cart_items[i]["price"] * cart_items[i]["quantity"];
@@ -57,7 +58,7 @@ class _CartState extends State<Cart> {
           "quantity": qn.docs[i]["quantity"],
           "location": qn.docs[i]["reference"]
         });
-        print("cart cart cart cart ${qn.docs[i].reference.path}");
+        // print("cart cart cart cart ${qn.docs[i].reference.path}");
       }
     });
 
@@ -108,7 +109,7 @@ class _BodyState extends State<Body> {
 
   Future _removefromCart(BuildContext context, action, index) async {
     // return doNothing;
-    print("${index} indexindexindexindexindexindex");
+    // print("${index} indexindexindexindexindexindex");
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
 
@@ -118,7 +119,7 @@ class _BodyState extends State<Body> {
         await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
     Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
 
-    print("${allData} string string ${s[1]}");
+    // print("${allData} string string ${s[1]}");
 
     var isliked = allData[currentUser!.email.toString()]["isliked"];
     var favorite_reference =
@@ -152,12 +153,12 @@ class _BodyState extends State<Body> {
         .collection("items")
         .doc(reference)
         .delete()
-        .then((value) => print("Removed from cart"));
+        .then((value) => Fluttertoast.showToast(msg: "Removed from cart"));
   }
 
   Future decrease_quantity(BuildContext context, action, index) async {
     // return doNothing;
-    print("${index} indexindexindexindexindexindex");
+    // print("${index} indexindexindexindexindexindex");
 
     if (widget.cart_item[index]["quantity"] == 1) {
       _removefromCart(context, action, index);
@@ -173,7 +174,7 @@ class _BodyState extends State<Body> {
         await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
     Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
 
-    print("${allData} string string ${s[1]}");
+    // print("${allData} string string ${s[1]}");
 
     var isliked = allData[currentUser!.email.toString()]["isliked"];
     var favorite_reference =
@@ -210,12 +211,12 @@ class _BodyState extends State<Body> {
         .doc(reference)
         .update({
       "quantity": quantity - 1,
-    }).then((value) => print("quantity decreased"));
+    }).then((value) => Fluttertoast.showToast(msg: "quantity decreased"));
   }
 
   Future increase_quantity(BuildContext context, action, index) async {
     // return doNothing;
-    print("${index} indexindexindexindexindexindex");
+    // print("${index} indexindexindexindexindexindex");
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
 
@@ -225,7 +226,7 @@ class _BodyState extends State<Body> {
         await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
     Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
 
-    print("${allData} string string ${s[1]}");
+    // print("${allData} string string ${s[1]}");
 
     var isliked = allData[currentUser!.email.toString()]["isliked"];
     var favorite_reference =
@@ -263,7 +264,7 @@ class _BodyState extends State<Body> {
         .doc(reference)
         .update({
       "quantity": quantity + 1,
-    }).then((value) => print("quantity increased"));
+    }).then((value) => Fluttertoast.showToast(msg: "quantity increased"));
   }
 
   @override

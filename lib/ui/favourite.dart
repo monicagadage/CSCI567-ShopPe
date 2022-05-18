@@ -111,7 +111,7 @@ class _BodyState extends State<Body> {
         await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
     Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
 
-    print("${allData} string string ${s[1]}");
+    // print("${allData} string string ${s[1]}");
 
     var isliked = allData[currentUser!.email.toString()]["isliked"];
     var favorite_reference =
@@ -163,7 +163,7 @@ class _BodyState extends State<Body> {
         await FirebaseFirestore.instance.collection(s[1]).doc(s[2]).get();
     Map<String, dynamic> allData = docref.data() as Map<String, dynamic>;
 
-    print("${allData} string string ${s[1]}");
+    // print("${allData} string string ${s[1]}");
 
     var cart = allData[currentUser!.email.toString()]["cart"];
     var cart_reference =
@@ -249,7 +249,7 @@ class _BodyState extends State<Body> {
               } else {
                 // TODO: Navigate to edit page;
                 addToCart(widget.fav_item[index]["location"]);
-                print("swipe right right right right");
+                // print("swipe right right right right");
               }
             },
             child: CartCard(widget.fav_item[index]),
